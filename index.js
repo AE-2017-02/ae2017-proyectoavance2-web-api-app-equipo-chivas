@@ -36,6 +36,8 @@ app.use(function (req, res, next){
 // Al tener una petición con la ruta de la api, la redirige a lo que se encuentra
 // dentro de la carpeta ./api y se pone a disposición el contenido de esa carpeta (modelos y db) de todo mundo, mediante wagner.
 
+app.use('/api/v1', require('./api')(wagner));
+
 var port = 8080;
 app.listen(port);
 
