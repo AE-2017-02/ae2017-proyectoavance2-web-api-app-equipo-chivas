@@ -1,0 +1,20 @@
+{
+  "name": "nutrisha-api",
+  "version": "0.17.1015",
+  "dependencies": {
+    "async": "^2.1.4",
+    "body-parser": "1.12.4",
+    "express": "4.12.3",
+    "express-session": "1.11.2",
+    "http-status": "0.1.8",
+    "mongodb": "2.0.35",
+    "mongoose": "*",
+    "superagent": "1.2.0",
+    "underscore": "1.5.2",
+    "wagner-core": "0.1.0"
+  },
+  "devDependencies": {
+    "mocha": "2.2.4",
+    "superagent": "1.2.0"
+  }
+}
