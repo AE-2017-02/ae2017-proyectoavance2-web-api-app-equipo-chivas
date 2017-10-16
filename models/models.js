@@ -14,12 +14,16 @@ module.exports = function(wagner){
 	var Menu = mongoose.model('Menu', require('./menu'), 'menus');
 	var Comida = mongoose.model('Comida', require('./comida'), 'comidas');
 	var Ingrediente = mongoose.model('Ingrediente', require('./ingrediente'), 'ingredientes');
+	var Paciente = mongoose.model('Paciente', require('./paciente'), 'pacientes');
+
 	// Se crea un object de estos modelos llamado models
+
 	var models = {
 		MenuUsuario : MenuUsuario,
 		Menu: Menu,
 		Comida: Comida,
-		Ingrediente, Ingrediente
+		Ingrediente: Ingrediente,
+		Paciente: Paciente
 	};
 	
 	_.each(models, function(value, key){
