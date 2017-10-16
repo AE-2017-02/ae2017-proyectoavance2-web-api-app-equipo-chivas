@@ -9,10 +9,12 @@ module.exports = function(wagner){
 		return mongoose;
 	});
 	
-	// Aquí se declaran modelos referenciados a documentos de mongodb.
+	var Paciente = mongoose.model('Paciente', require('./paciente'), 'pacientes');
 	
 	// Se crea un object de estos modelos llamado models
-	var models = {};
+	var models = {
+		Paciente: Paciente
+	};
 	
 	_.each(models, function(value, key){
 		wagner.factory(key, function(){
