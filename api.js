@@ -12,7 +12,7 @@ module.exports = function(wagner){
 	
 	//Permite recuperar los parámetros de la ruta.
 	
-	api.use(bodyParser.urlenconded({
+	api.use(bodyParser.urlencoded({
 		extended: true
 	}));
 	
