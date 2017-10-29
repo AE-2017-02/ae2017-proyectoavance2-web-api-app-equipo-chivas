@@ -7,7 +7,7 @@ var pacienteSchema = {
     email: {type: String, required: true},
 	pin: {type: Number, required: true},
 	activo: { type: Boolean, required: true},
-	idCita: {type: Schema.Types.ObjectId, true},
+	idCita: {type: Schema.Types.ObjectId, required: true},
 	menu_asignado: [
 		{type: Schema.Types.ObjectId}
 	],
