@@ -15,6 +15,12 @@ module.exports = function(wagner){
 	var Comida = mongoose.model('Comida', require('./comida'), 'comidas');
 	var Ingrediente = mongoose.model('Ingrediente', require('./ingrediente'), 'ingredientes');
 	var Paciente = mongoose.model('Paciente', require('./paciente'), 'pacientes');
+	var RegistroCita = mongoose.model('RegistroCita', require('./registro_cita'), 'registroCita');
+	var Cita = mongoose.model('Cita', require('./cita'), 'cita');	
+	var HistorialCitas = mongoose.model('HistorialCitas', require('./hitorialcitas'), 'historialCitas');
+	var Usuario = mongoose.model('Usuario', require('./usario'), 'usuario');	
+	var Consultorio = mongoose.model('Consultorio', require('./consultorio'), 'consultorio');	
+	var Mensaje = mongoose.model('Mensaje', require('./mensaje'), 'mensaje');	
 
 	// Se crea un object de estos modelos llamado models
 
@@ -23,7 +29,13 @@ module.exports = function(wagner){
 		Menu: Menu,
 		Comida: Comida,
 		Ingrediente: Ingrediente,
-		Paciente: Paciente
+		Paciente: Paciente,
+		RegistroCita: RegistroCita,
+		Cita: Cita,
+		HistorialCitas: HistorialCitas,
+		Usuario: Usuario,
+		Consultorio: Consultorio,
+		Mensaje: Mensaje
 	};
 	
 	_.each(models, function(value, key){
