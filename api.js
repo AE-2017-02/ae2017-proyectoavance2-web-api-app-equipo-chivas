@@ -18,31 +18,58 @@ module.exports = function(wagner){
 	
 	//RUTAS DE LAS APIS A REQUERIR.
 	
-	//Paciente
+	// region Paciente
 	api.get('/patient/', wagner.invoke(function (Paciente){
 		return function(req, res){
-			return require('./controllers/patientController').getPatients(req, res, Paciente);
+			return require('./controllers/foodController').getPatients(req, res, Paciente);
 		};
 	}));
 
 	api.get('/patient/:_id', wagner.invoke(function (Paciente){
 		return function(req, res){
-			return require('./controllers/patientController').getPatient(req, res, Paciente);
+			return require('./controllers/foodController').getPatient(req, res, Paciente);
 		};
 	}));
 
 	api.post('/patient/', wagner.invoke(function (Paciente){
 		return function(req, res){
-			return require('./controllers/patientController').newPatient(req, res, Paciente);
+			return require('./controllers/foodController').newPatient(req, res, Paciente);
 		};
 	}));
 
 	api.delete('/patient/:_id', wagner.invoke(function (Paciente){
 		return function(req, res){
-			return require('./controllers/patientController').deletePatient(req, res, Paciente);
+			return require('./controllers/foodController').deletePatient(req, res, Paciente);
 		};
 	}));
-	//end Paciente
+	//endregion Paciente
+
+	//region Comida
+	api.get('/food/', wagner.invoke(function (Comida){
+		return function(req, res){
+			return require('./controllers/foodController').getFoods(req, res, Comida);
+		};
+	}));
+
+	api.get('/food/:_id', wagner.invoke(function (Comida){
+		return function(req, res){
+			return require('./controllers/foodController').getFood(req, res, Comida);
+		};
+	}));
+
+	api.post('/food/', wagner.invoke(function (Comida){
+		return function(req, res){
+			return require('./controllers/foodController').newFood(req, res, Comida);
+		};
+	}));
+
+	api.delete('/food/:_id', wagner.invoke(function (Comida){
+		return function(req, res){
+			return require('./controllers/foodController').deletePatient(req, res, Comida);
+		};
+	}));
+	
+	//endregion Comida
 
 	return api;
 };

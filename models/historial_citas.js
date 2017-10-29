@@ -1,9 +1,9 @@
 var mongoose = require('mongoose');
 
 var historial_citasSchema = {
-        paciente: {type: Schema.Types.ObjectId, required: true},
+        paciente: {type: mongoose.Schema.Types.ObjectId, required: true},
 	    idRegistroCitas: [
-		{type: Schema.Types.ObjectId, required: true}
+		{type: mongoose.Schema.Types.ObjectId, required: true}
 	]  
         
 };

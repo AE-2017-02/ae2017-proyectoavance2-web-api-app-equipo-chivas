@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 var mensajeSchema = {
         titulo: { type: String, required:true },
         cuerpo: { type: String },
-        to: { type: Schema.Types.ObjectId, required:true },
+        to: { type: mongoose.Schema.Types.ObjectId, required:true },
         
 };
 

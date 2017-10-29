@@ -17,8 +17,8 @@ module.exports = function(wagner){
 	var Paciente = mongoose.model('Paciente', require('./paciente'), 'pacientes');
 	var RegistroCita = mongoose.model('RegistroCita', require('./registro_cita'), 'registroCita');
 	var Cita = mongoose.model('Cita', require('./cita'), 'cita');	
-	var HistorialCitas = mongoose.model('HistorialCitas', require('./hitorialcitas'), 'historialCitas');
-	var Usuario = mongoose.model('Usuario', require('./usario'), 'usuario');	
+	var HistorialCitas = mongoose.model('HistorialCitas', require('./historial_citas'), 'historialCitas');
+	var Usuario = mongoose.model('Usuario', require('./usuario'), 'usuario');	
 	var Consultorio = mongoose.model('Consultorio', require('./consultorio'), 'consultorio');	
 	var Mensaje = mongoose.model('Mensaje', require('./mensaje'), 'mensaje');	
 
