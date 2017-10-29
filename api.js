@@ -37,6 +37,12 @@ module.exports = function(wagner){
 		};
 	}));
 
+	api.put('/patient/:_id', wagner.invoke(function(Paciente){
+		return function(req, res){
+			return require('./controllers/patientController').updatePatient(req, res, Paciente);
+		};
+	}));
+
 	api.delete('/patient/:_id', wagner.invoke(function (Paciente){
 		return function(req, res){
 			return require('./controllers/patientController').deletePatient(req, res, Paciente);
