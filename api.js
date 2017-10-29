@@ -49,6 +49,32 @@ module.exports = function(wagner){
 		};
 	}));
 	//end Paciente
+	
+	//RegistroCita
+	api.get('/appointmentRegister/', wagner.invoke(function (RegistroCita){
+		return function(req, res){
+			return require('./controllers/apointmentRegisterController').getAppointmentRegisters(req, res, RegistroCita);
+		};
+	}));
+
+	api.get('/appointmentRegister/:_id', wagner.invoke(function (RegistroCita){
+		return function(req, res){
+			return require('./controllers/apointmentRegisterController').getAppointmentRegister(req, res, RegistroCita);
+		};
+	}));
+
+	api.post('/appointmentRegister/', wagner.invoke(function (RegistroCita){
+		return function(req, res){
+			return require('./controllers/apointmentRegisterController').newAppointmentRegister(req, res, RegistroCita);
+		};
+	}));
+
+	api.delete('/appointmentRegister/:_id', wagner.invoke(function (RegistroCita){
+		return function(req, res){
+			return require('./controllers/apointmentRegisterController').deleteAppointmentRegister(req, res, RegistroCita);
+		};
+	}));
+	//end RegistroCita
 
 	return api;
 };
