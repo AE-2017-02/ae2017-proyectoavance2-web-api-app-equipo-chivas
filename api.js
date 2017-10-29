@@ -18,5 +18,31 @@ module.exports = function(wagner){
 	
 	//RUTAS DE LAS APIS A REQUERIR.
 	
+	//Paciente
+	api.get('/patient/', wagner.invoke(function (Paciente){
+		return function(req, res){
+			return require('./controllers/patientController').getPatients(req, res, Paciente);
+		};
+	}));
+
+	api.get('/patient/:_id', wagner.invoke(function (Paciente){
+		return function(req, res){
+			return require('./controllers/patientController').getPatient(req, res, Paciente);
+		};
+	}));
+
+	api.post('/patient/', wagner.invoke(function (Paciente){
+		return function(req, res){
+			return require('./controllers/patientController').newPatient(req, res, Paciente);
+		};
+	}));
+
+	api.delete('/patient/:_id', wagner.invoke(function (Paciente){
+		return function(req, res){
+			return require('./controllers/patientController').deletePatient(req, res, Paciente);
+		};
+	}));
+	//end Paciente
+
 	return api;
 };
