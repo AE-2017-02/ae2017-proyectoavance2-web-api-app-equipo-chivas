@@ -37,6 +37,12 @@ module.exports = function(wagner){
 		};
 	}));
 
+	api.put('/patient/:_id', wagner.invoke(function(Paciente){
+		return function(req, res){
+			return require('./controllers/patientController').updatePatient(req, res, Paciente);
+		};
+	}));
+
 	api.delete('/patient/:_id', wagner.invoke(function (Paciente){
 		return function(req, res){
 			return require('./controllers/foodController').deletePatient(req, res, Paciente);
@@ -70,6 +76,32 @@ module.exports = function(wagner){
 	}));
 	
 	//endregion Comida
+	
+	//RegistroCita
+	api.get('/appointmentRegister/', wagner.invoke(function (RegistroCita){
+		return function(req, res){
+			return require('./controllers/apointmentRegisterController').getAppointmentRegisters(req, res, RegistroCita);
+		};
+	}));
 
+	api.get('/appointmentRegister/:_id', wagner.invoke(function (RegistroCita){
+		return function(req, res){
+			return require('./controllers/apointmentRegisterController').getAppointmentRegister(req, res, RegistroCita);
+		};
+	}));
+
+	api.post('/appointmentRegister/', wagner.invoke(function (RegistroCita){
+		return function(req, res){
+			return require('./controllers/apointmentRegisterController').newAppointmentRegister(req, res, RegistroCita);
+		};
+	}));
+
+	api.delete('/appointmentRegister/:_id', wagner.invoke(function (RegistroCita){
+		return function(req, res){
+			return require('./controllers/apointmentRegisterController').deleteAppointmentRegister(req, res, RegistroCita);
+		};
+	}));
+	//end RegistroCita
+	
 	return api;
 };
