@@ -21,19 +21,19 @@ module.exports = function(wagner){
 	// region Paciente
 	api.get('/patient/', wagner.invoke(function (Paciente){
 		return function(req, res){
-			return require('./controllers/foodController').getPatients(req, res, Paciente);
+			return require('./controllers/patientController').getPatients(req, res, Paciente);
 		};
 	}));
 
 	api.get('/patient/:_id', wagner.invoke(function (Paciente){
 		return function(req, res){
-			return require('./controllers/foodController').getPatient(req, res, Paciente);
+			return require('./controllers/patientController').getPatient(req, res, Paciente);
 		};
 	}));
 
 	api.post('/patient/', wagner.invoke(function (Paciente){
 		return function(req, res){
-			return require('./controllers/foodController').newPatient(req, res, Paciente);
+			return require('./controllers/patientController').newPatient(req, res, Paciente);
 		};
 	}));
 
@@ -45,7 +45,7 @@ module.exports = function(wagner){
 
 	api.delete('/patient/:_id', wagner.invoke(function (Paciente){
 		return function(req, res){
-			return require('./controllers/foodController').deletePatient(req, res, Paciente);
+			return require('./controllers/patientController').deletePatient(req, res, Paciente);
 		};
 	}));
 	//endregion Paciente
@@ -71,7 +71,7 @@ module.exports = function(wagner){
 
 	api.delete('/food/:_id', wagner.invoke(function (Comida){
 		return function(req, res){
-			return require('./controllers/foodController').deletePatient(req, res, Comida);
+			return require('./controllers/foodController').deleteFood(req, res, Comida);
 		};
 	}));
 	
@@ -102,6 +102,30 @@ module.exports = function(wagner){
 		};
 	}));
 	//end RegistroCita
-	
+	// Ingrediente
+	api.get('/ingredient/', wagner.invoke(function (Ingrediente){
+		return function(req, res){
+			return require('./controllers/ingredientsController').getIngredients(req, res, Ingrediente);
+		};
+	}));
+
+	api.get('/ingredient/:_id', wagner.invoke(function (Ingrediente){
+		return function(req, res){
+			return require('./controllers/ingredientsController').getIngredient(req, res, Ingrediente);
+		};
+	}));
+
+	api.post('/ingredient/', wagner.invoke(function (Ingrediente){
+		return function(req, res){
+			return require('./controllers/ingredientsController').newIngredient(req, res, Ingrediente);
+		};
+	}));
+
+	api.delete('/ingredient/:_id', wagner.invoke(function (Ingrediente){
+		return function(req, res){
+			return require('./controllers/ingredientsController').deleteIngredient(req, res, Ingrediente);
+		};
+	}));
+	// end Ingrediente
 	return api;
 };
