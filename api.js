@@ -51,7 +51,7 @@ module.exports = function(wagner){
 	//endregion Paciente
 
 	//region Comida
-	api.get('/food/', wagner.invoke(function (Comida){
+	api.get('/foods/', wagner.invoke(function (Comida){
 		return function(req, res){
 			return require('./controllers/foodController').getFoods(req, res, Comida);
 		};
@@ -78,7 +78,7 @@ module.exports = function(wagner){
 	//endregion Comida
 	
 	//RegistroCita
-	api.get('/appointmentRegister/', wagner.invoke(function (RegistroCita){
+	api.get('/appointmentRegisters/', wagner.invoke(function (RegistroCita){
 		return function(req, res){
 			return require('./controllers/apointmentRegisterController').getAppointmentRegisters(req, res, RegistroCita);
 		};

@@ -3,7 +3,7 @@ var handle = require('./../utils/handle');
 var _ = require('underscore');
 
 module.exports.getAppointmentRegisters = function(req, res, RegistroCita){
-	RegistroCita.find({}).exec(handle.handleMany.bind(null, 'registrosdecitas'));
+	RegistroCita.find({}).exec(handle.handleMany.bind(null, 'registrosdecitas', res));
 };
 
 module.exports.getAppointmentRegister = function(req, res, RegistroCita){
