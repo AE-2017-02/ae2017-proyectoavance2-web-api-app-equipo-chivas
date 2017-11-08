@@ -30,6 +30,12 @@ module.exports = function(wagner){
 			return require('./controllers/patientController').getPatient(req, res, Paciente);
 		};
 	}));
+	
+	api.post('/patient/login', wagner.invoke(function(Paciente){
+		return function(req, res){
+			return require('./controllers/patientController').getPatientByLogin(req, res, Paciente);
+		}
+	}));
 
 	api.post('/patient/', wagner.invoke(function (Paciente){
 		return function(req, res){
@@ -133,25 +139,115 @@ module.exports = function(wagner){
 		return function(req, res){
 			return require('./controllers/menuController').getMenus(req, res, Menu);
 		}
-	});
+	}));
 	
 	api.get('/menu/:_id', wagner.invoke(function(Menu){
 		return function(req, res){
 			return require('./controllers/menuController').getMenu(req, res, Menu);
 		}
-	});
+	}));
 	
 	api.post('/menu/', wagner.invoke(function(Menu){
 		return function(req, res){
 			return require('./controllers/menuController').newMenu(req, res, Menu);
 		}
-	});
+	}));
 	
 	api.delete('/menu/:_id', wagner.invoke(function(Menu){
 		return function(req, res){
 			return require('./controllers/menuController').deleteMenu(req, res, Menu);
 		}
-	});
+	}));
 	//end Menu
+	
+	//region Menu_Usuario
+	api.get('/menu_user/', wagner.invoke(function(MenuUsuario){
+		return function(req, res){
+			return require('./controllers/menuCompletoController').getMenusUsers(req, res, MenuUsuario);
+		}
+	}));
+	
+	api.get('/menu_user/:_id', wagner.invoke(function(MenuUsuario){
+		return function(req, res){
+			return require('./controllers/menuCompletoController').getMenuUser(req, res, MenuUsuario);
+		}
+	}));
+	
+	api.post('/menu_user/', wagner.invoke(function(MenuUsuario){
+		return function(req, res){
+			return require('./controllers/menuCompletoController').newMenuUser(req, res, MenuUsuario);
+		}
+	}));
+	
+	api.delete('/menu_user/:_id', wagner.invoke(function(MenuUsuario){
+		return function(req, res){
+			return require('./controllers/menuCompletoController').deleteMenuUser(req, res, MenuUsuario);
+		}
+	}));
+	//end Menu_Usuario
+	
+	//region Cita
+	api.get('/appointment/', wagner.invoke(function(Cita){
+		return function(req, res){
+			return require('./controllers/appointmentController').getAppointments(req, res, Cita);
+		}
+	}));
+	
+	api.get('/appointment/:_id', wagner.invoke(function(Cita){
+		return function(req, res){
+			return require('./controllers/appointmentController').getAppointment(req, res, Cita);
+		}
+	}));
+	
+	api.post('/appointment/', wagner.invoke(function(Cita){
+		return function(req, res){
+			return require('./controllers/appointmentController').newAppointment(req, res, Cita);
+		}
+	}));
+	
+	api.put('/appointment/:_id', wagner.invoke(function(Cita){
+		return function(req, res){
+			return require('./controllers/appointmentController').updateAppointment(req, res, Cita);
+		}
+	}));
+	
+	api.delete('/appointment/:_id', wagner.invoke(function(Cita){
+		return function(req, res){
+			return require('./controllers/appointmentController').deleteAppointment(req, res, Cita);
+		}
+	}));
+	//end Cita
+	
+	//region Usuario
+	api.get('/user/', wagner.invoke(function(Usuario){
+		return function(req, res){
+			return require('./controllers/userController').getUsers(req, res, Usuario);
+		}
+	}));
+	
+	api.get('/user/:_id', wagner.invoke(function(Usuario){
+		return function(req, res){
+			return require('./controllers/userController').getUser(req, res, Usuario);
+		}
+	}));
+	
+	api.post('/user/', wagner.invoke(function(Usuario){
+		return function(req, res){
+			return require('./controllers/userController').newUser(req, res, Usuario);
+		}
+	}));
+	
+	api.put('/user/:_id', wagner.invoke(function(Usuario){
+		return function(req, res){
+			return require('./controllers/userController').updateUser(req, res, Usuario);
+		}
+	}));
+	
+	api.delete('/user/:_id', wagner.invoke(function(Usuario){
+		return function(req, res){
+			return require('./controllers/userController').deleteUser(req, res, Usuario);
+		}
+	}));
+	//end Usuario
 	return api;
 };

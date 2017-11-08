@@ -2,59 +2,38 @@ var status = require('http-status');
 var handle = require('./../utils/handle');
 var _ = require('underscore');
 
-module.exports.getPatients = function (req, res, Paciente){
-	Paciente.find({}).exec(handle.handleMany.bind(null, 'pacientes', res));
+module.exports.getMenusUsers = function (req, res, MenuUsuario){
+	MenuUsuario.find({}).exec(handle.handleMany.bind(null, 'menus_users', res));
 };
 
-module.exports.getPatient = function (req, res, Paciente){
+module.exports.getMenuUser = function (req, res, MenuUsuario){
 	try{
 		var _id = req.params._id;
 	} catch(e){
-		return res.status(status.BAD_REQUEST).json({error: "No patient id provided"});
+		return res.status(status.BAD_REQUEST).json({error: "No menu_user id provided"});
 	}
-	Paciente.find({'_id': _id}).exec(handle.handleOne.bind(null, 'paciente', res));
+	MenuUsuario.find({'_id': _id}).exec(handle.handleOne.bind(null, 'menu_user', res));
 };
 
-module.exports.getPatientByLogin = function(req, res, Paciente){
+module.exports.newMenuUser = function (req, res, MenuUsuario){
 	try{
-		var email = req.body.paciente.email;
-		var pin = req.body.paciente.pin;
-	}catch(e){
-		return res.status(status.BAD_REQUEST).json({error: e.toString()});
-	}
-	Paciente.find({'email': email, 'pin':pin}).exec(handle.handleOne.bind(null, 'paciente', res));
-}
-
-module.exports.newPatient = function (req, res, Paciente){
-	try{
-		var paciente = req.body.paciente;
+		var menu_user = req.body.menu_user;
 	} catch(e){
-		return res.status(status.BAD_REQUEST).json({error: "No patient provided"});
+		return res.status(status.BAD_REQUEST).json({error: "No menu_user provided"});
 	}
-	
-	Paciente.find({'email': paciente.email}, function(err, patient){
-		if(err){
-			return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
-		}
-
-		if(patient){
-			return res.status(status.NOT_FOUND).json({error : 'Cant create, user email is already in use'});
-		}else{
-			Paciente.create(paciente, handle.handleMany.bind(null, 'paciente', res));
-		}
-	});
+	MenuUsuario.create(menu_user, handle.handleMany.bind(null, 'menu_user', res));
 };
 
-module.exports.deletePatient = function (req, res, Paciente){
+module.exports.deleteMenuUser = function (req, res, MenuUsuario){
 	try{
 		var _id = req.params._id;
 	}catch(e){
 		return res.status(status.BAD_REQUEST).json({error: e.toString()});
 	}
-	Paciente.remove({'_id': _id}, handle.handleOne.bind(null, 'paciente', res));
+	MenuUsuario.remove({'_id': _id}, handle.handleOne.bind(null, 'menu_user', res));
 };
 
-module.exports.updatePatient = function(req, res, Paciente){
+/*module.exports.updateMenuUser = function(req, res, MenuUsuario){
 	try{
 		var idPaciente = req.params._id;
 		var paciente = req.body.paciente;
@@ -306,4 +285,4 @@ module.exports.updatePatient = function(req, res, Paciente){
 
 		funcion25();
 	});
-}
+}*/
