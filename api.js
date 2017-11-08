@@ -127,5 +127,31 @@ module.exports = function(wagner){
 		};
 	}));
 	// end Ingrediente
+	
+	//region Menu
+	api.get('/menu/', wagner.invoke(function(Menu){
+		return function(req, res){
+			return require('./controllers/menuController').getMenus(req, res, Menu);
+		}
+	});
+	
+	api.get('/menu/:_id', wagner.invoke(function(Menu){
+		return function(req, res){
+			return require('./controllers/menuController').getMenu(req, res, Menu);
+		}
+	});
+	
+	api.post('/menu/', wagner.invoke(function(Menu){
+		return function(req, res){
+			return require('./controllers/menuController').newMenu(req, res, Menu);
+		}
+	});
+	
+	api.delete('/menu/:_id', wagner.invoke(function(Menu){
+		return function(req, res){
+			return require('./controllers/menuController').deleteMenu(req, res, Menu);
+		}
+	});
+	//end Menu
 	return api;
 };
