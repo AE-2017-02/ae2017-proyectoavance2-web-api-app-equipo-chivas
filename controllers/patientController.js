@@ -36,8 +36,7 @@ module.exports.newPatient = function (req, res, Paciente){
 		if(err){
 			return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
 		}
-
-		if(patient.email != undefined){
+		if(patient[0] != undefined){
 			return res.status(status.NOT_FOUND).json({error : 'Cant create, user email is already in use'});
 		}else{
 			Paciente.create(paciente, handle.handleMany.bind(null, 'paciente', res));
