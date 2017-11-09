@@ -74,6 +74,12 @@ module.exports = function(wagner){
 			return require('./controllers/foodController').newFood(req, res, Comida);
 		};
 	}));
+	
+	api.put('/food/', wagner.invoke(function(Comida){
+		return function(req, res){
+			return require('./controllers/foodController').updateFood(req, res, Comida);
+		};
+	}));
 
 	api.delete('/food/:_id', wagner.invoke(function (Comida){
 		return function(req, res){
