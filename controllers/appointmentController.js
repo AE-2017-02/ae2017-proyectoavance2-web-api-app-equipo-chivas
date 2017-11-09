@@ -15,6 +15,48 @@ module.exports.getAppointment = function (req, res, Cita){
 	Cita.find({'_id': _id}).exec(handle.handleOne.bind(null, 'appointment', res));
 };
 
+module.exports.getAppointmentsUsedForDate = function (req, res, Cita){
+	try{
+		var date = req.params.date;
+	} catch(e){
+		return res.status(status.BAD_REQUEST).json({error: "No appointment id provided"});
+	}
+	
+	Cita.find({ $and: [{'fecha': { $gte : new Date(date+"T00:00:00") }}, {'fecha':{$lte: new Date(date+"T23:59:59")}}]}, function(error, result){
+		
+		if(error){
+			return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
+		}
+		if(!result){
+			return res.status(status.NOT_FOUND).json({error: 'Not found'});
+		}
+		
+		var finalresult = [];
+
+		for(var i =0; i<Object.keys(result).length; i++){
+			var count = 0;
+			for(var j=0; j<Object.keys(result).length; j++){
+				if(result[i].fecha.getTime() === result[j].fecha.getTime()){
+					count ++;
+				}
+			}
+			if(!(count > 2)){
+				finalresult.push(result[i].fecha);
+			}
+		}
+		
+		var uniqueArray = finalresult
+		.map(function (date) { return date.getTime() })
+		.filter(function (date, i, array) {
+			return array.indexOf(date) === i;
+		})
+		.map(function (time) { return new Date(time); });
+		
+		res.status(status.OK).json({appointment : uniqueArray});
+		
+	});
+};
+
 module.exports.newAppointment = function (req, res, Cita){
 	try{
 		var appointment = req.body.appointment;

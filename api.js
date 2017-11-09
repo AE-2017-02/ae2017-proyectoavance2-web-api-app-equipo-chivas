@@ -211,6 +211,12 @@ module.exports = function(wagner){
 		}
 	}));
 	
+	api.get('/appointmentForDate/:date', wagner.invoke(function(Cita){
+		return function(req, res){
+			return require('./controllers/appointmentController').getAppointmentsUsedForDate(req, res, Cita);
+		}
+	}));
+	
 	api.post('/appointment/', wagner.invoke(function(Cita){
 		return function(req, res){
 			return require('./controllers/appointmentController').newAppointment(req, res, Cita);
