@@ -101,6 +101,12 @@ module.exports = function(wagner){
 			return require('./controllers/apointmentRegisterController').newAppointmentRegister(req, res, RegistroCita);
 		};
 	}));
+	
+	api.put('/appointmentRegister/:_id', wagner.invoke(function(RegistroCita){
+		return function(req, res){
+			return require('./controllers/apointmentRegisterController').updateAppointmentRegister(req, res, RegistroCita);
+		}
+	}));
 
 	api.delete('/appointmentRegister/:_id', wagner.invoke(function (RegistroCita){
 		return function(req, res){
@@ -125,6 +131,12 @@ module.exports = function(wagner){
 		return function(req, res){
 			return require('./controllers/ingredientsController').newIngredient(req, res, Ingrediente);
 		};
+	}));
+	
+	api.put('/ingredient/:_id', wagner.invoke(function(Ingrediente){
+		return function(req, res){
+			return require('./controllers/ingredientsController').updateIngredient(req, res, Ingrediente);
+		}
 	}));
 
 	api.delete('/ingredient/:_id', wagner.invoke(function (Ingrediente){
