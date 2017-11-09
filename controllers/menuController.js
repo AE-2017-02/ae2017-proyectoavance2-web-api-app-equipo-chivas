@@ -78,7 +78,7 @@ module.exports.updateMenu = function(req, res, Menu){
 		}
 
 		var funcion1 = function(){
-			if(menu.nombre != undefined && menus[0].nombre != menu.fecha){
+			if(menu.nombre != undefined && menus[0].nombre != menu.nombre){
 				actualizaCampo('nombre', menu.nombre, funcionfinal);
 			}else{
 				funcionfinal();

@@ -199,6 +199,12 @@ module.exports = function(wagner){
 		}
 	}));
 	
+	api.put('/menu_user/:_id', wagner.invoke(function(MenuUsuario){
+		return function(req, res){
+			return require('./controllers/menuCompletoController').updateMenuUser(req, res, MenuUsuario);
+		};
+	}));
+
 	api.delete('/menu_user/:_id', wagner.invoke(function(MenuUsuario){
 		return function(req, res){
 			return require('./controllers/menuCompletoController').deleteMenuUser(req, res, MenuUsuario);
