@@ -164,12 +164,20 @@ module.exports = function(wagner){
 			return require('./controllers/menuController').newMenu(req, res, Menu);
 		}
 	}));
+
+	api.put('/menu/:_id', wagner.invoke(function(Menu){
+		return function(req, res){
+			return require('./controllers/menuController').updateMenu(req, res, Menu);
+		};
+	}));
 	
 	api.delete('/menu/:_id', wagner.invoke(function(Menu){
 		return function(req, res){
 			return require('./controllers/menuController').deleteMenu(req, res, Menu);
 		}
 	}));
+
+
 	//end Menu
 	
 	//region Menu_Usuario
