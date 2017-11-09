@@ -40,7 +40,7 @@ module.exports.getAppointmentsUsedForDate = function (req, res, Cita){
 					count ++;
 				}
 			}
-			if(!(count > 2)){
+			if((count >= 2)){
 				finalresult.push(result[i].fecha);
 			}
 		}
