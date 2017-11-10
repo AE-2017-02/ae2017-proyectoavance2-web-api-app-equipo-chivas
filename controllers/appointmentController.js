@@ -59,7 +59,7 @@ module.exports.getAppointmentsUsedForDate = function (req, res, Cita){
 
 module.exports.newAppointment = function (req, res, Cita){
 	try{
-		var appointment = req.body.appointment;
+		var appointment = req.body.cita;
 	} catch(e){
 		return res.status(status.BAD_REQUEST).json({error: "No appointment provided"});
 	}
@@ -78,7 +78,7 @@ module.exports.deleteAppointment = function (req, res, Cita){
 module.exports.updateAppointment = function(req, res, Cita){
 	try{
 		var idCita = req.params._id;
-		var cita = req.body.paciente;
+		var cita = req.body.cita;
 		var count = 0;
 		var camposActualizados = "";
 	}catch(e){
@@ -126,7 +126,15 @@ module.exports.updateAppointment = function(req, res, Cita){
 				funcionfinal();
 			}
 		}
+		
+		var funcion2 = function(){
+			if(cita.estatus != undefined && appointment[0].estatus != cita.estatus){
+				actualizaCampo('estatus', cita.estatus, funcion1);
+			}else{
+				funcion1();
+			}
+		}
 
-		funcion1();
+		funcion2();
 	});
 }
