@@ -231,9 +231,9 @@ module.exports = function(wagner){
 		}
 	}));
 
-	api.get('/pendingAppointments/:date', wagner.invoke(function(Cita){
+	api.get('/pendingAppointments/:date', wagner.invoke(function(Cita, Paciente){
 		return function(req, res){
-			return require('./controllers/appointmentController').getPendingAppointments(req, res, Cita);
+			return require('./controllers/appointmentController').getPendingAppointments(req, res, Cita, Paciente);
 		}
 	}));	
 	

@@ -32,22 +32,37 @@ module.exports.getPendingAppointments = function (req, res, Cita, Paciente){
 			return res.status(status.NOT_FOUND).json({error: 'Not found'});
 		}
 		
-		for(var i=0; j<result.length; i++){
-			Paciente.find({'idCita': result[i]}, {'nombre': true}, function(error, resulta){
+		if(result.length == 0){
+			res.status(status.OK).json({appointment : result});				
+		}
+		var i=0;
+		
+			result.forEach(function(element) {
+				
+			Paciente.findOne({'idCita': element._id}, {'nombre': true}, function(error, resulta){
 				if(error){
 					return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
 				}
-				if(!resulta){
-					return res.status(status.NOT_FOUND).json({error: 'Not found'});
-				}
-
 				
+				var element2 = element.toObject();
+				if(resulta != null){
+					
+					element2.namePatient = resulta.nombre;
+					element2.idPatient = resulta._id;
+					
+					result[result.indexOf(element)] = element2;
+				}else{										
+					element2["namePatient"] = "";
+					element2["idPatient"] = "";
+					result[result.indexOf(element)] = element2;
+				}
+				if(result.indexOf(element2) == result.length-1){
+					return res.status(status.OK).json({appointment : result});	
+				}
+			});		
+
 			});
-		}
-		
-		res.status(status.OK).json({appointment : finalresult});
-		
-	});
+		});
 };
 
 module.exports.getAppointmentsUsedForDate = function (req, res, Cita){
@@ -163,8 +178,8 @@ module.exports.updateAppointment = function(req, res, Cita){
 		}
 		
 		var funcion2 = function(){
-			if(cita.estatus != undefined && appointment[0].estatus != cita.estatus){
-				actualizaCampo('estatus', cita.estatus, funcion1);
+			if(cita.status != undefined && appointment[0].status != cita.status){
+				actualizaCampo('status', cita.status, funcion1);
 			}else{
 				funcion1();
 			}
