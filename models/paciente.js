@@ -7,7 +7,7 @@ var pacienteSchema = {
     email: {type: String, required: true},
 	pin: {type: Number, required: false},
 	activo: { type: Boolean, required: true},
-	idCita: {type: mongoose.Schema.Types.ObjectId, required:false},
+	idCita: {type: mongoose.Schema.Types.ObjectId, required:false, ref:"Cita"},
 	menu_asignado: [
 		{type: mongoose.Schema.Types.ObjectId, ref: "MenuUsuario"}
 	],

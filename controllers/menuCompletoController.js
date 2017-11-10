@@ -17,7 +17,7 @@ module.exports.getMenuUser = function (req, res, MenuUsuario){
 
 module.exports.newMenuUser = function (req, res, MenuUsuario){
 	try{
-		var menu_user = req.body.menu_user;
+		var menu_user = req.body.menu_usuario;
 	} catch(e){
 		return res.status(status.BAD_REQUEST).json({error: "No menu_user provided"});
 	}

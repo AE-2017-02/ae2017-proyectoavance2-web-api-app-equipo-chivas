@@ -15,6 +15,8 @@ module.exports.getUser = function (req, res, Usuario){
 	Usuario.find({'_id': _id}).exec(handle.handleOne.bind(null, 'usuario', res));
 };
 
+
+
 module.exports.newUser = function (req, res, Usuario){
 	try{
 		var usuario = req.body.usuario;
@@ -95,4 +97,6 @@ module.exports.updateUser = function(req, res, Usuario){
 
 		funcion2();
 	});
+
+	
 }
