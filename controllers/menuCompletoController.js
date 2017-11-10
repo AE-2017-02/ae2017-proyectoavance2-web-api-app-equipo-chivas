@@ -71,6 +71,7 @@ module.exports.updateMenuUser = function(req, res, MenuUsuario){
 		}
 
 		var funcionfinal = function(){
+			console.log('funcion final');
 			if(_.isEmpty(menuUsuario) || count == 0){
 				return res.status(status.BAD_REQUEST).json({error: 'Not actualizable fields'});
 			}
@@ -79,6 +80,7 @@ module.exports.updateMenuUser = function(req, res, MenuUsuario){
 		}
 
 		var funcion1 = function(){
+						console.log('funcion 1');
 			if(menuUsuario.desayuno != undefined){
 				if(menuUsuario.desayuno.idMenu != undefined && menuUser[0].desayuno.idMenu != menuUsuario.desayuno.idMenu){
 						actualizaCampo('desayuno.idMenu', menuUsuario.desayuno.idMenu, funcion2);
@@ -91,6 +93,7 @@ module.exports.updateMenuUser = function(req, res, MenuUsuario){
 		}
 
 		var funcion2 = function(){
+						console.log('funcion 2');
 				if(menuUsuario.desayuno.hora != undefined && menuUser[0].desayuno.hora != menuUsuario.desayuno.hora){
 						actualizaCampo('desayuno.hora', menuUsuario.desayuno.hora, funcion3);
 				}else{
@@ -99,6 +102,7 @@ module.exports.updateMenuUser = function(req, res, MenuUsuario){
 	    }
 
 		var funcion3 = function(){
+						console.log('funcion 3');
 				if(menuUsuario.desayuno.cumplido != undefined && menuUser[0].desayuno.cumplido != menuUsuario.desayuno.cumplido){
 						actualizaCampo('desayuno.cumplido', menuUsuario.desayuno.cumplido, funcion4);
 				}else{
@@ -107,6 +111,7 @@ module.exports.updateMenuUser = function(req, res, MenuUsuario){
 	    }
 
 		var funcion4 = function(){
+						console.log('funcion 4');
 			if(menuUsuario.comida != undefined){
 				if(menuUsuario.comida.idMenu != undefined && menuUser[0].comida.idMenu != menuUsuario.comida.idMenu){
 						actualizaCampo('comida.idMenu', menuUsuario.comida.idMenu, funcion5);
@@ -119,6 +124,7 @@ module.exports.updateMenuUser = function(req, res, MenuUsuario){
 		}
 
 		var funcion5 = function(){
+						console.log('funcion 5');
 				if(menuUsuario.comida.hora != undefined && menuUser[0].comida.hora != menuUsuario.comida.hora){
 						actualizaCampo('comida.hora', menuUsuario.comida.hora, funcion6);
 				}else{
@@ -127,6 +133,7 @@ module.exports.updateMenuUser = function(req, res, MenuUsuario){
 	    }
 
 		var funcion6 = function(){
+						console.log('funcion 6');
 				if(menuUsuario.comida.cumplido != undefined && menuUser[0].comida.cumplido != menuUsuario.comida.cumplido){
 						actualizaCampo('comida.cumplido', menuUsuario.comida.cumplido, funcion7);
 				}else{
@@ -135,6 +142,7 @@ module.exports.updateMenuUser = function(req, res, MenuUsuario){
 	    }
 
 		var funcion7 = function(){
+				console.log('funcion 7');		
 			if(menuUsuario.cena != undefined){
 				if(menuUsuario.cena.idMenu != undefined && menuUser[0].cena.idMenu != menuUsuario.cena.idMenu){
 						actualizaCampo('cena.idMenu', menuUsuario.cena.idMenu, funcion8);
@@ -147,6 +155,7 @@ module.exports.updateMenuUser = function(req, res, MenuUsuario){
 		}
 
 		var funcion8 = function(){
+						console.log('funcion 8');
 				if(menuUsuario.cena.hora != undefined && menuUser[0].cena.hora != menuUsuario.cena.hora){
 						actualizaCampo('cena.hora', menuUsuario.cena.hora, funcion9);
 				}else{
@@ -155,6 +164,7 @@ module.exports.updateMenuUser = function(req, res, MenuUsuario){
 	    }
 
 		var funcion9 = function(){
+					console.log('funcion 9');	
 				if(menuUsuario.cena.cumplido != undefined && menuUser[0].cena.cumplido != menuUsuario.cena.cumplido){
 						actualizaCampo('cena.cumplido', menuUsuario.cena.cumplido, funcion10);
 				}else{
@@ -164,6 +174,7 @@ module.exports.updateMenuUser = function(req, res, MenuUsuario){
 
 
 		var funcion10 = function(){
+				console.log('funcion 10');		
 			if(menuUsuario.colacion1 != undefined){
 				if(menuUsuario.colacion1.idMenu != undefined && menuUser[0].colacion1.idMenu != menuUsuario.colacion1.idMenu){
 						actualizaCampo('colacion1.idMenu', menuUsuario.colacion1.idMenu, funcion11);
@@ -176,6 +187,7 @@ module.exports.updateMenuUser = function(req, res, MenuUsuario){
 		}
 
 		var funcion11 = function(){
+					console.log('funcion 11');	
 				if(menuUsuario.colacion1.hora != undefined && menuUser[0].colacion1.hora != menuUsuario.colacion1.hora){
 						actualizaCampo('colacion1.hora', menuUsuario.colacion1.hora, funcion12);
 				}else{
@@ -184,6 +196,7 @@ module.exports.updateMenuUser = function(req, res, MenuUsuario){
 	    }
 
 		var funcion12 = function(){
+				console.log('funcion 12');		
 				if(menuUsuario.colacion1.cumplido != undefined && menuUser[0].colacion1.cumplido != menuUsuario.colacion1.cumplido){
 						actualizaCampo('colacion1.cumplido', menuUsuario.colacion1.cumplido, funcion13);
 				}else{
@@ -192,6 +205,7 @@ module.exports.updateMenuUser = function(req, res, MenuUsuario){
 	    }
 	
 		var funcion13 = function(){
+					console.log('funcion 13');	
 			if(menuUsuario.colacion2 != undefined){
 				if(menuUsuario.colacion2.idMenu != undefined && menuUser[0].colacion2.idMenu != menuUsuario.colacion2.idMenu){
 						actualizaCampo('colacion2.idMenu', menuUsuario.colacion2.idMenu, funcion14);
@@ -204,6 +218,7 @@ module.exports.updateMenuUser = function(req, res, MenuUsuario){
 		}
 
 		var funcion14 = function(){
+			console.log('funcion 14');			
 				if(menuUsuario.colacion2.hora != undefined && menuUser[0].colacion2.hora != menuUsuario.colacion2.hora){
 						actualizaCampo('colacion2.hora', menuUsuario.colacion2.hora, funcion15);
 				}else{
@@ -212,6 +227,7 @@ module.exports.updateMenuUser = function(req, res, MenuUsuario){
 	    }
 
 		var funcion15 = function(){
+					console.log('funcion 15');	
 				if(menuUsuario.colacion2.cumplido != undefined && menuUser[0].colacion2.cumplido != menuUsuario.colacion2.cumplido){
 						actualizaCampo('colacion2.cumplido', menuUsuario.colacion2.cumplido, funcionfinal);
 				}else{
