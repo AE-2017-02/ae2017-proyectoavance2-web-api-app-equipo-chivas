@@ -230,6 +230,12 @@ module.exports = function(wagner){
 			return require('./controllers/appointmentController').getAppointment(req, res, Cita);
 		}
 	}));
+
+	api.get('/pendingAppointments/:date', wagner.invoke(function(Cita){
+		return function(req, res){
+			return require('./controllers/appointmentController').getPendingAppointments(req, res, Cita);
+		}
+	}));	
 	
 	api.get('/appointmentForDate/:date', wagner.invoke(function(Cita){
 		return function(req, res){
@@ -277,7 +283,7 @@ module.exports = function(wagner){
 
 	api.post('/user/login/',wagner.invoke(function(Usuario){
 		return function(req, res){
-			return require('./controllers/userController').login(req, res, Usuario);
+			return require('./controllers/userController').getUserByLogin(req, res, Usuario);
 		}
 	}));
 	

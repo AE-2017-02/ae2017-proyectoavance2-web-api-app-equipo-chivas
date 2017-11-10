@@ -15,14 +15,14 @@ module.exports.getUser = function (req, res, Usuario){
 	Usuario.find({'_id': _id}).exec(handle.handleOne.bind(null, 'usuario', res));
 };
 
-module.exports.login = function (req, res,Usuario){
+module.exports.getUserByLogin = function(req, res, Usuario){
 	try{
 		var username = req.body.username;
 		var password = req.body.password;
-	} catch(e){
-		return res.status(status.BAD_REQUEST).json({error: "No user id provided"});
+	}catch(e){
+		return res.status(status.BAD_REQUEST).json({error: e.toString()});
 	}
-	Usuario.find({'username': username,'password':password}).exec(handle.handleOne.bind(null, 'usuario', res));
+	Usuario.find({'username': username, 'password':password}).exec(handle.handleOne.bind(null, 'usuario', res));
 }
 
 module.exports.newUser = function (req, res, Usuario){
@@ -106,3 +106,4 @@ module.exports.updateUser = function(req, res, Usuario){
 		funcion2();
 	});
 }
+	

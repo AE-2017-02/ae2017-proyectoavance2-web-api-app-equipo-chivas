@@ -223,5 +223,3 @@ module.exports.updateMenuUser = function(req, res, MenuUsuario){
 	});
 }
 
-
-

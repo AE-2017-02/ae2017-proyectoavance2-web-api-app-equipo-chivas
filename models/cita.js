@@ -1,8 +1,8 @@
 var mongoose = require('mongoose');
 
 var citaSchema = {
-        fecha:{type:Date, required:true},
-		estatus: {type: String, required: true, enum: ['Pendiente', 'Atendida', 'Cancelada'], default:'Pendiente'}
+        fecha:{type:Date, required:true},  
+        status:{type:String, required:true}
 };
 
 module.exports = new mongoose.Schema(citaSchema);
