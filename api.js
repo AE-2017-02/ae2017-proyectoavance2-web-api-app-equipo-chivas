@@ -205,6 +205,12 @@ module.exports = function(wagner){
 		}
 	}));
 	
+	api.put('/menu_user/:_id', wagner.invoke(function(MenuUsuario){
+		return function(req, res){
+			return require('./controllers/menuCompletoController').updateMenuUser(req, res, MenuUsuario);
+		};
+	}));
+
 	api.delete('/menu_user/:_id', wagner.invoke(function(MenuUsuario){
 		return function(req, res){
 			return require('./controllers/menuCompletoController').deleteMenuUser(req, res, MenuUsuario);
@@ -266,6 +272,12 @@ module.exports = function(wagner){
 	api.post('/user/', wagner.invoke(function(Usuario){
 		return function(req, res){
 			return require('./controllers/userController').newUser(req, res, Usuario);
+		}
+	}));
+
+	api.post('/user/login/',wagner.invoke(function(Usuario){
+		return function(req, res){
+			return require('./controllers/userController').login(req, res, Usuario);
 		}
 	}));
 	
