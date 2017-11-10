@@ -137,7 +137,7 @@ module.exports.updateMenuUser = function(req, res, MenuUsuario){
 				if(menuUsuario.comida.cumplido != undefined && menuUser[0].comida.cumplido != menuUsuario.comida.cumplido){
 						actualizaCampo('comida.cumplido', menuUsuario.comida.cumplido, funcion7);
 				}else{
-					funcion7;
+					funcion7();
 				}	
 	    }
 
