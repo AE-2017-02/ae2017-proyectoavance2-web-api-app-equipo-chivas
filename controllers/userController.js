@@ -102,8 +102,24 @@ module.exports.updateUser = function(req, res, Usuario){
 				funcion1();
 			}
 		}
+		
+		var funcion3 = function(){
+			if(usuario.photo != undefined && user[0].photo != usuario.photo){
+				actualizaCampo('photo', usuario.photo, funcion2);
+			}else{
+				funcion2();
+			}
+		}
+		
+		var funcion4 = function(){
+			if(usuario.name != undefined && user[0].name != usuario.name){
+				actualizaCampo('name', usuario.name, funcion3);
+			}else{
+				funcion3();
+			}
+		}
 
-		funcion2();
+		funcion4();
 	});
 }
 	
