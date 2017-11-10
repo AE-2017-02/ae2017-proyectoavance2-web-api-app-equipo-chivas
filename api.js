@@ -75,7 +75,7 @@ module.exports = function(wagner){
 		};
 	}));
 	
-	api.put('/food/', wagner.invoke(function(Comida){
+	api.put('/food/:_id', wagner.invoke(function(Comida){
 		return function(req, res){
 			return require('./controllers/foodController').updateFood(req, res, Comida);
 		};

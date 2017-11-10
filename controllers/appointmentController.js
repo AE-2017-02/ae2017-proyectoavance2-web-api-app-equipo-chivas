@@ -16,14 +16,14 @@ module.exports.getAppointment = function (req, res, Cita){
 };
 
 
-module.exports.getPendingAppointments = function (req, res, Cita){
+module.exports.getPendingAppointments = function (req, res, Cita, Paciente){
 	try{
 		var date = req.params.date;
 	} catch(e){
 		return res.status(status.BAD_REQUEST).json({error: "No appointment id provided"});
 	}
 	
-	Cita.find({ $and: [{'fecha': { $gte : new Date(date+"T00:00:00") }}, {'fecha':{$lte: new Date(date+"T23:59:59")}}]}, function(error, result){
+	Cita.find({ $and: [{'fecha': { $gte : new Date(date+"T00:00:00") }}, {'fecha':{$lte: new Date(date+"T23:59:59")}}, {'status': 'pendiente'}]}, function(error, result){
 		
 		if(error){
 			return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
@@ -32,13 +32,17 @@ module.exports.getPendingAppointments = function (req, res, Cita){
 			return res.status(status.NOT_FOUND).json({error: 'Not found'});
 		}
 		
-		var finalresult = [];
+		for(var i=0; j<result.length; i++){
+			Paciente.find({'idCita': result[i]}, {'nombre': true}, function(error, resulta){
+				if(error){
+					return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
+				}
+				if(!resulta){
+					return res.status(status.NOT_FOUND).json({error: 'Not found'});
+				}
 
-		for(var i =0; i<Object.keys(result).length; i++){
-			if(result[i].status == "pendiente"){
-				finalresult.push(result[i]);
-			}
-
+				
+			});
 		}
 		
 		res.status(status.OK).json({appointment : finalresult});

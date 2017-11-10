@@ -80,7 +80,23 @@ module.exports.updateIngredient = function(req, res, Ingrediente){
 
 		var funcion1 = function(){
 			if(ingrediente.nombre != undefined && ingredient[0].nombre != ingrediente.nombre){
-				actualizaCampo('nombre', ingrediente.nombre, funcionfinal);
+				actualizaCampo('nombre', ingrediente.nombre, funcion2);
+			}else{
+				funcion2();
+			}
+		}
+		
+		var funcion2 = function(){
+			if(ingrediente.calorias != undefined && ingredient[0].calorias != ingrediente.calorias){
+				actualizaCampo('calorias', ingrediente.calorias, funcion3);
+			}else{
+				funcion3();
+			}
+		}
+		
+		var funcion3 = function(){
+			if(ingrediente.unitMeasure != undefined && ingredient[0].unitMeasure != ingrediente.unitMeasure){
+				actualizaCampo('unitMeasure', ingrediente.unitMeasure, funcionfinal);
 			}else{
 				funcionfinal();
 			}
