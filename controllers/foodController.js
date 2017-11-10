@@ -21,9 +21,7 @@ module.exports.newFood = function (req, res, Comida){
 	} catch(e){
 		return res.status(status.BAD_REQUEST).json({error: "No food provided"});
 	}
-	console.log('didwegotin?');
 	Comida.create(comida, handle.handleMany.bind(null, 'comida', res));
-	console.log('yes');
 };
 
 module.exports.deleteFood = function (req, res, Comida){

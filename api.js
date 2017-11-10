@@ -280,6 +280,12 @@ module.exports = function(wagner){
 			return require('./controllers/userController').newUser(req, res, Usuario);
 		}
 	}));
+
+	api.post('/user/login/',wagner.invoke(function(Usuario){
+		return function(req, res){
+			return require('./controllers/userController').getUserByLogin(req, res, Usuario);
+		}
+	}));
 	
 	api.put('/user/:_id', wagner.invoke(function(Usuario){
 		return function(req, res){

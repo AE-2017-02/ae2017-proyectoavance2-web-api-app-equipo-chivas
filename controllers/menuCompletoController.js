@@ -17,7 +17,7 @@ module.exports.getMenuUser = function (req, res, MenuUsuario){
 
 module.exports.newMenuUser = function (req, res, MenuUsuario){
 	try{
-		var menu_user = req.body.menu_usuario;
+		var menu_user = req.body.menu_user;
 	} catch(e){
 		return res.status(status.BAD_REQUEST).json({error: "No menu_user provided"});
 	}
@@ -222,6 +222,4 @@ module.exports.updateMenuUser = function(req, res, MenuUsuario){
 		funcion1();
 	});
 }
-
-
 

@@ -15,7 +15,7 @@ app.use(function (req, res, next){
 	
 	// Permitir la conexión.
 	
-	res.setHeader('Acess-Control-Allow-Origin', '*');
+	res.setHeader('Access-Control-Allow-Origin', '*');
 	
 	// Peticiones Permitidas.
 	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
