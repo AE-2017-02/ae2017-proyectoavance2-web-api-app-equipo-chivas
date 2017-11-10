@@ -108,7 +108,7 @@ module.exports.updateAppointmentRegister = function(req, res, RegistroCita){
 			if(registroCita.mediciones != undefined){
 				if(registroCita.mediciones.cirfunferencias != undefined){
 					if(registroCita.mediciones.circunferencias.brazo != undefined && appointmentRegister[0].mediciones.circunferencias.brazo != registroCita.mediciones.circunferencias.brazo){
-						actualizaCampo('mediciones.circunferencias.brazo', paciente.mediciones.circunferencias.brazo, funcion5);
+						actualizaCampo('mediciones.circunferencias.brazo', registroCita.mediciones.circunferencias.brazo, funcion5);
 					}else{
 						funcion5();
 					}
@@ -122,7 +122,7 @@ module.exports.updateAppointmentRegister = function(req, res, RegistroCita){
 		
 		var funcion5 = function(){
 			if(registroCita.mediciones.circunferencias.cintura != undefined && appointmentRegister[0].mediciones.circunferencias.cintura != registroCita.mediciones.circunferencias.cintura){
-				actualizaCampo('mediciones.circunferencias.cintura', paciente.mediciones.circunferencias.cintura, funcion6);
+				actualizaCampo('mediciones.circunferencias.cintura', registroCita.mediciones.circunferencias.cintura, funcion6);
 			}else{
 				funcion6();
 			}
@@ -130,7 +130,7 @@ module.exports.updateAppointmentRegister = function(req, res, RegistroCita){
 		
 		var funcion6 = function(){
 			if(registroCita.mediciones.circunferencias.cadera != undefined && appointmentRegister[0].mediciones.circunferencias.cadera != registroCita.mediciones.circunferencias.cadera){
-				actualizaCampo('mediciones.circunferencias.cadera', paciente.mediciones.circunferencias.cadera, funcion7);
+				actualizaCampo('mediciones.circunferencias.cadera', registroCita.mediciones.circunferencias.cadera, funcion7);
 			}else{
 				funcion7();
 			}
@@ -138,7 +138,7 @@ module.exports.updateAppointmentRegister = function(req, res, RegistroCita){
 		
 		var funcion7 = function(){
 			if(registroCita.mediciones.circunferencias.brazo_cont != undefined && appointmentRegister[0].mediciones.circunferencias.brazo_cont != registroCita.mediciones.circunferencias.brazo_cont){
-				actualizaCampo('mediciones.circunferencias.brazo_cont', paciente.mediciones.circunferencias.brazo_cont, funcion8);
+				actualizaCampo('mediciones.circunferencias.brazo_cont', registroCita.mediciones.circunferencias.brazo_cont, funcion8);
 			}else{
 				funcion8();
 			}
@@ -146,7 +146,7 @@ module.exports.updateAppointmentRegister = function(req, res, RegistroCita){
 		
 		var funcion8 = function(){
 			if(registroCita.mediciones.circunferencias.muslo != undefined && appointmentRegister[0].mediciones.circunferencias.muslo != registroCita.mediciones.circunferencias.muslo){
-				actualizaCampo('mediciones.circunferencias.muslo', paciente.mediciones.circunferencias.muslo, funcion9);
+				actualizaCampo('mediciones.circunferencias.muslo', registroCita.mediciones.circunferencias.muslo, funcion9);
 			}else{
 				funcion9();
 			}
@@ -154,7 +154,7 @@ module.exports.updateAppointmentRegister = function(req, res, RegistroCita){
 		
 		var funcion9 = function(){
 			if(registroCita.mediciones.circunferencias.pantorrilla != undefined && appointmentRegister[0].mediciones.circunferencias.pantorrilla != registroCita.mediciones.circunferencias.pantorrilla){
-				actualizaCampo('mediciones.circunferencias.pantorrilla', paciente.mediciones.circunferencias.pantorrilla, funcion4);
+				actualizaCampo('mediciones.circunferencias.pantorrilla', registroCita.mediciones.circunferencias.pantorrilla, funcion4);
 			}else{
 				funcion4();
 			}			
@@ -163,7 +163,7 @@ module.exports.updateAppointmentRegister = function(req, res, RegistroCita){
 		var funcion4 = function(){
 			if(registroCita.mediciones.pliegues != undefined){
 				if(registroCita.mediciones.pliegues.tricipital != undefined && appointmentRegister[0].mediciones.pliegues.tricipital != registroCita.mediciones.pliegues.tricipital){
-					actualizaCampo('mediciones.pliegues.tricipital', paciente.mediciones.pliegues.tricipital, funcion10);
+					actualizaCampo('mediciones.pliegues.tricipital', registroCita.mediciones.pliegues.tricipital, funcion10);
 				}else{
 					funcion10();
 				}
@@ -174,7 +174,7 @@ module.exports.updateAppointmentRegister = function(req, res, RegistroCita){
 		
 		var funcion10 = function(){
 			if(registroCita.mediciones.pliegues.sEscapulada != undefined && appointmentRegister[0].mediciones.pliegues.sEscapulada != registroCita.mediciones.pliegues.sEscapulada){
-				actualizaCampo('mediciones.pliegues.sEscapulada', paciente.mediciones.pliegues.sEscapulada, funcion11);
+				actualizaCampo('mediciones.pliegues.sEscapulada', registroCita.mediciones.pliegues.sEscapulada, funcion11);
 			}else{
 				funcion11();
 			}
@@ -182,7 +182,7 @@ module.exports.updateAppointmentRegister = function(req, res, RegistroCita){
 		
 		var funcion11 = function(){
 			if(registroCita.mediciones.pliegues.bicapital != undefined && appointmentRegister[0].mediciones.pliegues.bicapital != registroCita.mediciones.pliegues.bicapital){
-				actualizaCampo('mediciones.pliegues.bicapital', paciente.mediciones.pliegues.bicapital, funcion12);
+				actualizaCampo('mediciones.pliegues.bicapital', registroCita.mediciones.pliegues.bicapital, funcion12);
 			}else{
 				funcion12();
 			}
@@ -190,7 +190,7 @@ module.exports.updateAppointmentRegister = function(req, res, RegistroCita){
 		
 		var funcion12 = function(){
 			if(registroCita.mediciones.pliegues.seliaco != undefined && appointmentRegister[0].mediciones.pliegues.seliaco != registroCita.mediciones.pliegues.seliaco){
-				actualizaCampo('mediciones.pliegues.seliaco', paciente.mediciones.pliegues.seliaco, funcion13);
+				actualizaCampo('mediciones.pliegues.seliaco', registroCita.mediciones.pliegues.seliaco, funcion13);
 			}else{
 				funcion13();
 			}			
@@ -198,7 +198,7 @@ module.exports.updateAppointmentRegister = function(req, res, RegistroCita){
 		
 		var funcion13 = function(){
 			if(registroCita.mediciones.pliegues.sespinaje != undefined && appointmentRegister[0].mediciones.pliegues.sespinaje != registroCita.mediciones.pliegues.sespinaje){
-				actualizaCampo('mediciones.pliegues.sespinaje', paciente.mediciones.pliegues.sespinaje, funcion14);
+				actualizaCampo('mediciones.pliegues.sespinaje', registroCita.mediciones.pliegues.sespinaje, funcion14);
 			}else{
 				funcion14();
 			}			
@@ -206,7 +206,7 @@ module.exports.updateAppointmentRegister = function(req, res, RegistroCita){
 		
 		var funcion14 = function(){
 			if(registroCita.mediciones.pliegues.abdominal != undefined && appointmentRegister[0].mediciones.pliegues.abdominal != registroCita.mediciones.pliegues.abdominal){
-				actualizaCampo('mediciones.pliegues.abdominal', paciente.mediciones.pliegues.abdominal, funcion15);
+				actualizaCampo('mediciones.pliegues.abdominal', registroCita.mediciones.pliegues.abdominal, funcion15);
 			}else{
 				funcion15();
 			}			
@@ -214,7 +214,7 @@ module.exports.updateAppointmentRegister = function(req, res, RegistroCita){
 		
 		var funcion15 = function(){
 			if(registroCita.mediciones.pliegues.muslo != undefined && appointmentRegister[0].mediciones.pliegues.muslo != registroCita.mediciones.pliegues.muslo){
-				actualizaCampo('mediciones.pliegues.muslo', paciente.mediciones.pliegues.muslo, funcion16);
+				actualizaCampo('mediciones.pliegues.muslo', registroCita.mediciones.pliegues.muslo, funcion16);
 			}else{
 				funcion16();
 			}			
@@ -222,7 +222,7 @@ module.exports.updateAppointmentRegister = function(req, res, RegistroCita){
 
 		var funcion16 = function(){
 			if(registroCita.mediciones.pliegues.pantorrilla != undefined && appointmentRegister[0].mediciones.pliegues.pantorrilla != registroCita.mediciones.pliegues.pantorrilla){
-				actualizaCampo('mediciones.pliegues.pantorrilla', paciente.mediciones.pliegues.pantorrilla, funcion2);
+				actualizaCampo('mediciones.pliegues.pantorrilla', registroCita.mediciones.pliegues.pantorrilla, funcion2);
 			}else{
 				funcion2();
 			}			

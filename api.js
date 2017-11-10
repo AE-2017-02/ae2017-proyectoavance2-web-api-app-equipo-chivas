@@ -74,6 +74,12 @@ module.exports = function(wagner){
 			return require('./controllers/foodController').newFood(req, res, Comida);
 		};
 	}));
+	
+	api.put('/food/', wagner.invoke(function(Comida){
+		return function(req, res){
+			return require('./controllers/foodController').updateFood(req, res, Comida);
+		};
+	}));
 
 	api.delete('/food/:_id', wagner.invoke(function (Comida){
 		return function(req, res){
@@ -101,6 +107,12 @@ module.exports = function(wagner){
 			return require('./controllers/apointmentRegisterController').newAppointmentRegister(req, res, RegistroCita);
 		};
 	}));
+	
+	api.put('/appointmentRegister/:_id', wagner.invoke(function(RegistroCita){
+		return function(req, res){
+			return require('./controllers/apointmentRegisterController').updateAppointmentRegister(req, res, RegistroCita);
+		}
+	}));
 
 	api.delete('/appointmentRegister/:_id', wagner.invoke(function (RegistroCita){
 		return function(req, res){
@@ -125,6 +137,12 @@ module.exports = function(wagner){
 		return function(req, res){
 			return require('./controllers/ingredientsController').newIngredient(req, res, Ingrediente);
 		};
+	}));
+	
+	api.put('/ingredient/:_id', wagner.invoke(function(Ingrediente){
+		return function(req, res){
+			return require('./controllers/ingredientsController').updateIngredient(req, res, Ingrediente);
+		}
 	}));
 
 	api.delete('/ingredient/:_id', wagner.invoke(function (Ingrediente){
@@ -152,12 +170,20 @@ module.exports = function(wagner){
 			return require('./controllers/menuController').newMenu(req, res, Menu);
 		}
 	}));
+
+	api.put('/menu/:_id', wagner.invoke(function(Menu){
+		return function(req, res){
+			return require('./controllers/menuController').updateMenu(req, res, Menu);
+		};
+	}));
 	
 	api.delete('/menu/:_id', wagner.invoke(function(Menu){
 		return function(req, res){
 			return require('./controllers/menuController').deleteMenu(req, res, Menu);
 		}
 	}));
+
+
 	//end Menu
 	
 	//region Menu_Usuario
@@ -179,6 +205,12 @@ module.exports = function(wagner){
 		}
 	}));
 	
+	api.put('/menu_user/:_id', wagner.invoke(function(MenuUsuario){
+		return function(req, res){
+			return require('./controllers/menuCompletoController').updateMenuUser(req, res, MenuUsuario);
+		};
+	}));
+
 	api.delete('/menu_user/:_id', wagner.invoke(function(MenuUsuario){
 		return function(req, res){
 			return require('./controllers/menuCompletoController').deleteMenuUser(req, res, MenuUsuario);
@@ -196,6 +228,12 @@ module.exports = function(wagner){
 	api.get('/appointment/:_id', wagner.invoke(function(Cita){
 		return function(req, res){
 			return require('./controllers/appointmentController').getAppointment(req, res, Cita);
+		}
+	}));
+	
+	api.get('/appointmentForDate/:date', wagner.invoke(function(Cita){
+		return function(req, res){
+			return require('./controllers/appointmentController').getAppointmentsUsedForDate(req, res, Cita);
 		}
 	}));
 	
