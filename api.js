@@ -299,5 +299,38 @@ module.exports = function(wagner){
 		}
 	}));
 	//end Usuario
+	
+	//region Consultorio
+	api.get('/consulterRoom/', wagner.invoke(function(Consultorio){
+		return function(req, res){
+			return require('./controllers/consulterRoomController').getConsulterRooms(req, res, Consultorio);
+		}
+	}));
+	
+	api.get('/consulterRoom/:_id', wagner.invoke(function(Consultorio){
+		return function(req, res){
+			return require('./controllers/consulterRoomController').getConsulterRoom(req, res, Consultorio);
+		}
+	}));
+	
+	api.post('/consulterRoom/', wagner.invoke(function(Consultorio){
+		return function(req, res){
+			return require('./controllers/consulterRoomController').newConsulterRoom(req, res, Consultorio);
+		}
+	}));
+
+	
+	api.put('/consulterRoom/:_id', wagner.invoke(function(Consultorio){
+		return function(req, res){
+			return require('./controllers/consulterRoomController').updateConsulterRoom(req, res, Consultorio);
+		}
+	}));
+	
+	api.delete('/consulterRoom/:_id', wagner.invoke(function(Consultorio){
+		return function(req, res){
+			return require('./controllers/consulterRoomController').deleteConsulterRoom(req, res, Consultorio);
+		}
+	}));
+	//end Consultorio
 	return api;
 };
