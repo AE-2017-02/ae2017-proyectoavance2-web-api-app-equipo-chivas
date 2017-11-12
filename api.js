@@ -351,17 +351,48 @@ module.exports = function(wagner){
 		}
 	}));
 	
-	api.put('/message/:_id', wagner.invoke(function(Mensaje){
+	api.put('/appointmentHistory/:_id', wagner.invoke(function(Mensaje){
 		return function(req, res){
-			return require('./controllers/messageController').updateMessage(req, res, Mensaje);
+			return require('./controllers/appointmentHistoryController').updateMessage(req, res, Mensaje);
 		}
 	}));
 	
-	api.delete('/message/:_id', wagner.invoke(function(Mensaje){
+	api.delete('/appointmentHistory/:_id', wagner.invoke(function(Mensaje){
 		return function(req, res){
-			return require('./controllers/messageController').deleteMessage(req, res, Mensaje);
+			return require('./controllers/appointmentHistoryController').deleteMessage(req, res, Mensaje);
 		}
 	}));
 	//end Mensaje
+		//region HistorialCitas
+	api.get('/appointmentHistory/', wagner.invoke(function(HistorialCitas){
+		return function(req, res){
+			return require('./controllers/appointmentHistoryController').getAppointmentHistorys(req, res, HistorialCitas);
+		}
+	}));
+	
+	api.get('/appointmentHistory/:_id', wagner.invoke(function(HistorialCitas){
+		return function(req, res){
+			return require('./controllers/appointmentHistoryController').getAppointmentHistory(req, res, HistorialCitas);
+		}
+	}));
+	
+	api.post('/appointmentHistory/', wagner.invoke(function(HistorialCitas){
+		return function(req, res){
+			return require('./controllers/appointmentHistoryController').newAppointmentHistory(req, res, HistorialCitas);
+		}
+	}));
+	
+	api.put('/appointmentHistory/:_id', wagner.invoke(function(HistorialCitas){
+		return function(req, res){
+			return require('./controllers/appointmentHistoryController').updateAppointmentHistory(req, res, HistorialCitas);
+		}
+	}));
+	
+	api.delete('/appointmentHistory/:_id', wagner.invoke(function(HistorialCitas){
+		return function(req, res){
+			return require('./controllers/appointmentHistoryController').deleteAppointmentHistory(req, res, HistorialCitas);
+		}
+	}));
+	//end HistorialCitas
 	return api;
 };

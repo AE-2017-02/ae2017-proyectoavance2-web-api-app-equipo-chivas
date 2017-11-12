@@ -95,7 +95,7 @@ module.exports.updateMenu = function(req, res, Menu){
 
 		var funcion3 = function(){
 			if(menu.tipo != undefined && menus[0].tipo != menu.tipo){
-				actualizaCampo('tipo', menu.tipo, funcion1);
+				actualizaCampo('tipo', menu.tipo, funcion2);
 			}else{
 				funcion2();
 			}
