@@ -332,5 +332,36 @@ module.exports = function(wagner){
 		}
 	}));
 	//end Consultorio
+	//region Mensaje
+	api.get('/message/', wagner.invoke(function(Mensaje){
+		return function(req, res){
+			return require('./controllers/messageController').getMessages(req, res, Mensaje);
+		}
+	}));
+	
+	api.get('/message/:_id', wagner.invoke(function(Mensaje){
+		return function(req, res){
+			return require('./controllers/messageController').getMessage(req, res, Mensaje);
+		}
+	}));
+	
+	api.post('/message/', wagner.invoke(function(Mensaje){
+		return function(req, res){
+			return require('./controllers/messageController').newMessage(req, res, Mensaje);
+		}
+	}));
+	
+	api.put('/message/:_id', wagner.invoke(function(Mensaje){
+		return function(req, res){
+			return require('./controllers/messageController').updateMessage(req, res, Mensaje);
+		}
+	}));
+	
+	api.delete('/message/:_id', wagner.invoke(function(Mensaje){
+		return function(req, res){
+			return require('./controllers/messageController').deleteMessage(req, res, Mensaje);
+		}
+	}));
+	//end Mensaje
 	return api;
 };
