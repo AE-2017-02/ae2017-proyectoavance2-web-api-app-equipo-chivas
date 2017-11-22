@@ -311,5 +311,100 @@ module.exports = function(wagner){
 		}
 	}));
 	//end Usuario
+	
+	//region Consultorio
+	api.get('/consulterRoom/', wagner.invoke(function(Consultorio){
+		return function(req, res){
+			return require('./controllers/consulterRoomController').getConsulterRooms(req, res, Consultorio);
+		}
+	}));
+	
+	api.get('/consulterRoom/:_id', wagner.invoke(function(Consultorio){
+		return function(req, res){
+			return require('./controllers/consulterRoomController').getConsulterRoom(req, res, Consultorio);
+		}
+	}));
+	
+	api.post('/consulterRoom/', wagner.invoke(function(Consultorio){
+		return function(req, res){
+			return require('./controllers/consulterRoomController').newConsulterRoom(req, res, Consultorio);
+		}
+	}));
+
+	
+	api.put('/consulterRoom/:_id', wagner.invoke(function(Consultorio){
+		return function(req, res){
+			return require('./controllers/consulterRoomController').updateConsulterRoom(req, res, Consultorio);
+		}
+	}));
+	
+	api.delete('/consulterRoom/:_id', wagner.invoke(function(Consultorio){
+		return function(req, res){
+			return require('./controllers/consulterRoomController').deleteConsulterRoom(req, res, Consultorio);
+		}
+	}));
+	//end Consultorio
+	//region Mensaje
+	api.get('/message/', wagner.invoke(function(Mensaje){
+		return function(req, res){
+			return require('./controllers/messageController').getMessages(req, res, Mensaje);
+		}
+	}));
+	
+	api.get('/message/:_id', wagner.invoke(function(Mensaje){
+		return function(req, res){
+			return require('./controllers/messageController').getMessage(req, res, Mensaje);
+		}
+	}));
+	
+	api.post('/message/', wagner.invoke(function(Mensaje){
+		return function(req, res){
+			return require('./controllers/messageController').newMessage(req, res, Mensaje);
+		}
+	}));
+	
+	api.put('/appointmentHistory/:_id', wagner.invoke(function(Mensaje){
+		return function(req, res){
+			return require('./controllers/appointmentHistoryController').updateMessage(req, res, Mensaje);
+		}
+	}));
+	
+	api.delete('/appointmentHistory/:_id', wagner.invoke(function(Mensaje){
+		return function(req, res){
+			return require('./controllers/appointmentHistoryController').deleteMessage(req, res, Mensaje);
+		}
+	}));
+	//end Mensaje
+		//region HistorialCitas
+	api.get('/appointmentHistory/', wagner.invoke(function(HistorialCitas){
+		return function(req, res){
+			return require('./controllers/appointmentHistoryController').getAppointmentHistorys(req, res, HistorialCitas);
+		}
+	}));
+	
+	api.get('/appointmentHistory/:_id', wagner.invoke(function(HistorialCitas){
+		return function(req, res){
+			return require('./controllers/appointmentHistoryController').getAppointmentHistory(req, res, HistorialCitas);
+		}
+	}));
+	
+	api.post('/appointmentHistory/', wagner.invoke(function(HistorialCitas){
+		return function(req, res){
+			return require('./controllers/appointmentHistoryController').newAppointmentHistory(req, res, HistorialCitas);
+		}
+	}));
+	
+	api.put('/appointmentHistory/:_id', wagner.invoke(function(HistorialCitas){
+		return function(req, res){
+			return require('./controllers/appointmentHistoryController').updateAppointmentHistory(req, res, HistorialCitas);
+		}
+	}));
+	
+	api.delete('/appointmentHistory/:_id', wagner.invoke(function(HistorialCitas){
+		return function(req, res){
+			return require('./controllers/appointmentHistoryController').deleteAppointmentHistory(req, res, HistorialCitas);
+		}
+	}));
+	//end HistorialCitas
 	return api;
 };
