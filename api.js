@@ -36,6 +36,12 @@ module.exports = function(wagner){
 			return require('./controllers/patientController').getPatientByLogin(req, res, Paciente);
 		}
 	}));
+	
+	api.post('/patient/activate/:_id', wagner.invoke(function (Paciente){
+		return function(req, res){
+			return require('./controllers/patientController').sendPatientActivationEmail(req, res, Paciente);
+		}
+	}));
 
 	api.post('/patient/', wagner.invoke(function (Paciente){
 		return function(req, res){
@@ -131,6 +137,12 @@ module.exports = function(wagner){
 		return function(req, res){
 			return require('./controllers/ingredientsController').getIngredient(req, res, Ingrediente);
 		};
+	}));
+	
+	api.get('/ingredient/user/:_id', wagner.invoke(function(Ingrediente, Comida, Menu, MenuUsuario, Paciente){
+		return function(req, res){
+			return require('./controllers/ingredientsController').getIngredientsForUser(req, res, Ingrediente, Paciente, MenuUsuario, Menu, Comida);
+		}
 	}));
 
 	api.post('/ingredient/', wagner.invoke(function (Ingrediente){
