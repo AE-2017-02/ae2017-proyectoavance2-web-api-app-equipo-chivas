@@ -21,7 +21,16 @@ module.exports.newMessage = function (req, res, Mensaje){
 	} catch(e){
 		return res.status(status.BAD_REQUEST).json({error: "No message provided"});
 	}
-	Mensaje.create(mensaje, handle.handleMany.bind(null, 'mensaje', res));
+	Mensaje.create(mensaje,function(error,result){
+		const notify = require('./../utils/onesignal')("MzE2ZDk0MTctMzdhOC00OWRmLWI5NGItZGRiMmM1Zjc3Mjgy", "ee63927a-ed8e-4510-a20e-687d880eb211");
+		notify.notifyUser({
+			message: mensaje.contenido,
+			onesignal_id: mensaje.usuarios
+		  }, (err, res) => {
+			res.status(status.OK).json(result);
+		});
+	});
+	
 };
 
 module.exports.deleteMessage = function (req, res, Mensaje){

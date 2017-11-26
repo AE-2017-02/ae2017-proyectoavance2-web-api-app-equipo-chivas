@@ -31,7 +31,8 @@ var pacienteSchema = {
 	userconfig: {
 		aceptNotification : {type: Boolean, required: false},
 		timeBefore: {type: Number, required: false}
-	}
+	},
+	device_key:{type:String,require:true}
 };
 
 module.exports = new mongoose.Schema(pacienteSchema);
