@@ -83,7 +83,7 @@ module.exports.getPendingAppointments = function (req, res, Cita, Paciente){
 		}, function(error, result){
 		
 		if(error){
-			return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
+			return res.status(status.INTERNAL_SERVER_ERROR).json({error: error.toString()});
 		}
 		if(!result){
 			return res.status(status.NOT_FOUND).json({error: 'Not found'});
