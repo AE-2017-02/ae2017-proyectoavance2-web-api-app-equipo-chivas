@@ -1,12 +1,47 @@
 var status = require('http-status');
 var handle = require('./../utils/handle');
+var moment = require('moment');
+var jwt = require('jwt-simple');
+var express = require('express');
 var _ = require('underscore');
 
 module.exports.getIngredients = function (req, res, Ingrediente){
+	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
+	console.log(token);
+	if (token) {
+		try {
+			var decoded = jwt.decode(token, 'GarnicaUltraSecretKey');
+
+			if (decoded.exp <= Date.now()) {
+				return res.end('Access token has expired', 400);
+			};
+		} catch (err) {
+			return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+		}
+	} else {
+		return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+	}
+	
 	Ingrediente.find({}).exec(handle.handleMany.bind(null, 'ingredientes', res));
 };
 
 module.exports.getIngredient = function (req, res, Ingrediente){
+	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
+	console.log(token);
+	if (token) {
+		try {
+			var decoded = jwt.decode(token, 'GarnicaUltraSecretKey');
+
+			if (decoded.exp <= Date.now()) {
+				return res.end('Access token has expired', 400);
+			};
+		} catch (err) {
+			return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+		}
+	} else {
+		return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+	}
+	
 	try{
 		var _id = req.params._id;
 	} catch(e){
@@ -16,6 +51,22 @@ module.exports.getIngredient = function (req, res, Ingrediente){
 };
 
 module.exports.getIngredientsForUser = function(req, res, Ingrediente, Paciente, MenuUsuario, Menu, Comida){
+	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
+	console.log(token);
+	if (token) {
+		try {
+			var decoded = jwt.decode(token, 'GarnicaUltraSecretKey');
+
+			if (decoded.exp <= Date.now()) {
+				return res.end('Access token has expired', 400);
+			};
+		} catch (err) {
+			return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+		}
+	} else {
+		return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+	}
+	
 	try{
 		var _id = req.params._id;
 	} catch(e){
@@ -360,6 +411,22 @@ module.exports.getIngredientsForUser = function(req, res, Ingrediente, Paciente,
 }
 
 module.exports.newIngredient = function (req, res, Ingrediente){
+	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
+	console.log(token);
+	if (token) {
+		try {
+			var decoded = jwt.decode(token, 'GarnicaUltraSecretKey');
+
+			if (decoded.exp <= Date.now()) {
+				return res.end('Access token has expired', 400);
+			};
+		} catch (err) {
+			return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+		}
+	} else {
+		return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+	}
+	
 	try{
 		var ingrediente = req.body.ingrediente;
 	} catch(e){
@@ -369,6 +436,22 @@ module.exports.newIngredient = function (req, res, Ingrediente){
 };
 
 module.exports.deleteIngredient = function (req, res, Ingrediente){
+	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
+	console.log(token);
+	if (token) {
+		try {
+			var decoded = jwt.decode(token, 'GarnicaUltraSecretKey');
+
+			if (decoded.exp <= Date.now()) {
+				return res.end('Access token has expired', 400);
+			};
+		} catch (err) {
+			return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+		}
+	} else {
+		return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+	}
+	
 	try{
 		var _id = req.params._id;
 	}catch(e){
@@ -379,6 +462,22 @@ module.exports.deleteIngredient = function (req, res, Ingrediente){
 
 
 module.exports.updateIngredient = function(req, res, Ingrediente){
+	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
+	console.log(token);
+	if (token) {
+		try {
+			var decoded = jwt.decode(token, 'GarnicaUltraSecretKey');
+
+			if (decoded.exp <= Date.now()) {
+				return res.end('Access token has expired', 400);
+			};
+		} catch (err) {
+			return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+		}
+	} else {
+		return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+	}
+	
 	try{
 		var idIngrediente = req.params._id;
 		var ingrediente = req.body.ingrediente;
