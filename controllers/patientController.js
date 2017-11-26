@@ -1,9 +1,29 @@
 var status = require('http-status');
 var handle = require('./../utils/handle');
+var moment = require('moment');
+var jwt = require('jwt-simple');
+var express = require('express');
 var _ = require('underscore');
 
 module.exports.getPatients = function (req, res, Paciente){
-	Paciente.find({}).exec(handle.handleMany.bind(null, 'pacientes', res));
+	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
+	console.log(token);
+	if (token) {
+		try {
+			var decoded = jwt.decode(token, 'GarnicaUltraSecretKey');
+
+			if (decoded.exp <= Date.now()) {
+				return res.end('Access token has expired', 400);
+			};
+			
+			Paciente.find({}).exec(handle.handleMany.bind(null, 'pacientes', res));
+
+		} catch (err) {
+			return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+		}
+	} else {
+		return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+	}
 };
 
 module.exports.getPatient = function (req, res, Paciente){
@@ -16,6 +36,10 @@ module.exports.getPatient = function (req, res, Paciente){
 };
 
 module.exports.getPatientByLogin = function(req, res, Paciente){
+	var expires = moment().add('days', 7).valueOf();
+	var app = express();
+
+	app.set('jwtTokenSecret', 'GarnicaUltraSecretKey');
 	try{
 		var email = req.body.paciente.email;
 		var pin = req.body.paciente.pin;
@@ -23,7 +47,19 @@ module.exports.getPatientByLogin = function(req, res, Paciente){
 	}catch(e){
 		return res.status(status.BAD_REQUEST).json({error: e.toString()});
 	}
-	Paciente.update({'email': email, 'pin':pin},{'device_key':deviceKey}).exec(handle.handleOne.bind(null, 'paciente', res));
+
+	Paciente.update({'email': email, 'pin':pin}, {'device_key': deviceKey}, function(error, result){
+		var token = jwt.encode({
+			iss: result[0]._id,
+			exp: expires
+		}, app.get('jwtTokenSecret'));
+		
+		return res.status(status.OK).json({
+			token : token,
+			expires: expires,
+			user: result[0].toJSON()
+		});
+	});
 }
 
 module.exports.newPatient = function (req, res, Paciente){
@@ -42,6 +78,59 @@ module.exports.newPatient = function (req, res, Paciente){
 		}else{
 			Paciente.create(paciente, handle.handleMany.bind(null, 'paciente', res));
 		}
+	});
+};
+
+module.exports.sendPatientActivationEmail = function (req, res, Paciente){
+	try{
+		var _id = req.params._id;
+		var msg = req.body.message;
+	} catch(e){
+		return res.status(status.BAD_REQUEST).json({error: "No patient id provided"});
+	}
+	var val = Math.floor(1000 + Math.random() * 9000);
+	
+	Paciente.update({'_id': _id}, {'activo': true, 'pin': val}, function(err, resu){
+		
+		Paciente.find({'_id': _id}, function(err, patient){
+		
+			if(err){
+				return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
+			}
+		
+			var nodemailer = require("nodemailer");
+
+			var smtpTransport = nodemailer.createTransport({
+				host: "smtp.gmail.com",
+				port: 587, 
+				secure: false,
+				auth: {
+					user: "lualgarnicalo@ittepic.edu.mx",
+					pass: "luisgarnica11"
+				}
+			});
+
+			smtpTransport.sendMail({
+				from: "Nutrisha APP <lualgarnicalo@ittepic.edu.mx>", // sender address
+				to: patient[0].nombre+" <"+patient[0].email+">", // comma separated list of receivers
+				subject: "Enhorabuena "+patient[0].nombre, // Subject line
+				text: "Bienvenido a Nutrisha APP. Mediante esta aplicación podrás dar seguimiento a tu avance en las citas con tu nutriólogo. ¡Tu cuenta ha sido Activada! Puedes acceder a ella utilizando el correo electrónico con el que te registraste y tu pin \n"+
+						"Credenciales de acceso: \n\n"+
+						"email: "+patient[0].email+"\n"+
+						"PIN: "+val+"\n"+
+						"\n\n ¡Sigue firme en tus metas y alcanza tus sueños!"+
+						"Dr. Un Doctor De un Consultario \n"+
+						"Consultorio del Doctor y Datos de Contacto"// plaintext body
+			}, function(error, response){
+				if(error){
+					console.log(error);
+				}else{
+					console.log("Mail sent: " + response.message);
+					return res.status(status.OK).json(response.message);
+				}
+			});
+		});
+		
 	});
 };
 

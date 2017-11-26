@@ -9,6 +9,7 @@
     "http-status": "0.1.8",
     "mongodb": "2.0.35",
     "mongoose": "*",
+    "nodemailer":"*",
     "superagent": "1.2.0",
     "underscore": "1.5.2",
     "wagner-core": "0.1.0"

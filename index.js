@@ -1,4 +1,5 @@
 var express = require('express');
+var jwt = require('jwt-simple');
 var wagner = require('wagner-core');
 
 //Arrancar el servidor.
@@ -6,6 +7,8 @@ var wagner = require('wagner-core');
 require('./models/models')(wagner);
 
 var app = express();
+
+app.set('jwtTokenSecret', 'GarnicaUltraSecretKey');
 
 // Añadir los encabezados.
 
