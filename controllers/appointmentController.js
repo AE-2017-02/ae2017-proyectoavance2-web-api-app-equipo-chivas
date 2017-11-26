@@ -76,9 +76,9 @@ module.exports.getPendingAppointments = function (req, res, Cita, Paciente){
 				{'fecha': { $gte : new Date(date+"T00:00:00") }}, 
 				{'fecha':{$lte: new Date(date+"T23:59:59")}}, 
 				{'status': 'pendiente'}
-			]},  {
+			]}, {}, {
 				sort:{
-					fecha: -1 //Sort by Date Added DESC
+					'fecha': -1 //Sort by Date Added DESC
 				}
 		}, function(error, result){
 		
