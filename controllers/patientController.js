@@ -48,7 +48,7 @@ module.exports.getPatientByLogin = function(req, res, Paciente){
 		return res.status(status.BAD_REQUEST).json({error: e.toString()});
 	}
 
-	Paciente.find({'email': email, 'pin': pin}, function(error, resulta){
+	Paciente.find({'email': email, 'pin': pin}, function(err, resulta){
 		if(err){
 			return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
 		}
