@@ -22,12 +22,14 @@ module.exports.newMessage = function (req, res, Mensaje){
 		return res.status(status.BAD_REQUEST).json({error: "No message provided"});
 	}
 	Mensaje.create(mensaje,function(error,result){
+		console.log(error);
+		console.log(result);
 		const notify = require('./../utils/onesignal')("MzE2ZDk0MTctMzdhOC00OWRmLWI5NGItZGRiMmM1Zjc3Mjgy", "ee63927a-ed8e-4510-a20e-687d880eb211");
 		notify.notifyUser({
 			message: mensaje.cuerpo,
 			onesignal_id: mensaje.to
 		  }, (err, response) => {
-			res.status(status.OK).json(result);
+			res.status(status.OK).json({"mensaje": result});
 		});
 	});
 	
