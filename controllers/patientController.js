@@ -391,7 +391,13 @@ module.exports.updatePatient = function(req, res, Paciente){
 				funcion24();
 			}
 		}
-
-		funcion25();
+		var function26=function(){
+			if(paciente.device_key != undefined && patient[0].device_key != paciente.device_key){
+				actualizaCampo('device_key',paciente.device_key,funcion25);
+			}else{
+				funcion25();
+			}
+		}
+		funcion26();
 	});
 }

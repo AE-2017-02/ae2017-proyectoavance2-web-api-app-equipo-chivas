@@ -21,7 +21,29 @@ module.exports.newMessage = function (req, res, Mensaje){
 	} catch(e){
 		return res.status(status.BAD_REQUEST).json({error: "No message provided"});
 	}
-	Mensaje.create(mensaje, handle.handleMany.bind(null, 'mensaje', res));
+	Mensaje.create(mensaje, function(error,result){
+		if(error){
+			return res.status(status.INTERNAL_SERVER_ERROR).json({error: error.toString()});
+		}
+		if(!result){
+			return res.status(status.NOT_FOUND).json({error: 'Not found'});
+		}
+
+		var devices = [];
+
+		mensaje.to.forEach(function(element) {
+			devices.push(element.deviceToken);
+		});
+		
+		const notify = require('./../utils/onesignal')("MzE2ZDk0MTctMzdhOC00OWRmLWI5NGItZGRiMmM1Zjc3Mjgy", "ee63927a-ed8e-4510-a20e-687d880eb211");
+		notify.notifyUser({
+			message: mensaje.cuerpo,
+			onesignal_id: devices
+		  }, (err, response) => {
+			res.status(status.OK).json({"mensaje": result});
+		});
+	});
+	
 };
 
 module.exports.deleteMessage = function (req, res, Mensaje){
