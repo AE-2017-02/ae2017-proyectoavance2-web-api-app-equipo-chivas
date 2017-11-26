@@ -32,7 +32,7 @@ var pacienteSchema = {
 		aceptNotification : {type: Boolean, required: false},
 		timeBefore: {type: Number, required: false}
 	},
-	device_key:{type:String,require:true}
+	device_key:{type:String,required:true}
 };
 
 module.exports = new mongoose.Schema(pacienteSchema);
