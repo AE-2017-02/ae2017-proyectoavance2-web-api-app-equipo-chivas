@@ -48,18 +48,29 @@ module.exports.getPatientByLogin = function(req, res, Paciente){
 		return res.status(status.BAD_REQUEST).json({error: e.toString()});
 	}
 
-	Paciente.update({'email': email, 'pin':pin}, {'device_key': deviceKey}, function(error, result){
-		var token = jwt.encode({
-			iss: result[0]._id,
-			exp: expires
-		}, app.get('jwtTokenSecret'));
-		
-		return res.status(status.OK).json({
-			token : token,
-			expires: expires,
-			user: result[0].toJSON()
+	Paciente.find({'email': email, 'pin': pin}, function(error, resulta){
+		if(err){
+			return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
+		}
+		if(!resulta){
+			return res.status(status.NOT_FOUND).json({error : 'Login failed, wrong credentials'});
+		}
+		Paciente.update({'email': email, 'pin':pin}, {'device_key': deviceKey}, function(error, result){	
+			var token = jwt.encode({
+				iss: resulta[0]._id,
+				exp: expires
+			}, app.get('jwtTokenSecret'));
+			
+			return res.status(status.OK).json({
+				token : token,
+				expires: expires,
+				user: resulta[0].toJSON()
+			});
 		});
+
 	});
+	
+	
 }
 
 module.exports.newPatient = function (req, res, Paciente){
