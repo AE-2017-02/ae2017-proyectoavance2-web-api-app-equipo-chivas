@@ -1,49 +1,147 @@
 var status = require('http-status');
 var handle = require('./../utils/handle');
 var _ = require('underscore');
+var moment = require('moment');
+var jwt = require('jwt-simple');
+var express = require('express');
 
 module.exports.getUsers = function (req, res, Usuario){
+	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
+	console.log(token);
+	if (token) {
+		try {
+			var decoded = jwt.decode(token, 'GarnicaUltraSecretKey');
+
+			if (decoded.exp <= Date.now()) {
+				return res.end('Access token has expired', 400);
+			};
+		} catch (err) {
+			return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+		}
+	} else {
+		return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+	}
 	Usuario.find({}).exec(handle.handleMany.bind(null, 'usuarios', res));
+		
 };
 
 module.exports.getUser = function (req, res, Usuario){
+	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
+	console.log(token);
+	if (token) {
+		try {
+			var decoded = jwt.decode(token, 'GarnicaUltraSecretKey');
+
+			if (decoded.exp <= Date.now()) {
+				return res.end('Access token has expired', 400);
+			};
+		} catch (err) {
+			return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+		}
+	} else {
+		return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+	}
 	try{
 		var _id = req.params._id;
 	} catch(e){
 		return res.status(status.BAD_REQUEST).json({error: "No user id provided"});
 	}
 	Usuario.find({'_id': _id}).exec(handle.handleOne.bind(null, 'usuario', res));
+		
 };
 
 module.exports.getUserByLogin = function(req, res, Usuario){
+	var expires = moment().add('days', 7).valueOf();
+	var app = express();
+
+	app.set('jwtTokenSecret', 'GarnicaUltraSecretKey');
 	try{
 		var username = req.body.username;
 		var password = req.body.password;
 	}catch(e){
 		return res.status(status.BAD_REQUEST).json({error: e.toString()});
 	}
-	Usuario.find({'username': username, 'password':password}).exec(handle.handleOne.bind(null, 'usuario', res));
+	Usuario.find({'username': username, 'password':password},function(err,resulta){
+		var token = jwt.encode({
+			iss: resulta[0]._id,
+			exp: expires
+		}, app.get('jwtTokenSecret'));
+		
+		return res.status(status.OK).json({
+			token : token,
+			expires: expires,
+			user: resulta[0].toJSON()
+		});
+	});
+		
 }
 
 module.exports.newUser = function (req, res, Usuario){
+	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
+	console.log(token);
+	if (token) {
+		try {
+			var decoded = jwt.decode(token, 'GarnicaUltraSecretKey');
+
+			if (decoded.exp <= Date.now()) {
+				return res.end('Access token has expired', 400);
+			};
+		} catch (err) {
+			return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+		}
+	} else {
+		return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+	}
 	try{
 		var usuario = req.body.usuario;
 	} catch(e){
 		return res.status(status.BAD_REQUEST).json({error: "No user provided"});
 	}
 	Usuario.create(usuario, handle.handleMany.bind(null, 'usuario', res));
+		
 };
 
 module.exports.deleteUser = function (req, res, Usuario){
+	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
+	console.log(token);
+	if (token) {
+		try {
+			var decoded = jwt.decode(token, 'GarnicaUltraSecretKey');
+
+			if (decoded.exp <= Date.now()) {
+				return res.end('Access token has expired', 400);
+			};
+		} catch (err) {
+			return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+		}
+	} else {
+		return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+	}
 	try{
 		var _id = req.params._id;
 	}catch(e){
 		return res.status(status.BAD_REQUEST).json({error: e.toString()});
 	}
 	Usuario.remove({'_id': _id}, handle.handleOne.bind(null, 'usuario', res));
+		
 };
 
 module.exports.updateUser = function(req, res, Usuario){
+	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
+	console.log(token);
+	if (token) {
+		try {
+			var decoded = jwt.decode(token, 'GarnicaUltraSecretKey');
+
+			if (decoded.exp <= Date.now()) {
+				return res.end('Access token has expired', 400);
+			};
+		} catch (err) {
+			return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+		}
+	} else {
+		return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+	}
 	try{
 		var idUsuario = req.params._id;
 		var usuario = req.body.usuario;
