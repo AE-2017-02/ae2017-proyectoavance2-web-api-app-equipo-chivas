@@ -24,9 +24,9 @@ module.exports.newMessage = function (req, res, Mensaje){
 	Mensaje.create(mensaje,function(error,result){
 		const notify = require('./../utils/onesignal')("MzE2ZDk0MTctMzdhOC00OWRmLWI5NGItZGRiMmM1Zjc3Mjgy", "ee63927a-ed8e-4510-a20e-687d880eb211");
 		notify.notifyUser({
-			message: mensaje.contenido,
-			onesignal_id: mensaje.usuarios
-		  }, (err, res) => {
+			message: mensaje.cuerpo,
+			onesignal_id: mensaje.to
+		  }, (err, response) => {
 			res.status(status.OK).json(result);
 		});
 	});
