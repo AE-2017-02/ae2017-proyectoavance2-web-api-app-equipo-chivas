@@ -21,9 +21,13 @@ module.exports.newMessage = function (req, res, Mensaje){
 	} catch(e){
 		return res.status(status.BAD_REQUEST).json({error: "No message provided"});
 	}
-	Mensaje.create(mensaje,function(error,result){
-		console.log(error);
-		console.log(result);
+	Mensaje.create(mensaje, function(error,result){
+		if(error){
+			return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
+		}
+		if(!result){
+			return res.status(status.NOT_FOUND).json({error: 'Not found'});
+		}
 		const notify = require('./../utils/onesignal')("MzE2ZDk0MTctMzdhOC00OWRmLWI5NGItZGRiMmM1Zjc3Mjgy", "ee63927a-ed8e-4510-a20e-687d880eb211");
 		notify.notifyUser({
 			message: mensaje.cuerpo,
