@@ -19,10 +19,12 @@ module.exports.getPatientByLogin = function(req, res, Paciente){
 	try{
 		var email = req.body.paciente.email;
 		var pin = req.body.paciente.pin;
+		var deviceKey = req.body.paciente.deviceKey;
 	}catch(e){
 		return res.status(status.BAD_REQUEST).json({error: e.toString()});
 	}
-	Paciente.find({'email': email, 'pin':pin}).exec(handle.handleOne.bind(null, 'paciente', res));
+	Paciente.update({'email': email, 'pin':pin},{'device_key': deviceKey}).exec(handle.handleOne.bind(null, 'paciente', res));
+	
 }
 
 module.exports.newPatient = function (req, res, Paciente){
