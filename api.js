@@ -243,9 +243,9 @@ module.exports = function(wagner){
 		}
 	}));
 
-	api.get('/pendingAppointments/:date', wagner.invoke(function(Cita, Paciente){
+	api.get('/appointmentWithUser/', wagner.invoke(function(Cita, Paciente){
 		return function(req, res){
-			return require('./controllers/appointmentController').getPendingAppointments(req, res, Cita, Paciente);
+			return require('./controllers/appointmentController').getAppointmentsWithPatient(req, res, Cita, Paciente);
 		}
 	}));	
 	
@@ -354,6 +354,12 @@ module.exports = function(wagner){
 	api.get('/message/:_id', wagner.invoke(function(Mensaje){
 		return function(req, res){
 			return require('./controllers/messageController').getMessage(req, res, Mensaje);
+		}
+	}));
+
+	api.get('/messageByUser/:_id', wagner.invoke(function(Mensaje){
+		return function(req, res){
+			return require('./controllers/messageController').getMessageByUser(req, res, Mensaje);
 		}
 	}));
 	

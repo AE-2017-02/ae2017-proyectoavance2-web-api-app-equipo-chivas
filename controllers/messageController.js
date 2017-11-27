@@ -47,6 +47,29 @@ module.exports.getMessage = function (req, res, Mensaje){
 	}
 	Mensaje.find({'_id': _id}).exec(handle.handleOne.bind(null, 'mensaje', res));
 };
+module.exports.getMessageByUser= function(req, res, Mensaje){
+	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
+	console.log(token);
+	if (token) {
+		try {
+			var decoded = jwt.decode(token, 'GarnicaUltraSecretKey');
+
+			if (decoded.exp <= Date.now()) {
+				return res.end('Access token has expired', 400);
+			};
+		} catch (err) {
+			return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+		}
+	} else {
+		return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+	}
+	try{
+		var _id= req.params._id;
+	} catch(e){
+		return res.status(status.BAD_REQUEST).json({error: "No message id provided"});
+	}
+	Mensaje.find({'to': {$elemMatch: {'_idUser': _id}}}).exec(handle.handleMany.bind(null,'mensajes',res));
+};
 
 module.exports.newMessage = function (req, res, Mensaje){
 	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];

@@ -49,7 +49,7 @@ module.exports.getAppointment = function (req, res, Cita){
 };
 
 
-module.exports.getPendingAppointments = function (req, res, Cita, Paciente){
+module.exports.getAppointmentsWithPatient = function (req, res, Cita, Paciente){
 	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
 	console.log(token);
 	if (token) {
@@ -72,10 +72,14 @@ module.exports.getPendingAppointments = function (req, res, Cita, Paciente){
 		return res.status(status.BAD_REQUEST).json({error: "No appointment id provided"});
 	}
 	
-	Cita.find({ $and: [{'fecha': { $gte : new Date(date+"T00:00:00") }}, {'fecha':{$lte: new Date(date+"T23:59:59")}}, {'status': 'pendiente'}]}, function(error, result){
+	Cita.find({'fecha': { $gte : new Date() }}, {}, {
+				sort:{
+					'fecha': 1 //Sort by Date Added DESC
+				}
+		}, function(error, result){
 		
 		if(error){
-			return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
+			return res.status(status.INTERNAL_SERVER_ERROR).json({error: error.toString()});
 		}
 		if(!result){
 			return res.status(status.NOT_FOUND).json({error: 'Not found'});
