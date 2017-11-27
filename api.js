@@ -63,9 +63,9 @@ module.exports = function(wagner){
 	//endregion Paciente
 
 	//region Comida
-	api.get('/foods/', wagner.invoke(function (Comida){
+	api.get('/foods/', wagner.invoke(function (Comida, Ingrediente){
 		return function(req, res){
-			return require('./controllers/foodController').getFoods(req, res, Comida);
+			return require('./controllers/foodController').getFoods(req, res, Comida, Ingrediente);
 		};
 	}));
 
@@ -75,9 +75,9 @@ module.exports = function(wagner){
 		};
 	}));
 
-	api.post('/food/', wagner.invoke(function (Comida){
+	api.post('/food/', wagner.invoke(function (Comida, Ingrediente){
 		return function(req, res){
-			return require('./controllers/foodController').newFood(req, res, Comida);
+			return require('./controllers/foodController').newFood(req, res, Comida, Ingrediente);
 		};
 	}));
 	
