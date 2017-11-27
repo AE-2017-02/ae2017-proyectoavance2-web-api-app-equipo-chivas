@@ -62,6 +62,14 @@ module.exports.getUserByLogin = function(req, res, Usuario){
 		return res.status(status.BAD_REQUEST).json({error: e.toString()});
 	}
 	Usuario.find({'username': username, 'password':password},function(err,resulta){
+		
+		if(err){
+			return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
+		}
+		if(!resulta){
+			return res.status(status.NOT_FOUND).json({error : 'Login failed, wrong credentials'});
+		}
+		
 		var token = jwt.encode({
 			iss: resulta[0]._id,
 			exp: expires
