@@ -22,7 +22,19 @@ module.exports.getFoods = function (req, res, Comida){
 		return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
 	}
 	
-	Comida.find({}).exec(handle.handleMany.bind(null, 'comidas', res));
+	Comida.find({}, function(err, result){
+		if(err){
+			return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
+		}
+
+		if(!result){
+			return res.status(status.NOT_FOUND).json({error : 'Not found'});
+		}
+		
+		result.populate('ingred._id', function (err, caseDocPopulated){
+			return res.status(status.OK).json({'comidas' : caseDocPopulated});
+		});
+	});
 };
 
 module.exports.getFood = function (req, res, Comida){
