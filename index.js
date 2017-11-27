@@ -25,7 +25,7 @@ app.use(function (req, res, next){
 	
 	// Encabezados de peticiones que se permitirán
 	
-	res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+	res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, x-access-token');
 	
 	// Una instrucción opcional, que aún no se si implementaremos, si la api permitirá manejar sesiones
 	// Pudieran implementarse medidas de seguridad usando cookies. En caso de que lo decida, descomentar.
