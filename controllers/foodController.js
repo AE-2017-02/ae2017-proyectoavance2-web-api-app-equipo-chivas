@@ -72,7 +72,19 @@ module.exports.newFood = function (req, res, Comida){
 	} catch(e){
 		return res.status(status.BAD_REQUEST).json({error: "No food provided"});
 	}
-	Comida.create(comida, handle.handleMany.bind(null, 'comida', res));
+	Comida.create(comida, function(err, result){
+		if(err){
+			return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
+		}
+
+		if(!result){
+			return res.status(status.NOT_FOUND).json({error : 'Not found'});
+		}
+		
+		result.populate('ingred._id', function (err, caseDocPopulated){
+			return res.status(status.OK).json({'comida' : caseDocPopulated});
+		});
+	});
 };
 
 module.exports.deleteFood = function (req, res, Comida){
