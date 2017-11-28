@@ -71,8 +71,8 @@ module.exports.getAppointmentsWithPatient = function (req, res, Cita, Paciente){
 	} catch(e){
 		return res.status(status.BAD_REQUEST).json({error: "No appointment id provided"});
 	}
-	
-	Cita.find({'fecha': { $gte : new Date() }}, {}, {
+	var offset = -7;
+	Cita.find({'fecha': { $gte : new Date( new Date().getTime() + offset * 3600 * 1000) }}, {}, {
 				sort:{
 					'fecha': 1 //Sort by Date Added DESC
 				}
@@ -85,14 +85,18 @@ module.exports.getAppointmentsWithPatient = function (req, res, Cita, Paciente){
 			return res.status(status.NOT_FOUND).json({error: 'Not found'});
 		}
 		
-		if(result.length == 0){
-			res.status(status.OK).json({appointment : result});				
-		}
 		var i=0;
-		
-			result.forEach(function(element) {
-				
-			Paciente.findOne({'idCita': element._id}, {'nombre': true}, function(error, resulta){
+			
+			var funcion1 = function(){
+				if(i == result.length){
+					return res.status(status.OK).json({appointment : result});
+				}else{
+					funcion2(result[i]);	
+				}			
+			}	
+			
+			var funcion2 = function(element){
+				Paciente.findOne({'idCita': element._id}, {'nombre': true}, function(error, resulta){
 				if(error){
 					return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
 				}
@@ -103,18 +107,18 @@ module.exports.getAppointmentsWithPatient = function (req, res, Cita, Paciente){
 					element2.namePatient = resulta.nombre;
 					element2.idPatient = resulta._id;
 					
-					result[result.indexOf(element)] = element2;
+					result[i] = element2;
 				}else{										
-					element2["namePatient"] = "";
-					element2["idPatient"] = "";
-					result[result.indexOf(element)] = element2;
+					element2.namePatient = "";
+					element2.idPatient = "";
+					result[i] = element2;
 				}
-				if(result.indexOf(element2) == result.length-1){
-					return res.status(status.OK).json({appointment : result});	
-				}
-			});		
-
+				
+				i++;
+				funcion1();
 			});
+			}
+                        funcion1();
 		});
 };
 
