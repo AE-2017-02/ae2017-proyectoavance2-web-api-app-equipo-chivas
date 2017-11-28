@@ -1,3 +1,5 @@
+// import { ENAMETOOLONG } from 'constants';
+
 var mongoose = require('mongoose').set('debug', true);
 var _ = require('underscore');
 
@@ -21,6 +23,7 @@ module.exports = function(wagner){
 	var Usuario = mongoose.model('Usuario', require('./usuario'), 'usuario');	
 	var Consultorio = mongoose.model('Consultorio', require('./consultorio'), 'consultorio');	
 	var Mensaje = mongoose.model('Mensaje', require('./mensaje'), 'mensaje');	
+	var GrupoAlimento = mongoose.model('GrupoAlimento',require('./grupo_alimento'),'grupoAlimento');
 
 	// Se crea un object de estos modelos llamado models
 
@@ -35,7 +38,8 @@ module.exports = function(wagner){
 		HistorialCitas: HistorialCitas,
 		Usuario: Usuario,
 		Consultorio: Consultorio,
-		Mensaje: Mensaje
+		Mensaje: Mensaje,
+		GrupoAlimento: GrupoAlimento
 	};
 	
 	_.each(models, function(value, key){
