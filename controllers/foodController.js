@@ -35,7 +35,7 @@ module.exports.getFoods = function (req, res, Comida, Ingrediente){
 		var i = 0;
 		var j = 0;
 		var funcion1 = function(){
-			if(i == result.length && result[i].ingred.length == j){
+			if(i == result.length && result[i-1].ingred.length == j){
 				return res.status(status.OK).json({'comidas' : result});
 			}else{
 				funcion2(result[i]);
@@ -46,16 +46,19 @@ module.exports.getFoods = function (req, res, Comida, Ingrediente){
 			j = 0;
 			
 			var funcion3 = function(){
-				if(j == value.length){
+				if(j == value.ingred.length){
 					i++;
 					funcion1();
 				}else{
+					console.log(value.ingred);
 					funcion4(value.ingred[j]);
 				}
 			}
 			
 			var funcion4 = function(value2){
-				Ingrediente.findOne({'_id': value2._id }, {'nombre':true, 'calorias':true}, function(err, resulta){
+				var aux = value2.toObject();
+				console.log(aux.idIngred);
+				Ingrediente.findOne({'_id': aux.idIngred }, {'nombre':true, 'calorias':true}, function(err, resulta){
 					if(!resulta){
 						
 					}else{
