@@ -58,7 +58,7 @@ module.exports.getFoods = function (req, res, Comida, Ingrediente){
 			var funcion4 = function(value2){
 				var aux = value2.toObject();
 				console.log(aux.idIngred);
-				Ingrediente.findOne({'_id': aux.idIngred }, {'nombre':true, 'calorias':true}, function(err, resulta){
+				Ingrediente.findOne({'_id': aux._id }, {'nombre':true, 'calorias':true}, function(err, resulta){
 					if(!resulta){
 						
 					}else{
