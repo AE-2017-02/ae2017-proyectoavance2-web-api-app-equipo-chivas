@@ -32,25 +32,48 @@ module.exports.getFoods = function (req, res, Comida, Ingrediente){
 		}
 		var ingred2 = {};
 		
-		result.forEach(function(value, index, arr){
-			value.ingred.forEach(function(value2, index2, arr2){
-				console.log(value2._id);
-				Ingrediente.findOne({'_id': value2._id}, {'nombre':true, 'calorias':true}, function(err, resulta){
+		var i = 0;
+		var j = 0;
+		var funcion1 = function(){
+			if(i == result.length && result[i].ingred.length == j){
+				return res.status(status.OK).json({'comidas' : result});
+			}else{
+				funcion2(result[i]);
+			}
+		}
+		
+		var funcion2 = function(value){
+			j = 0;
+			
+			var funcion3 = function(){
+				if(j == value.length){
+					i++;
+					funcion1();
+				}else{
+					funcion4(value.ingred[j]);
+				}
+			}
+			
+			var funcion4 = function(value2){
+				Ingrediente.findOne({'_id': value2._id }, {'nombre':true, 'calorias':true}, function(err, resulta){
 					if(!resulta){
 						
 					}else{
-						ingred2 = result[index].ingred[index2].toObject();
+						ingred2 = result[i].ingred[j].toObject();
 						ingred2.nombre = resulta.nombre;
 						ingred2.calorias = resulta.calorias;
-						result[index].ingred[index2] = ingred2;
+						result[i].ingred[j] = ingred2;
 					}
 					
-					if(index == arr.length-1 && index2 == arr2.length-1){
-						return res.status(status.OK).json({'comidas': result});
-					}
-				}); 
-			});
-		});
+					j++;
+					funcion3();
+				});
+			}
+			
+			funcion3();
+		}
+		
+		funcion1();
 	});
 };
 
