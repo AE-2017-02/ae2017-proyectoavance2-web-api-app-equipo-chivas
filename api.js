@@ -98,31 +98,31 @@ module.exports = function(wagner){
 	//RegistroCita
 	api.get('/appointmentRegisters/', wagner.invoke(function (RegistroCita){
 		return function(req, res){
-			return require('./controllers/apointmentRegisterController').getAppointmentRegisters(req, res, RegistroCita);
+			return require('./controllers/appointmentRegisterController').getAppointmentRegisters(req, res, RegistroCita);
 		};
 	}));
 
 	api.get('/appointmentRegister/:_id', wagner.invoke(function (RegistroCita){
 		return function(req, res){
-			return require('./controllers/apointmentRegisterController').getAppointmentRegister(req, res, RegistroCita);
+			return require('./controllers/appointmentRegisterController').getAppointmentRegister(req, res, RegistroCita);
 		};
 	}));
 
 	api.post('/appointmentRegister/', wagner.invoke(function (RegistroCita){
 		return function(req, res){
-			return require('./controllers/apointmentRegisterController').newAppointmentRegister(req, res, RegistroCita);
+			return require('./controllers/appointmentRegisterController').newAppointmentRegister(req, res, RegistroCita);
 		};
 	}));
 	
 	api.put('/appointmentRegister/:_id', wagner.invoke(function(RegistroCita){
 		return function(req, res){
-			return require('./controllers/apointmentRegisterController').updateAppointmentRegister(req, res, RegistroCita);
+			return require('./controllers/appointmentRegisterController').updateAppointmentRegister(req, res, RegistroCita);
 		}
 	}));
 
 	api.delete('/appointmentRegister/:_id', wagner.invoke(function (RegistroCita){
 		return function(req, res){
-			return require('./controllers/apointmentRegisterController').deleteAppointmentRegister(req, res, RegistroCita);
+			return require('./controllers/appointmentRegisterController').deleteAppointmentRegister(req, res, RegistroCita);
 		};
 	}));
 	//end RegistroCita
