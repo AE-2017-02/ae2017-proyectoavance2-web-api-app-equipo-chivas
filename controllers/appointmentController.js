@@ -93,9 +93,7 @@ module.exports.getAppointmentsWithPatient = function (req, res, Cita, Paciente){
 				}else{
 					funcion2(result[i]);	
 				}			
-			}
-			
-			funcion1();
+			}	
 			
 			var funcion2 = function(element){
 				Paciente.findOne({'idCita': element._id}, {'nombre': true}, function(error, resulta){
@@ -120,6 +118,7 @@ module.exports.getAppointmentsWithPatient = function (req, res, Cita, Paciente){
 				funcion1();
 			});
 			}
+                        funcion1();
 		});
 };
 
