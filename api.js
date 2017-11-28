@@ -412,5 +412,38 @@ module.exports = function(wagner){
 		}
 	}));
 	//end HistorialCitas
+
+
+	//begin GrupoAlimento
+		api.get('/foodGroups/',wagner.invoke(function(GrupoAlimento){
+			return function(req,res){
+				return require('./controllers/foodGroupController').getFoodGroups(req,res,GrupoAlimento);
+			}
+		}));
+
+		api.get('/foodGroups/:_id',wagner.invoke(function(GrupoAlimento){
+			return function(req,res){
+				return require('./controllers/foodGroupController').getFoodGroupsById(req,res,GrupoAlimento);
+			}
+		}));
+
+		api.post('/foodGroups/',wagner.invoke(function(GrupoAlimento){
+			return function(req,res){
+				return require('./controllers/foodGroupController').newFoodGroup(req,res,GrupoAlimento);
+			}
+		}));
+
+		api.put('/foodGroups/:_id',wagner.invoke(function(GrupoAlimento){
+			return function(req,res){
+				return require('./controllers/foodGroupController').updateFoodGroup(req,res,GrupoAlimento);
+			}
+		}));
+
+		api.delete('/foodGroups/:_id',wagner.invoke(function(GrupoAlimento){
+			return function(req,res){
+				return require('./controllers/foodGroupController').deleteFoodGroup(req,res,GrupoAlimento);
+			}
+		}));
+	//end GrupoAlimento
 	return api;
 };

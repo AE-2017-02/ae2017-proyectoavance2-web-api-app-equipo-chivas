@@ -7,9 +7,10 @@
     "express": "4.12.3",
     "express-session": "1.11.2",
     "http-status": "0.1.8",
+    "jwt-simple": "^0.5.1",
     "mongodb": "2.0.35",
     "mongoose": "*",
-    "nodemailer":"*",
+    "nodemailer": "*",
     "superagent": "1.2.0",
     "underscore": "1.5.2",
     "wagner-core": "0.1.0"
