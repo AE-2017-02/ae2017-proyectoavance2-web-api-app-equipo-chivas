@@ -5,7 +5,7 @@ var jwt = require('jwt-simple');
 var express = require('express');
 var _ = require('underscore');
 
-module.exports.getFoods = function (req, res, Comida){
+module.exports.getFoods = function (req, res, Comida, Ingrediente){
 	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
 	console.log(token);
 	if (token) {
@@ -22,7 +22,36 @@ module.exports.getFoods = function (req, res, Comida){
 		return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
 	}
 	
-	Comida.find({}).exec(handle.handleMany.bind(null, 'comidas', res));
+	Comida.find({}, function(err, result){
+		if(err){
+			return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
+		}
+
+		if(!result){
+			return res.status(status.NOT_FOUND).json({error : 'Not found'});
+		}
+		var ingred2 = {};
+		
+		result.forEach(function(value, index, arr){
+			value.ingred.forEach(function(value2, index2, arr2){
+				console.log(value2._id);
+				Ingrediente.findOne({'_id': value2._id}, {'nombre':true, 'calorias':true}, function(err, resulta){
+					if(!resulta){
+						
+					}else{
+						ingred2 = result[index].ingred[index2].toObject();
+						ingred2.nombre = resulta.nombre;
+						ingred2.calorias = resulta.calorias;
+						result[index].ingred[index2] = ingred2;
+					}
+					
+					if(index == arr.length-1 && index2 == arr2.length-1){
+						return res.status(status.OK).json({'comidas': result});
+					}
+				}); 
+			});
+		});
+	});
 };
 
 module.exports.getFood = function (req, res, Comida){
@@ -50,7 +79,7 @@ module.exports.getFood = function (req, res, Comida){
 	Comida.find({'_id': _id}).exec(handle.handleOne.bind(null, 'comida', res));
 };
 
-module.exports.newFood = function (req, res, Comida){
+module.exports.newFood = function (req, res, Comida, Ingrediente){
 	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
 	console.log(token);
 	if (token) {
@@ -72,7 +101,9 @@ module.exports.newFood = function (req, res, Comida){
 	} catch(e){
 		return res.status(status.BAD_REQUEST).json({error: "No food provided"});
 	}
-	Comida.create(comida, function(err, result){
+	
+	var createFood = function(){
+		Comida.create(comida, function(err, result){
 		if(err){
 			return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
 		}
@@ -81,9 +112,45 @@ module.exports.newFood = function (req, res, Comida){
 			return res.status(status.NOT_FOUND).json({error : 'Not found'});
 		}
 		
-		result.populate('ingred._id', function (err, caseDocPopulated){
-			return res.status(status.OK).json({'comida' : caseDocPopulated});
+		var ingredComplets = [];
+		
+		result.ingred.forEach(function(value, index, ar){
+			Ingrediente.findOne({'_id' : value._id}, function(erro, resulta){
+					
+			var objTemp = {};
+			
+			objTemp._id = resulta._id;
+			objTemp.nombre = resulta.nombre;
+			objTemp.calorias = resulta.calorias;
+			objTemp.cantidad = comida.ingred[index].cantidad;
+			ingredComplets.push(objTemp);
+		
+			if(index == ar.length-1){
+				console.log(ingredComplets);
+
+				var resultados = result.toObject();
+				resultados.ingred = ingredComplets;
+				
+				return res.status(status.OK).json({'comida' : resultados});
+			}
+		});   
+	});
 		});
+	}
+	
+	var ingredIds = [];
+	
+	comida.ingred.forEach(function(value, index, ar) {
+		var objTemp = {};
+				
+		objTemp._id = value._id;
+		objTemp.cantidad = value.cantidad;
+		ingredIds.push(objTemp);
+		
+		if(index == ar.length-1){
+			comida.ingred = ingredIds;
+			createFood();
+		}
 	});
 };
 
