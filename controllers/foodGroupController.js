@@ -68,7 +68,7 @@ module.exports.updateFoodGroup = function (req, res, GrupoAlimento){
     }
 	
 	try{
-        var grupo = req.body.grupo;
+        var grupoAlimento = req.body.grupoAlimento;
         var _id = req.params._id;
 	} catch(e){
 		return res.status(status.BAD_REQUEST).json({error: "No food group provided"});
@@ -99,4 +99,29 @@ module.exports.removeFoodGroup = function (req, res, GrupoAlimento){
 		return res.status(status.BAD_REQUEST).json({error: "No food group provided"});
 	}
 	GrupoAlimento.findByIdAndRemove(_id, handle.handleOne.bind(null, 'grupo_alimento', res));
+};
+
+module.exports.newFoodGroup = function (req, res, GrupoAlimento){
+	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
+	console.log(token);
+	if (token) {
+		try {
+			var decoded = jwt.decode(token, 'GarnicaUltraSecretKey');
+
+			if (decoded.exp <= Date.now()) {
+				return res.end('Access token has expired', 400);
+			};
+		} catch (err) {
+			return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+		}
+	} else {
+		return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+	}
+	
+	try{
+		var grupoAlimento = req.body.grupoAlimento;
+	} catch(e){
+		return res.status(status.BAD_REQUEST).json({error: "No food group provided"});
+	}
+	GrupoAlimento.create(ingrediente, handle.handleMany.bind(null, 'grupo_alimento', res));
 };
