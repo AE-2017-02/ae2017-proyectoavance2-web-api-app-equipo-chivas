@@ -107,6 +107,12 @@ module.exports = function(wagner){
 			return require('./controllers/appointmentRegisterController').getAppointmentRegister(req, res, RegistroCita);
 		};
 	}));
+	
+	api.get('/appointmentRegister/appointment/:_id', wagner.invoke(function(RegistroCita){
+		return function(req, res){
+			return require('./controllers/appointmentRegisterController').getAppointmentRegisterByAppointment(req, res, RegistroCita);
+		};
+	}));
 
 	api.post('/appointmentRegister/', wagner.invoke(function (RegistroCita){
 		return function(req, res){
