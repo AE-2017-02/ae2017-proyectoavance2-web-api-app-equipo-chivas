@@ -184,7 +184,7 @@ module.exports.sendPatientActivationEmail = function (req, res, Paciente){
 					console.log(error);
 				}else{
 					console.log("Mail sent: " + response.message);
-					return res.status(status.OK).json(response.message);
+					return res.status(status.OK).json({"pin":val, "todoclarotodocorrecto":true});
 				}
 			});
 		});
