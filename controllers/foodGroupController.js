@@ -22,7 +22,7 @@ module.exports.getFoodGroups = function (req,res,GrupoAlimento){
 		return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
     }
     
-    GrupoAlimento.find({}).exec(handle.handleMany.bind(null,'grupo_alimento',res));
+    GrupoAlimento.find({}).exec(handle.handleMany.bind(null,'foodGroups',res));
 };
 
 module.exports.getFoodGroupById = function (req,res,GrupoAlimento){
@@ -46,7 +46,7 @@ module.exports.getFoodGroupById = function (req,res,GrupoAlimento){
     } catch(e){
         return res.status(status.BAD_REQUEST).json({error: "No ingredient id provided"});
     }
-        GrupoAlimento.find({'_id':_id}).exec(handle.handleOne.bind(null,'grupo_alimento',res));
+        GrupoAlimento.find({'_id':_id}).exec(handle.handleOne.bind(null,'foodGroup',res));
 };
 
 
@@ -68,12 +68,12 @@ module.exports.updateFoodGroup = function (req, res, GrupoAlimento){
     }
 	
 	try{
-        var grupoAlimento = req.body.grupoAlimento;
+        var grupoAlimento = req.body.foodGroup;
         var _id = req.params._id;
 	} catch(e){
 		return res.status(status.BAD_REQUEST).json({error: "No food group provided"});
 	}
-	GrupoAlimento.findByIdAndUpdate(_id,grupo,{new:true}, handle.handleOne.bind(null, 'grupo_alimento', res));
+	GrupoAlimento.findByIdAndUpdate(_id,grupoAlimento,{new:true}, handle.handleOne.bind(null, 'foodGroup', res));
 };
 
 module.exports.removeFoodGroup = function (req, res, GrupoAlimento){
@@ -98,7 +98,7 @@ module.exports.removeFoodGroup = function (req, res, GrupoAlimento){
 	} catch(e){
 		return res.status(status.BAD_REQUEST).json({error: "No food group provided"});
 	}
-	GrupoAlimento.findByIdAndRemove(_id, handle.handleOne.bind(null, 'grupo_alimento', res));
+	GrupoAlimento.findByIdAndRemove(_id, handle.handleOne.bind(null, 'foodGroup', res));
 };
 
 module.exports.newFoodGroup = function (req, res, GrupoAlimento){
@@ -119,9 +119,10 @@ module.exports.newFoodGroup = function (req, res, GrupoAlimento){
 	}
 	
 	try{
-		var grupoAlimento = req.body.grupoAlimento;
+		var grupoAlimento = req.body.foodGroup;
+		console.log(grupoAlimento);
 	} catch(e){
 		return res.status(status.BAD_REQUEST).json({error: "No food group provided"});
 	}
-	GrupoAlimento.create(ingrediente, handle.handleMany.bind(null, 'grupo_alimento', res));
+	GrupoAlimento.create(grupoAlimento, handle.handleMany.bind(null, 'foodGroup', res));
 };

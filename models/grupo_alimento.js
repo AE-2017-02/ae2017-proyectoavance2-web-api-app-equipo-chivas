@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 var grupoAlimentoSchema = {
     nombre: { type: String, required:true },
     energia: { type: Number },
-    proteina: { type: Number},
+    proteinas: { type: Number},
     lipidos: { type: Number },
     carbohidratos: {type:Number}
 };
