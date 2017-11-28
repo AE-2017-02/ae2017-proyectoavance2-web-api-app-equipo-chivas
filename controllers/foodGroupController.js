@@ -1,7 +1,7 @@
 var status = require('http-status');
 var handle = require('./../utils/handle');
 var _ = require('underscore');
-var moment = require('moment');
+// var moment = require('moment');
 var jwt = require('jwt-simple');
 var express = require('express');
 

@@ -1,4 +1,4 @@
-import { ObjectId } from '../../../.cache/typescript/2.6/node_modules/@types/bson';
+// import { ObjectId } from '../../../.cache/typescript/2.6/node_modules/@types/bson';
 
 var mongoose = require('mongoose');
 
@@ -9,10 +9,10 @@ var ingredienteSchema = {
 		grupoAlimento:{ 
 			_id: {type: mongoose.Schema.Types.ObjectId, required:true , ref: "GrupoAlimento"},
 			nombre: { type: String, required:true },
-			energia: { type: number },
-			proteina: { type: number},
-			lipidos: { type: number },
-			carbohidratos: {type:number}
+			energia: { type: Number },
+			proteina: { type: Number},
+			lipidos: { type: Number },
+			carbohidratos: {type:Number}
 		}
 };
 

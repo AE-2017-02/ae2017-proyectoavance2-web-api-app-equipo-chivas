@@ -2,10 +2,10 @@ var mongoose = require('mongoose');
 
 var grupoAlimentoSchema = {
     nombre: { type: String, required:true },
-    energia: { type: number },
-    proteina: { type: number},
-    lipidos: { type: number },
-    carbohidratos: {type:number}
+    energia: { type: Number },
+    proteina: { type: Number},
+    lipidos: { type: Number },
+    carbohidratos: {type:Number}
 };
 
 module.exports = new mongoose.Schema(grupoAlimentoSchema);

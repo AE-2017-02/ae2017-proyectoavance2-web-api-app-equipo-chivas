@@ -8,6 +8,7 @@
     "express-session": "1.11.2",
     "http-status": "0.1.8",
     "jwt-simple": "^0.5.1",
+    "moment": "^2.19.2",
     "mongodb": "2.0.35",
     "mongoose": "*",
     "nodemailer": "*",
