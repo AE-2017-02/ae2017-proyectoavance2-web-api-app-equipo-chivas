@@ -68,7 +68,7 @@ module.exports.getMessageByUser= function(req, res, Mensaje){
 	} catch(e){
 		return res.status(status.BAD_REQUEST).json({error: "No message id provided"});
 	}
-	Mensaje.find({'to': {$elemMatch: {'_idUser': _id}}}).exec(handle.handleMany.bind(null,'mensajes',res));
+	Mensaje.find({'to': {$elemMatch: {'_idUser': _id}}}).sort({_id:-1}).limit(20).exec(handle.handleMany.bind(null,'mensajes',res));
 };
 
 module.exports.newMessage = function (req, res, Mensaje){

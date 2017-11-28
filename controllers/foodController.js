@@ -122,7 +122,7 @@ module.exports.newFood = function (req, res, Comida, Ingrediente){
 			objTemp._id = resulta._id;
 			objTemp.nombre = resulta.nombre;
 			objTemp.calorias = resulta.calorias;
-			objTemp.cantidad = comida.ingred[index].cantidad;
+			objTemp.cant = comida.ingred[index].cant;
 			ingredComplets.push(objTemp);
 		
 			if(index == ar.length-1){
@@ -144,7 +144,8 @@ module.exports.newFood = function (req, res, Comida, Ingrediente){
 		var objTemp = {};
 				
 		objTemp._id = value._id;
-		objTemp.cantidad = value.cantidad;
+		objTemp.cantidad = value.cant;
+		
 		ingredIds.push(objTemp);
 		
 		if(index == ar.length-1){
