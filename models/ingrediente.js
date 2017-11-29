@@ -7,12 +7,7 @@ var ingredienteSchema = {
 		calorias: {type: Number, required: true},
 		unitMeasure: {type: String, required: true},
 		grupoAlimento:{ 
-			_id: {type: mongoose.Schema.Types.ObjectId, required:true , ref: "GrupoAlimento"},
-			nombre: { type: String, required:true },
-			energia: { type: Number },
-			proteina: { type: Number},
-			lipidos: { type: Number },
-			carbohidratos: {type:Number}
+			_id: {type: mongoose.Schema.Types.ObjectId, required:true , ref: "GrupoAlimento"}
 		}
 };
 

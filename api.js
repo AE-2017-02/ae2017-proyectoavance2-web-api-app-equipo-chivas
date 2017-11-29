@@ -453,7 +453,7 @@ module.exports = function(wagner){
 
 		api.delete('/foodGroups/:_id',wagner.invoke(function(GrupoAlimento){
 			return function(req,res){
-				return require('./controllers/foodGroupController').deleteFoodGroup(req,res,GrupoAlimento);
+				return require('./controllers/foodGroupController').removeFoodGroup(req,res,GrupoAlimento);
 			}
 		}));
 	//end GrupoAlimento
