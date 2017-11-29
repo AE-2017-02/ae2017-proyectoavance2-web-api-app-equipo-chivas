@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 var registro_citaSchema = {
-        idCita: { type: mongoose.Schema.Types.ObjectId, required:true, ref:"Cita" },
+        idCita: { type: mongoose.Schema.Types.ObjectId, required:true, ref:"Cita" ,  unique : true},
         peso: { type: Number, required:true },
         talla: { type: Number, required:true },
         mediciones: {
