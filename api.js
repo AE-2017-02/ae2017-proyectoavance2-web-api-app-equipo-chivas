@@ -113,6 +113,12 @@ module.exports = function(wagner){
 			return require('./controllers/appointmentRegisterController').getAppointmentRegisterByAppointment(req, res, RegistroCita);
 		};
 	}));
+	
+	api.get('/apointmentRegister/firstLast/user/:_id', wagner.invoke(function(RegistroCita, HistorialCitas, Cita){
+		return function(req, res){
+			return require('./controllers/appointmentRegisterController').getFirstAndLastAppointmentRegisterByPatient(req, res, RegistroCita, HistorialCitas, Cita);
+		};
+	}));
 
 	api.post('/appointmentRegister/', wagner.invoke(function (RegistroCita){
 		return function(req, res){
@@ -375,13 +381,13 @@ module.exports = function(wagner){
 		}
 	}));
 	
-	api.put('/appointmentHistory/:_id', wagner.invoke(function(Mensaje){
+	api.put('/message/:_id', wagner.invoke(function(Mensaje){
 		return function(req, res){
 			return require('./controllers/appointmentHistoryController').updateMessage(req, res, Mensaje);
 		}
 	}));
 	
-	api.delete('/appointmentHistory/:_id', wagner.invoke(function(Mensaje){
+	api.delete('/message/:_id', wagner.invoke(function(Mensaje){
 		return function(req, res){
 			return require('./controllers/appointmentHistoryController').deleteMessage(req, res, Mensaje);
 		}

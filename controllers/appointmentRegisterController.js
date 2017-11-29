@@ -75,6 +75,79 @@ module.exports.getAppointmentRegisterByAppointment = function(req, res, Registro
 	RegistroCita.find({'idCita':_id}).exec(handle.handleOne.bind(null, 'registrodecita', res));
 };
 
+module.exports.getFirstAndLastAppointmentRegisterByPatient = function(req, res, RegistroCita, HistorialCitas, Cita){
+	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
+	console.log(token);
+	if (token) {
+		try {
+			var decoded = jwt.decode(token, 'GarnicaUltraSecretKey');
+
+			if (decoded.exp <= Date.now()) {
+				return res.end('Access token has expired', 400);
+			};
+		} catch (err) {
+			return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+		}
+	} else {
+		return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+	}
+
+	try{
+		var _id = req.params._id;
+	}catch(e){
+		return res.status(status.BAD_REQUEST).json({error:"No patient id provided"});
+	}
+	
+	HistorialCitas.findOne({'paciente': _id}, function(error, result){
+		if(error){
+			return res.status(status.INTERNAL_SERVER_ERROR).json({error: error.toString()});
+		}
+		if(!result){
+			return res.status(status.NOT_FOUND).json({error: 'Not found'});
+		}
+		
+		RegistroCita.find({'_id': {$in: result.idRegistroCitas}}).exec(function (err, resulta){
+			if(err){
+				return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
+			}
+			if(!resulta){
+				return res.status(status.NOT_FOUND).json({error: 'Not found'});
+			}
+			var obj = [];
+			
+			var continua = function(){
+				
+				Cita.find({'_id': {$in:obj}}).sort({'fecha':-1}).limit(1).exec(function(error, resultad){
+					if(error){
+						return res.status(status.INTERNAL_SERVER_ERROR).json({error: error.toString()});
+					}
+					if(!resultad){
+						return res.status(status.NOT_FOUND).json({error: 'Not found'});
+					}
+					Cita.find({'_id':{$in: obj}}).sort({'fecha':1}).limit(1).exec(function(error, resultado){
+					if(error){
+							return res.status(status.INTERNAL_SERVER_ERROR).json({error: error.toString()});
+						}
+						if(!resultado){
+							return res.status(status.NOT_FOUND).json({error: 'Not found'});
+						}
+						
+						RegistroCita.find({'idCita':{$in:[resultad[0]._id, resultado[0]._id]}}).populate('idCita').exec(handle.handleOne.bind(null, 'registrodecita', res));
+					});
+				});
+			};
+			
+			resulta.forEach(function(element, index, arr){	
+				obj.push(element.idCita);
+				
+				if(index == arr.length-1){
+					continua();
+				}
+			});	
+		});
+	});
+};
+
 module.exports.newAppointmentRegister = function(req, res, RegistroCita){
 	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
 	console.log(token);
@@ -204,8 +277,8 @@ module.exports.updateAppointmentRegister = function(req, res, RegistroCita){
 		}
 
 		var funcion2 = function(){
-			if(registroCita.tipo != undefined && appointmentRegister[0].tipo != registroCita.tipo){
-				actualizaCampo('tipo', registroCita.tipo, funcion1);
+			if(registroCita.talla != undefined && appointmentRegister[0].talla != registroCita.talla){
+				actualizaCampo('talla', registroCita.talla, funcion1);
 			}else{
 				funcion1();
 			}
@@ -262,11 +335,19 @@ module.exports.updateAppointmentRegister = function(req, res, RegistroCita){
 		
 		var funcion9 = function(){
 			if(registroCita.mediciones.circunferencias.pantorrilla != undefined && appointmentRegister[0].mediciones.circunferencias.pantorrilla != registroCita.mediciones.circunferencias.pantorrilla){
-				actualizaCampo('mediciones.circunferencias.pantorrilla', registroCita.mediciones.circunferencias.pantorrilla, funcion4);
+				actualizaCampo('mediciones.circunferencias.pantorrilla', registroCita.mediciones.circunferencias.pantorrilla, funcion18);
 			}else{
-				funcion4();
+				funcion18();
 			}			
 		}
+		
+		var funcion18 = function(){
+			if(registroCita.mediciones.circunferencias.muneca != undefined && appointmentRegister[0].mediciones.circunferencias.muneca != registroCita.mediciones.circunferencias.muneca){
+				actualizaCampo('mediciones.circunferencias.muneca', registroCita.mediciones.circunferencias.muneca, funcion4);
+			}else{
+				funcion4();
+			}
+		} 
 		
 		var funcion4 = function(){
 			if(registroCita.mediciones.pliegues != undefined){
@@ -289,24 +370,24 @@ module.exports.updateAppointmentRegister = function(req, res, RegistroCita){
 		}
 		
 		var funcion11 = function(){
-			if(registroCita.mediciones.pliegues.bicapital != undefined && appointmentRegister[0].mediciones.pliegues.bicapital != registroCita.mediciones.pliegues.bicapital){
-				actualizaCampo('mediciones.pliegues.bicapital', registroCita.mediciones.pliegues.bicapital, funcion12);
+			if(registroCita.mediciones.pliegues.bicipital != undefined && appointmentRegister[0].mediciones.pliegues.bicipital != registroCita.mediciones.pliegues.bicipital){
+				actualizaCampo('mediciones.pliegues.bicipital', registroCita.mediciones.pliegues.bicipital, funcion12);
 			}else{
 				funcion12();
 			}
 		}
 		
 		var funcion12 = function(){
-			if(registroCita.mediciones.pliegues.seliaco != undefined && appointmentRegister[0].mediciones.pliegues.seliaco != registroCita.mediciones.pliegues.seliaco){
-				actualizaCampo('mediciones.pliegues.seliaco', registroCita.mediciones.pliegues.seliaco, funcion13);
+			if(registroCita.mediciones.pliegues.siliaco != undefined && appointmentRegister[0].mediciones.pliegues.siliaco != registroCita.mediciones.pliegues.siliaco){
+				actualizaCampo('mediciones.pliegues.siliaco', registroCita.mediciones.pliegues.siliaco, funcion13);
 			}else{
 				funcion13();
 			}			
 		}
 		
 		var funcion13 = function(){
-			if(registroCita.mediciones.pliegues.sespinaje != undefined && appointmentRegister[0].mediciones.pliegues.sespinaje != registroCita.mediciones.pliegues.sespinaje){
-				actualizaCampo('mediciones.pliegues.sespinaje', registroCita.mediciones.pliegues.sespinaje, funcion14);
+			if(registroCita.mediciones.pliegues.sespinale != undefined && appointmentRegister[0].mediciones.pliegues.sespinale != registroCita.mediciones.pliegues.sespinale){
+				actualizaCampo('mediciones.pliegues.sespinale', registroCita.mediciones.pliegues.sespinale, funcion14);
 			}else{
 				funcion14();
 			}			
