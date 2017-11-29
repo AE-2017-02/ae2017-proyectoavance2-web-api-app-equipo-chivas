@@ -22,7 +22,7 @@ module.exports.getIngredients = function (req, res, Ingrediente){
 		return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
 	}
 	
-	Ingrediente.find({}).exec(handle.handleMany.bind(null, 'ingredientes', res));
+	Ingrediente.find({}).populate('grupoAlimento').exec(handle.handleMany.bind(null, 'ingredientes', res));
 };
 
 module.exports.getIngredient = function (req, res, Ingrediente){
@@ -47,7 +47,7 @@ module.exports.getIngredient = function (req, res, Ingrediente){
 	} catch(e){
 		return res.status(status.BAD_REQUEST).json({error: "No ingredient id provided"});
 	}
-	Ingrediente.find({'_id': _id}).exec(handle.handleOne.bind(null, 'ingrediente', res));
+	Ingrediente.find({'_id': _id}).populate('grupoAlimento').exec(handle.handleOne.bind(null, 'ingrediente', res));
 };
 
 module.exports.getIngredientsForUser = function(req, res, Ingrediente, Paciente, MenuUsuario, Menu, Comida){
