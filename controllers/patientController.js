@@ -487,6 +487,28 @@ module.exports.updatePatient = function(req, res, Paciente){
 				funcion25();
 			}
 		}
-		funcion26();
+		var funcion27 = function(){
+			if(paciente.presion_arterial != undefined && patient[0].presion_arterial != paciente.presion_arterial){
+				actualizaCampo('presion_arterial',paciente.presion_arterial,funcion26);
+			}else{
+				funcion26();
+			}
+		}
+		var funcion28 = function(){
+			if(paciente.talla != undefined && patient[0].talla != paciente.talla){
+				actualizaCampo('talla',paciente.talla,funcion27);
+			}else{
+				funcion27();
+			}
+		}
+		var funcion29 = function(){
+			if(paciente.tabaco != undefined && patient[0].tabaco != paciente.tabaco){
+				actualizaCampo('tabaco',paciente.tabaco,funcion28);
+			}else{
+				funcion28();
+			}
+		}
+		
+		funcion29();
 	});
 }
