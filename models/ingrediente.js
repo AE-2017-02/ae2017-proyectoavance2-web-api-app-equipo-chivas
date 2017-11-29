@@ -4,11 +4,11 @@ var mongoose = require('mongoose');
 
 var ingredienteSchema = {
         nombre: { type: String, required:true },
-		calorias: {type: Number, required: true},
 		unitMeasure: {type: String, required: true},
+		porcion: {type: Number,required:true},		
 		grupoAlimento:{ 
 			_id: {type: mongoose.Schema.Types.ObjectId, required:true , ref: "GrupoAlimento"}
-		}
+		},
 };
 
 module.exports = new mongoose.Schema(ingredienteSchema);
