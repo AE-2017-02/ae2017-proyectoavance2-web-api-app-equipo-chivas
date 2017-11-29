@@ -106,6 +106,10 @@ module.exports.getFirstAndLastAppointmentRegisterByPatient = function(req, res, 
 			return res.status(status.NOT_FOUND).json({error: 'Not found'});
 		}
 		
+		if(result.idRegistroCitas.length == 0){
+			return res.status(status.NOT_FOUND).json({error: 'El paciente no tiene citas suficientes para la consulta'});
+		}
+		
 		RegistroCita.find({'_id': {$in: result.idRegistroCitas}}).exec(function (err, resulta){
 			if(err){
 				return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
