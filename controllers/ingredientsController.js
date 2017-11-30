@@ -530,14 +530,22 @@ module.exports.updateIngredient = function(req, res, Ingrediente){
 		}
 		
 		var funcion2 = function(){
-			if(ingrediente.calorias != undefined && ingredient[0].calorias != ingrediente.calorias){
-				actualizaCampo('calorias', ingrediente.calorias, funcion3);
+			if(ingrediente.porcion != undefined && ingredient[0].porcion != ingrediente.porcion){
+				actualizaCampo('porcion', ingrediente.porcion, funcion3);
 			}else{
 				funcion3();
 			}
 		}
-		
+
 		var funcion3 = function(){
+			if(ingrediente.grupoAlimento != undefined && ingredient[0].grupoAlimento != ingrediente.grupoAlimento){
+				actualizaCampo('grupoAlimento', ingrediente.grupoAlimento, funcion4);
+			}else{
+				funcion4();
+			}
+		}
+		
+		var funcion4 = function(){
 			if(ingrediente.unitMeasure != undefined && ingredient[0].unitMeasure != ingrediente.unitMeasure){
 				actualizaCampo('unitMeasure', ingrediente.unitMeasure, funcionfinal);
 			}else{
