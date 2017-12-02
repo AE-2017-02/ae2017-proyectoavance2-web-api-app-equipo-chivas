@@ -481,6 +481,10 @@ module.exports.updateIngredient = function(req, res, Ingrediente){
 	try{
 		var idIngrediente = req.params._id;
 		var ingrediente = req.body.ingrediente;
+		if(req.body.ingrediente.grupoAlimento._id != null){
+			var idingre = req.body.ingrediente.grupoAlimento._id;
+					req.body.ingrediente.grupoAlimento = idingre;
+		}
 		var count = 0;
 		var camposActualizados = "";
 	}catch(e){
