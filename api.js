@@ -31,6 +31,12 @@ module.exports = function(wagner){
 		};
 	}));
 	
+	api.get('/patient/pendingAmount/', wagner.invoke(function (Paciente, Cita){
+		return function(req, res){
+			return require('./controllers/patientController').getPatientsWithValidDate(req, res, Paciente, Cita);
+		}
+	}));
+	
 	api.post('/patient/login', wagner.invoke(function(Paciente){
 		return function(req, res){
 			return require('./controllers/patientController').getPatientByLogin(req, res, Paciente);
@@ -375,9 +381,21 @@ module.exports = function(wagner){
 		}
 	}));
 	
+	api.get('/generalMessage/', wagner.invoke(function(Mensaje){
+		return function(req, res){
+			return require('./controllers/messageController').getGeneralMessages(req, res, Mensaje);
+		}
+	}));
+	
 	api.post('/message/', wagner.invoke(function(Mensaje){
 		return function(req, res){
 			return require('./controllers/messageController').newMessage(req, res, Mensaje);
+		}
+	}));
+	
+	api.post('/generalMessage/', wagner.invoke(function(Mensaje){
+		return function(req, res){
+			return require('./controllers/messageController').newGeneralMessage(req, res, Mensaje);
 		}
 	}));
 	
