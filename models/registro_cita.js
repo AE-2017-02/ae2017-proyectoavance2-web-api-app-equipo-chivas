@@ -1,5 +1,14 @@
 var mongoose = require('mongoose');
 
+let schemaOptions = {
+    toObject: {
+        virtuals: true
+    },
+    toJSON: {
+        virtuals: true
+    }
+};
+
 var registro_citaSchema = {
         idCita: { type: mongoose.Schema.Types.ObjectId, required:true, ref:"Cita" ,  unique : true},
         peso: { type: Number, required:true },
@@ -28,5 +37,5 @@ var registro_citaSchema = {
         
 };
 
-module.exports = new mongoose.Schema(registro_citaSchema);
+module.exports = new mongoose.Schema(registro_citaSchema, schemaOptions);
 module.exports.registro_citaSchema = registro_citaSchema;
