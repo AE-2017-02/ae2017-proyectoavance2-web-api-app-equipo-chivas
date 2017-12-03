@@ -104,7 +104,7 @@ module.exports.getPatientsWithValidDate = function(req, res, Paciente, Cita){
 	} else {
 		return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
 	}
-	Paciente.find({}, function(err, result){
+	Paciente.find({activo: true}, function(err, result){
 		if(err){
 			return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
 		}
@@ -126,16 +126,15 @@ module.exports.getPatientsWithValidDate = function(req, res, Paciente, Cita){
 				if(err2){
 					return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
 				}
-				if(!resulta){
-					return res.status(status.NOT_FOUND).json({error : 'Login failed, wrong credentials'});
-				}
 				
-				if(resulta.status == "pendiente" && resulta.fecha >= new Date( new Date().getTime() + offset * 3600 * 1000)){
-					numberUsers++;
-				}
+				if(resulta != undefined){
+					if(resulta.status == "pendiente" && resulta.fecha >= new Date( new Date().getTime() + 7 * 3600 * 1000)){
+						numberUsers++;
+					}
 				
-				i++;
-				funcion1();
+					i++;
+					funcion1();
+				}
 			});
 		}
 		

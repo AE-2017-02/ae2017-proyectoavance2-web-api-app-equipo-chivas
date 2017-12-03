@@ -24,17 +24,17 @@ module.exports = function(wagner){
 			return require('./controllers/patientController').getPatients(req, res, Paciente);
 		};
 	}));
-
-	api.get('/patient/:_id', wagner.invoke(function (Paciente){
-		return function(req, res){
-			return require('./controllers/patientController').getPatient(req, res, Paciente);
-		};
-	}));
 	
 	api.get('/patient/pendingAmount/', wagner.invoke(function (Paciente, Cita){
 		return function(req, res){
 			return require('./controllers/patientController').getPatientsWithValidDate(req, res, Paciente, Cita);
 		}
+	}));
+
+	api.get('/patient/:_id', wagner.invoke(function (Paciente){
+		return function(req, res){
+			return require('./controllers/patientController').getPatient(req, res, Paciente);
+		};
 	}));
 	
 	api.post('/patient/login', wagner.invoke(function(Paciente){
