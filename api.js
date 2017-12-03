@@ -229,6 +229,12 @@ module.exports = function(wagner){
 		}
 	}));
 	
+	api.get('/menu_user/data/:_id', wagner.invoke(function(MenuUsuario){
+		return function(req, res){
+			return require('./controllers/menuCompletoController').getMenuUserWithData(req, res, MenuUsuario);
+		}
+	}));
+	
 	api.post('/menu_user/', wagner.invoke(function(MenuUsuario){
 		return function(req, res){
 			return require('./controllers/menuCompletoController').newMenuUser(req, res, MenuUsuario);

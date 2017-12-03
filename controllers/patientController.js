@@ -131,10 +131,9 @@ module.exports.getPatientsWithValidDate = function(req, res, Paciente, Cita){
 					if(resulta.status == "pendiente" && resulta.fecha >= new Date( new Date().getTime() + 7 * 3600 * 1000)){
 						numberUsers++;
 					}
-				
-					i++;
-					funcion1();
 				}
+				i++;
+				funcion1();
 			});
 		}
 		
