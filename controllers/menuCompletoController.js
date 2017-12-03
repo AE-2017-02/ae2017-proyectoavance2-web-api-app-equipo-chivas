@@ -68,33 +68,32 @@ module.exports.getMenuUserWithData = function(req, res, MenuUsuario){
 	} catch(e){
 		return res.status(status.BAD_REQUEST).json({error: "No menu_user id provided"});
 	}
-	MenuUsuario.find({'_id': _id}, 
-		populate:[
-			{path: "desayuno.idMenu"}, model: "Menu",populate:[		
-				{path: "comida", model: "Comida", populate: [
-					{path: "ingred.$._id", model: "Ingrediente"}
-				]}
-			],
-			{path: "comida.idMenu"}, model: "Menu", populate:[
-				{path: "comida", model: "Comida", populate: [
-					{path: "ingred.$._id", model: "Ingrediente"}
-				]}
-			],
-			{path: "cena.idMenu"}, model: "Menu", populate:[
-				{path: "comida", model: "Comida", populate: [
-					{path: "ingred.$._id", model: "Ingrediente"}
-				]}
-			],{path: "colacion1.idMenu"}, model: "Menu", populate:[
-				{path: "comida", model: "Comida", populate: [
-					{path: "ingred.$._id", model: "Ingrediente"}
-				]}
-			],{path: "colacion2.idMenu"}, model: "Menu", populate:[
-				{path: "comida", model: "Comida", populate: [
-					{path: "ingred.$._id", model: "Ingrediente"}
-				]}
-			]
-		]
-	).exec(handle.handleOne.bind(null, 'menu_user', res));
+	MenuUsuario.find({'_id': _id})
+		.populate({path: "desayuno.idMenu", model:"Menu",  populate:[		
+			{path: "comidas", model: "Comida", populate: [
+                {path: "ingred._id", model: "Ingrediente"}
+            ]}
+		]})
+		.populate({path: "comida.idMenu", model:"Menu", populate:[
+			{path: "comidas", model: "Comida", populate: [
+                {path: "ingred._id", model: "Ingrediente"}
+            ]}
+		]})
+		.populate({path: "cena.idMenu", model:"Menu", populate:[
+			{path: "comidas", model: "Comida", populate: [
+                {path: "ingred._id", model: "Ingrediente"}
+            ]}
+		]})
+		.populate({path: "colacion1.idMenu", model:"Menu", populate:[
+			{path: "comidas", model: "Comida", populate: [
+                {path: "ingred._id", model: "Ingrediente"}
+            ]}
+		]})
+		.populate({path: "colacion2.idMenu", model:"Menu", populate:[
+			{path: "comidas", model: "Comida", populate: [
+                {path: "ingred._id", model: "Ingrediente"}
+            ]}
+		]}).exec(handle.handleOne.bind(null, 'menu_user', res));
 }
 
 module.exports.newMenuUser = function (req, res, MenuUsuario){
