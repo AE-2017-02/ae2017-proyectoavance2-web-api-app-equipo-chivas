@@ -88,7 +88,7 @@ module.exports.getPatientByLogin = function(req, res, Paciente){
 	});	
 }
 
-module.exports.getPatientsWithValidDate = function(req, res, Paciente){
+module.exports.getPatientsWithValidDate = function(req, res, Paciente, Cita){
 	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
 	console.log(token);
 	if (token) {
@@ -122,7 +122,7 @@ module.exports.getPatientsWithValidDate = function(req, res, Paciente){
 		
 		var funcion2 = function(elemento){
 			
-			Citas.findOne({"_id": elemento.idCita}, function(err2, resulta){
+			Cita.findOne({"_id": elemento.idCita}, function(err2, resulta){
 				if(err2){
 					return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
 				}
