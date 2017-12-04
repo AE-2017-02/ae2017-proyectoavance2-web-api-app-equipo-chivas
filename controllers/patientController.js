@@ -63,7 +63,7 @@ module.exports.getPatientByLogin = function(req, res, Paciente){
 		return res.status(status.BAD_REQUEST).json({error: e.toString()});
 	}
 
-	Paciente.find({'email': email, 'pin': pin}, function(err, resulta){
+	Paciente.find({'email': email, 'pin': pin},{"despensa": 0}, function(err, resulta){
 		if(err){
 			return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
 		}
@@ -163,7 +163,7 @@ module.exports.getPantryMenusForDate = function(req, res, Paciente){
 	} catch(e){
 		return res.status(status.BAD_REQUEST).json({error: "No patient provided"});
 	}
-	Paciente.find({"_id": _id, "despensa.fecha" : fecha}, {"despensa.$" : 1}).exec(handle.handleOne.bind(null, 'paciente', res));
+	Paciente.find({"_id": _id, "despensa.fecha" : fecha}, {"despensa" : 1}).exec(handle.handleOne.bind(null, 'paciente', res));
 }
 
 module.exports.newPatient = function (req, res, Paciente){
