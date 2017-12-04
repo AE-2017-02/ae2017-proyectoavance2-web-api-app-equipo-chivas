@@ -163,7 +163,7 @@ module.exports.getPantryMenusForDate = function(req, res, Paciente){
 	} catch(e){
 		return res.status(status.BAD_REQUEST).json({error: "No patient provided"});
 	}
-	Paciente.find({"_id": _id, "despensa.fecha" : fecha}, {"despensa.$" : 1}).exec(handle.handleOne.bind(null, 'paciente', res));
+	Paciente.find({"_id": _id, "despensa.fecha" : fecha}, {"despensa.$" : 1}).exec(handle.handleMany.bind(null, 'paciente', res));
 }
 
 module.exports.newPatient = function (req, res, Paciente){
