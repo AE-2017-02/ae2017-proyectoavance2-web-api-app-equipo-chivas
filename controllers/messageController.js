@@ -87,7 +87,7 @@ module.exports.getGeneralMessages = function(req, res, Mensaje){
 	} else {
 		return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
 	}
-	Mensaje.find({ $where: "this.to.length = 0" }).sort({_id: -1}).limit(20).exec(handle.handleMany.bind(null, 'MensajesGenerales', res));
+	Mensaje.find({ "to": {$size: 0 } }).sort({_id: -1}).limit(20).exec(handle.handleMany.bind(null, 'MensajesGenerales', res));
 }
 
 module.exports.newMessage = function (req, res, Mensaje){
