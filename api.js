@@ -25,12 +25,18 @@ module.exports = function(wagner){
 		};
 	}));
 	
+	api.get('/patientPantry/:_id/date/:fecha', wagner.invoke(function(Paciente){
+		return function(req, res){
+			return require('./controllers/patientController').getPantryMenusForDate(req, res, Paciente);
+		}
+	}));
+	
 	api.get('/patient/pendingAmount/', wagner.invoke(function (Paciente, Cita){
 		return function(req, res){
 			return require('./controllers/patientController').getPatientsWithValidDate(req, res, Paciente, Cita);
 		}
 	}));
-
+	
 	api.get('/patient/:_id', wagner.invoke(function (Paciente){
 		return function(req, res){
 			return require('./controllers/patientController').getPatient(req, res, Paciente);
@@ -40,6 +46,12 @@ module.exports = function(wagner){
 	api.post('/patient/login', wagner.invoke(function(Paciente){
 		return function(req, res){
 			return require('./controllers/patientController').getPatientByLogin(req, res, Paciente);
+		}
+	}));
+	
+	api.post('/patientPantry/:_id', wagner.invoke(function(Paciente, Comida){
+		return function(req, res){
+			return require('./controllers/patientController').setPatientPantry(req, res, Paciente, Comida);
 		}
 	}));
 	
@@ -65,6 +77,12 @@ module.exports = function(wagner){
 		return function(req, res){
 			return require('./controllers/patientController').deletePatient(req, res, Paciente);
 		};
+	}));
+	
+	api.delete('/patientPantry/:_id', wagner.invoke(function(Paciente, Comida){
+		return function(req, res){
+			return require('./controllers/patientController').removePatientPantry(res, res, Paciente, Comida);
+		}
 	}));
 	//endregion Paciente
 
