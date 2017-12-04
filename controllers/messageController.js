@@ -284,8 +284,15 @@ module.exports.updateMessage = function(req, res, Mensaje){
 				funcion2();
 			}
 		}
+		
+		var funcion4 = function(){
+			if(mensaje.fecha != undefined && message[0].fecha != mensaje.fecha){
+				actualizaCampo('fecha', mensaje.fecha, funcion3);
+			}else{
+				funcion3();
+			}
+		}
 
-
-		funcion3();
+		funcion4();
 	});
 }

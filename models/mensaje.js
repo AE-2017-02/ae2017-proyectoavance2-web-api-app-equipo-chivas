@@ -6,7 +6,8 @@ var mensajeSchema = {
         to: [{
               _idUser:  { type: mongoose.Schema.Types.ObjectId, required:true }, 
               deviceToken: {type: String, required: true}
-        }]
+        }],
+		fecha: {type: String}
 };
 
 module.exports = new mongoose.Schema(mensajeSchema);
