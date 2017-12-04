@@ -230,29 +230,28 @@ module.exports.setPatientPantry = function(req, res, Paciente, Comida){
 			var j = 0;
 			
 			var funcion1 = function(element){
-				Paciente.update({"_id": _id, 
-				    "despensa": {
-						"$not": {
-							"$elemMatch": {
-								"fecha": fecha,
-								"comidaTiempo": result.tipo,
-								"menuId": idComida
+				Paciente.update({"_id": _id,
+					"despensa":{
+						"$not":{
+							"$elemMatch":{
+								"fecha":fecha,
+								"comidaTiempo":result.tipo,
+								"menuId":idComida
 							}
 						}
 					}
-				}
-				, {$addToSet: {"despensa" : {"fecha": fecha, "comidaTiempo": result.tipo, "menuId": idComida, "ingredientes": []}}}).exec(function(err, resulta){
+				}, {$addToSet: {"despensa" : {"fecha": fecha, "comidaTiempo": result.tipo, "menuId": idComida, "ingredientes": []}}}).exec(function(err, resulta){
 					if(err){
 						return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
 					}
 					
-					Paciente.update({ $and : [{"_id": _id}, {"despensa": { $elemMatch: {"fecha":fecha}}} , {"despensa": { $elemMatch: {"comidaTiempo": result.tipo}}}, {"despensa" : {$elemMatch:{"menuId" : idComida}}}]}, {$push: {"despensa.$.ingredientes" : element._id.nombre } }).exec(function(error, resulta){
+					Paciente.update({ $and : [{"_id": _id}, {"despensa": { $elemMatch: {"fecha":fecha}}} , {"despensa": { $elemMatch: {"comidaTiempo": result.tipo}}}, {"despensa" : {$elemMatch:{"menuId" : idComida}}}]}, {$push: {"despensa.$.ingredientes" : element._id.nombre } }).exec(function(error, resultad){
 						if(error){
 							return res.status(status.INTERNAL_SERVER_ERROR).json({error: error.toString()});
-						}	
-						console.log(resulta);
-						i++;
-						funcion2();	
+						}
+							console.log(resultad);
+							i++;
+							funcion2();
 					});
 				});	
 			}
