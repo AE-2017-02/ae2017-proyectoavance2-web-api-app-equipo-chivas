@@ -230,12 +230,14 @@ module.exports.setPatientPantry = function(req, res, Paciente, Comida){
 			var j = 0;
 			
 			var funcion1 = function(element){
-				
-				console.log(element);
-				Paciente.update({ $and : [{"_id": _id}, {"despensa": { $elemMatch: {"fecha":fecha}}} , {"despensa": { $elemMatch: {"comidaTiempo": result.tipo}}}, {"despensa" : {$elemMatch:{"menuId" : idComida}}}]}, {$addToSet: {"despensa.$.ingredientes" : element._id.nombre } }, {upsert: true})	
-				i++;
-				
-				funcion2();	
+				Paciente.update({ $and : [{"_id": _id}, {"despensa": { $elemMatch: {"fecha":fecha}}} , {"despensa": { $elemMatch: {"comidaTiempo": result.tipo}}}, {"despensa" : {$elemMatch:{"menuId" : idComida}}}]}, {$addToSet: {"despensa.$.ingredientes" : element._id.nombre } }, {upsert: true}).exec(function(err, result){
+					if(err){
+						return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
+					}
+					console.log(result);
+					i++;
+					funcion2();	
+				});	
 			}
 			
 			var funcion2 = function(){
