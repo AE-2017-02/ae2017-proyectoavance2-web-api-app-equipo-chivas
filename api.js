@@ -113,6 +113,12 @@ module.exports = function(wagner){
 			return require('./controllers/appointmentRegisterController').getAppointmentRegisterByAppointment(req, res, RegistroCita);
 		};
 	}));
+
+	api.get('/getFatMass/:_id', wagner.invoke(function(RegistroCita, Paciente){
+		return function(req, res){
+			return require('./controllers/appointmentRegisterController').getFatMass(req, res, RegistroCita, Paciente);
+		};
+	}));
 	
 	api.get('/apointmentRegister/firstLast/user/:_id', wagner.invoke(function(RegistroCita, HistorialCitas, Cita){
 		return function(req, res){

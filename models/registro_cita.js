@@ -5,7 +5,7 @@ var registro_citaSchema = {
         peso: { type: Number, required:true },
         talla: { type: Number, required:true },
         mediciones: {
-        cirfunferencias:{
+        circunferencias:{
             brazo:{type:Number, required:true},
             cintura:{type:Number, required:true},
             cadera:{type:Number, required:true},
