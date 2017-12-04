@@ -24,6 +24,12 @@ module.exports = function(wagner){
 			return require('./controllers/patientController').getPatients(req, res, Paciente);
 		};
 	}));
+	
+	api.get('/patient/pendingAmount/', wagner.invoke(function (Paciente, Cita){
+		return function(req, res){
+			return require('./controllers/patientController').getPatientsWithValidDate(req, res, Paciente, Cita);
+		}
+	}));
 
 	api.get('/patient/:_id', wagner.invoke(function (Paciente){
 		return function(req, res){
@@ -229,6 +235,12 @@ module.exports = function(wagner){
 		}
 	}));
 	
+	api.get('/menu_user/data/:_id', wagner.invoke(function(MenuUsuario){
+		return function(req, res){
+			return require('./controllers/menuCompletoController').getMenuUserWithData(req, res, MenuUsuario);
+		}
+	}));
+	
 	api.post('/menu_user/', wagner.invoke(function(MenuUsuario){
 		return function(req, res){
 			return require('./controllers/menuCompletoController').newMenuUser(req, res, MenuUsuario);
@@ -381,9 +393,21 @@ module.exports = function(wagner){
 		}
 	}));
 	
+	api.get('/generalMessage/', wagner.invoke(function(Mensaje){
+		return function(req, res){
+			return require('./controllers/messageController').getGeneralMessages(req, res, Mensaje);
+		}
+	}));
+	
 	api.post('/message/', wagner.invoke(function(Mensaje){
 		return function(req, res){
 			return require('./controllers/messageController').newMessage(req, res, Mensaje);
+		}
+	}));
+	
+	api.post('/generalMessage/', wagner.invoke(function(Mensaje){
+		return function(req, res){
+			return require('./controllers/messageController').newGeneralMessage(req, res, Mensaje);
 		}
 	}));
 	

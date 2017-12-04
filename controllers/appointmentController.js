@@ -118,7 +118,7 @@ module.exports.getAppointmentsWithPatient = function (req, res, Cita, Paciente){
 				funcion1();
 			});
 			}
-                        funcion1();
+            funcion1();
 		});
 };
 

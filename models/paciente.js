@@ -15,7 +15,7 @@ var pacienteSchema = {
 	alcohol: {type: Boolean, required:false},
 	tabaco: {type: Boolean, required: false},
 	talla: {type: Number, required: false},
-	presion_arterial: {type:Number, required:false},
+	presion_arterial: {type:String, required:false},
 	diabetes: {type:Boolean, required:false},
 	colesterol: { type:Boolean, required: false},
 	hipertension: { type:Boolean, required: false},

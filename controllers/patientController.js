@@ -85,9 +85,60 @@ module.exports.getPatientByLogin = function(req, res, Paciente){
 			});
 		});
 
+	});	
+}
+
+module.exports.getPatientsWithValidDate = function(req, res, Paciente, Cita){
+	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
+	console.log(token);
+	if (token) {
+		try {
+			var decoded = jwt.decode(token, 'GarnicaUltraSecretKey');
+
+			if (decoded.exp <= Date.now()) {
+				return res.end('Access token has expired', 400);
+			};
+		} catch (err) {
+			return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+		}
+	} else {
+		return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+	}
+	Paciente.find({activo: true}, function(err, result){
+		if(err){
+			return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
+		}
+		
+		var i = 0;
+		var numberUsers = 0;
+		
+		var funcion1 = function(){
+			if(i == result.length){
+				return res.status(status.OK).json({numUsers: numberUsers});
+			}else{
+				funcion2(result[i]);				
+			}
+		}
+		
+		var funcion2 = function(elemento){
+			
+			Cita.findOne({"_id": elemento.idCita}, function(err2, resulta){
+				if(err2){
+					return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
+				}
+				
+				if(resulta != undefined){
+					if(resulta.status == "pendiente" && resulta.fecha >= new Date( new Date().getTime() + 7 * 3600 * 1000)){
+						numberUsers++;
+					}
+				}
+				i++;
+				funcion1();
+			});
+		}
+		
+		funcion1();
 	});
-	
-	
 }
 
 module.exports.newPatient = function (req, res, Paciente){

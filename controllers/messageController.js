@@ -71,6 +71,25 @@ module.exports.getMessageByUser= function(req, res, Mensaje){
 	Mensaje.find({'to': {$elemMatch: {'_idUser': _id}}}).sort({_id:-1}).limit(20).exec(handle.handleMany.bind(null,'mensajes',res));
 };
 
+module.exports.getGeneralMessages = function(req, res, Mensaje){
+	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
+	console.log(token);
+	if (token) {
+		try {
+			var decoded = jwt.decode(token, 'GarnicaUltraSecretKey');
+
+			if (decoded.exp <= Date.now()) {
+				return res.end('Access token has expired', 400);
+			};
+		} catch (err) {
+			return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+		}
+	} else {
+		return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+	}
+	Mensaje.find({ "to": {$size: 0 } }).sort({_id: -1}).limit(20).exec(handle.handleMany.bind(null, 'MensajesGenerales', res));
+}
+
 module.exports.newMessage = function (req, res, Mensaje){
 	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
 	console.log(token);
@@ -116,6 +135,48 @@ module.exports.newMessage = function (req, res, Mensaje){
 	});
 	
 };
+
+module.exports.newGeneralMessage = function(req, res, Mensaje){
+	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
+	console.log(token);
+	if (token) {
+		try {
+			var decoded = jwt.decode(token, 'GarnicaUltraSecretKey');
+
+			if (decoded.exp <= Date.now()) {
+				return res.end('Access token has expired', 400);
+			};
+		} catch (err) {
+			return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+		}
+	} else {
+		return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+	}
+	try{
+		var mensaje = req.body.mensaje;
+	}catch(e){
+		return res.status(status.BAD_REQUEST).json({error: e.toString()});
+	}
+
+	Mensaje.create(mensaje, function(error,result){
+		if(error){
+			return res.status(status.INTERNAL_SERVER_ERROR).json({error: error.toString()});
+		}
+		if(!result){
+			return res.status(status.NOT_FOUND).json({error: 'Not found'});
+		}
+
+		var devices = [];
+		
+		const notify = require('./../utils/onesignal')("MzE2ZDk0MTctMzdhOC00OWRmLWI5NGItZGRiMmM1Zjc3Mjgy", "ee63927a-ed8e-4510-a20e-687d880eb211");
+		notify.notifyUser({
+			message: mensaje.cuerpo,
+			included_segments: ["All Users"]
+		  }, (err, response) => {
+			res.status(status.OK).json({"mensaje": result});
+		});
+	});
+}
 
 module.exports.deleteMessage = function (req, res, Mensaje){
 	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
@@ -223,8 +284,15 @@ module.exports.updateMessage = function(req, res, Mensaje){
 				funcion2();
 			}
 		}
+		
+		var funcion4 = function(){
+			if(mensaje.fecha != undefined && message[0].fecha != mensaje.fecha){
+				actualizaCampo('fecha', mensaje.fecha, funcion3);
+			}else{
+				funcion3();
+			}
+		}
 
-
-		funcion3();
+		funcion4();
 	});
 }

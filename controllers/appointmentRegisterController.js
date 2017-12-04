@@ -482,7 +482,7 @@ module.exports.updateAppointmentRegister = function(req, res, RegistroCita){
 
 		var funcion3 = function(){
 			if(registroCita.mediciones != undefined){
-				if(registroCita.mediciones.cirfunferencias != undefined){
+				if(registroCita.mediciones.circunferencias != undefined){
 					if(registroCita.mediciones.circunferencias.brazo != undefined && appointmentRegister[0].mediciones.circunferencias.brazo != registroCita.mediciones.circunferencias.brazo){
 						actualizaCampo('mediciones.circunferencias.brazo', registroCita.mediciones.circunferencias.brazo, funcion5);
 					}else{
