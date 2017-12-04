@@ -141,6 +141,31 @@ module.exports.getPatientsWithValidDate = function(req, res, Paciente, Cita){
 	});
 }
 
+module.exports.getPantryMenusForDate = function(req, res, Paciente){
+	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
+	console.log(token);
+	if (token) {
+		try {
+			var decoded = jwt.decode(token, 'GarnicaUltraSecretKey');
+
+			if (decoded.exp <= Date.now()) {
+				return res.end('Access token has expired', 400);
+			};
+		} catch (err) {
+			return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+		}
+	} else {
+		return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+	}
+	try{
+		var _id = req.params._id;
+		var fecha = req.params.fecha;
+	} catch(e){
+		return res.status(status.BAD_REQUEST).json({error: "No patient provided"});
+	}
+	Paciente.find({"_id": _id, "despensa.fecha" : fecha}, {"despensa.$" : 1})
+}
+
 module.exports.newPatient = function (req, res, Paciente){
 	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
 	console.log(token);
@@ -174,6 +199,56 @@ module.exports.newPatient = function (req, res, Paciente){
 		}
 	});
 };
+
+module.exports.setPatientPantry = function(req, res, Paciente, Comida){
+	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
+	console.log(token);
+	if (token) {
+		try {
+			var decoded = jwt.decode(token, 'GarnicaUltraSecretKey');
+
+			if (decoded.exp <= Date.now()) {
+				return res.end('Access token has expired', 400);
+			};
+		} catch (err) {
+			return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+		}
+	} else {
+		return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+	}
+	try{
+		var _id = req.params._id;
+		var idComida = req.body.paciente.idComida;
+		var fecha = req.body.paciente.fecha;
+	}catch(e){
+		return res.status(status.BAD_REQUEST).json({error: e.toString()});
+	}
+	Comida.findOne({"_id": idComida})
+		.populate({path: "ingred._id", model: "Ingrediente"}).exec(function(error, result){
+			
+			var i = 0;
+			var j = 0;
+			
+			var funcion1 = function(element){
+				
+				console.log(element);
+				Paciente.update({ $and : [{"_id": _id}, {"despensa": { $elemMatch: {"fecha":fecha}}} , {"despensa": { $elemMatch: {"comidaTiempo": result.tipo}}}, {"despensa" : {$elemMatch:{"menuId" : idComida}}}]}, {$addToSet: {"despensa.$.ingredientes" : element._id.nombre } }, {upsert: true})	
+				i++;
+				
+				funcion2();	
+			}
+			
+			var funcion2 = function(){
+				if(i == result.ingred.length){
+					res.status(status.OK).json({"updatedPantry":true});
+				}else{
+					funcion1(result.ingred[i]);	
+				}
+			}
+			
+			funcion2();
+		});
+}
 
 module.exports.sendPatientActivationEmail = function (req, res, Paciente){
 	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
@@ -265,6 +340,35 @@ module.exports.deletePatient = function (req, res, Paciente){
 		return res.status(status.BAD_REQUEST).json({error: e.toString()});
 	}
 	Paciente.remove({'_id': _id}, handle.handleOne.bind(null, 'paciente', res));
+};
+
+module.exports.removePatientPantry = function(req, res, Paciente, Comida){
+	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
+	console.log(token);
+	if (token) {
+		try {
+			var decoded = jwt.decode(token, 'GarnicaUltraSecretKey');
+
+			if (decoded.exp <= Date.now()) {
+				return res.end('Access token has expired', 400);
+			};
+		} catch (err) {
+			return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+		}
+	} else {
+		return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+	}
+	try{
+		var _id = req.params._id;
+		var idComida = req.body.paciente.idComida;
+		var fecha = req.body.paciente.fecha;
+	}catch(e){
+		return res.status(status.BAD_REQUEST).json({error: e.toString()});
+	}
+	Comida.findOne({"_id": idComida})
+		.populate({path: "ingred._id", model: "Ingrediente"}).exec(function(error, result){
+			Paciente.update({ $and : [{"_id": _id}, {"despensa": { $elemMatch: {"fecha":fecha}}} , {"despensa": { $elemMatch: {"comidaTiempo": result.tipo}}}]}, {$pull: {"despensa" : {"menuId" : idComida} }});
+		});	
 };
 
 module.exports.updatePatient = function(req, res, Paciente){

@@ -35,7 +35,13 @@ var pacienteSchema = {
 		aceptNotification : {type: Boolean, required: false},
 		timeBefore: {type: Number, required: false}
 	},
-	device_key:{type:String,required:true}
+	device_key:{type:String,required:true},
+	despensa: [{
+		fecha: {type: String, required:true},
+		comidaTiempo: {type: String, required:true},
+		ingredientes: [{type: String}],
+		menuId: {type: mongoose.Schema.Types.ObjectId, required: true, ref: "Menu"}
+	}]
 };
 
 module.exports = new mongoose.Schema(pacienteSchema);
