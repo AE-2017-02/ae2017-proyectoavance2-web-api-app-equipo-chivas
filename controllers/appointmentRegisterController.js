@@ -184,9 +184,16 @@ module.exports.getFatMass = function (req, res, RegistroCita, Paciente, Historia
 		if(!resulta2){
 			return res.status(status.NOT_FOUND).json({error: 'Not found'});
 		}
-
+	    var resulta3 = resulta2.toObject();
 		var pliegues = resulta2.mediciones.pliegues;
-		var circunferencias = resulta2.mediciones.circunferencias;
+		console.log(resulta3.mediciones.circunferencias);
+		console.log(resulta3.mediciones.cirfunferencias);
+		if (resulta3.mediciones.circunferencias != undefined){
+		var circunferencias = resulta3.mediciones.circunferencias;
+		}else{
+		var circunferencias = resulta3.mediciones.cirfunferencias;	
+		}
+
 		var suma = pliegues.tricipital + pliegues.sEscapulada + pliegues.bicipital + pliegues.siliaco + pliegues.siliaco + pliegues.sespinale + pliegues.abdominal + pliegues.muslo + pliegues.pantorrilla;
   
 		var f1 = (c1-(c2*(Math.log(suma))));
@@ -215,7 +222,8 @@ module.exports.getFatMass = function (req, res, RegistroCita, Paciente, Historia
 				
 		var valores = {
 			"MasaGrasa" : f3,
-			"MasaOsea" : masaOsea
+			"MasaOsea" : masaOsea,
+			"MMT": MMT
 		}
 
 		res.status(status.OK).json({resultado : valores});
