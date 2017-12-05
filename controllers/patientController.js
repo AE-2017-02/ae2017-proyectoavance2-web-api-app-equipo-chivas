@@ -16,7 +16,7 @@ module.exports.getPatients = function (req, res, Paciente){
 				return res.end('Access token has expired', 400);
 			};
 			
-			Paciente.find({}).exec(handle.handleMany.bind(null, 'pacientes', res));
+			Paciente.find({},{"despensa": 0}).exec(handle.handleMany.bind(null, 'pacientes', res));
 
 		} catch (err) {
 			return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
@@ -47,7 +47,7 @@ module.exports.getPatient = function (req, res, Paciente){
 	} catch(e){
 		return res.status(status.BAD_REQUEST).json({error: "No patient id provided"});
 	}
-	Paciente.find({'_id': _id}).exec(handle.handleOne.bind(null, 'paciente', res));
+	Paciente.find({'_id': _id},{"despensa": 0}).exec(handle.handleOne.bind(null, 'paciente', res));
 };
 
 module.exports.getPatientByLogin = function(req, res, Paciente){
@@ -63,7 +63,7 @@ module.exports.getPatientByLogin = function(req, res, Paciente){
 		return res.status(status.BAD_REQUEST).json({error: e.toString()});
 	}
 
-	Paciente.find({'email': email, 'pin': pin}, function(err, resulta){
+	Paciente.find({'email': email, 'pin': pin},{"despensa": 0}, function(err, resulta){
 		if(err){
 			return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
 		}
@@ -104,7 +104,7 @@ module.exports.getPatientsWithValidDate = function(req, res, Paciente, Cita){
 	} else {
 		return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
 	}
-	Paciente.find({activo: true}, function(err, result){
+	Paciente.find({activo: true},{"despensa": 0}, function(err, result){
 		if(err){
 			return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
 		}
@@ -163,7 +163,7 @@ module.exports.getPantryMenusForDate = function(req, res, Paciente){
 	} catch(e){
 		return res.status(status.BAD_REQUEST).json({error: "No patient provided"});
 	}
-	Paciente.find({"_id": _id, "despensa.fecha" : fecha}, {"despensa.$" : 1})
+	Paciente.find({"_id": _id, "despensa.fecha" : fecha}, {"despensa.$" : 1}).exec(handle.handleOne.bind(null, 'paciente', res));
 }
 
 module.exports.newPatient = function (req, res, Paciente){
@@ -230,13 +230,29 @@ module.exports.setPatientPantry = function(req, res, Paciente, Comida){
 			var j = 0;
 			
 			var funcion1 = function(element){
-				Paciente.update({ $and : [{"_id": _id}, {"despensa": { $elemMatch: {"fecha":fecha}}} , {"despensa": { $elemMatch: {"comidaTiempo": result.tipo}}}, {"despensa" : {$elemMatch:{"menuId" : idComida}}}]}, {$addToSet: {"despensa.$.ingredientes" : element._id.nombre } }, {upsert: true}).exec(function(err, result){
+				Paciente.update({"_id": _id,
+					"despensa":{
+						"$not":{
+							"$elemMatch":{
+								"fecha":fecha,
+								"comidaTiempo":result.tipo,
+								"menuId":idComida
+							}
+						}
+					}
+				}, {$addToSet: {"despensa" : {"fecha": fecha, "comidaTiempo": result.tipo, "menuId": idComida, "ingredientes": []}}}).exec(function(err, resulta){
 					if(err){
 						return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
 					}
-					console.log(result);
-					i++;
-					funcion2();	
+					
+					Paciente.update({ $and : [{"_id": _id}, {"despensa": { $elemMatch: {"fecha":fecha}}} , {"despensa": { $elemMatch: {"comidaTiempo": result.tipo}}}, {"despensa" : {$elemMatch:{"menuId" : idComida}}}]}, {$push: {"despensa.$.ingredientes" : element._id.nombre } }).exec(function(error, resultad){
+						if(error){
+							return res.status(status.INTERNAL_SERVER_ERROR).json({error: error.toString()});
+						}
+							console.log(resultad);
+							i++;
+							funcion2();
+					});
 				});	
 			}
 			
@@ -369,7 +385,7 @@ module.exports.removePatientPantry = function(req, res, Paciente, Comida){
 	}
 	Comida.findOne({"_id": idComida})
 		.populate({path: "ingred._id", model: "Ingrediente"}).exec(function(error, result){
-			Paciente.update({ $and : [{"_id": _id}, {"despensa": { $elemMatch: {"fecha":fecha}}} , {"despensa": { $elemMatch: {"comidaTiempo": result.tipo}}}]}, {$pull: {"despensa" : {"menuId" : idComida} }});
+			Paciente.update({ $and : [{"_id": _id}, {"despensa": { $elemMatch: {"fecha":fecha}}} , {"despensa": { $elemMatch: {"comidaTiempo": result.tipo}}}]}, {$pull: {"despensa" : {"menuId" : idComida} }}).exec(handle.handleOne.bind(null, 'paciente', res));
 		});	
 };
 
