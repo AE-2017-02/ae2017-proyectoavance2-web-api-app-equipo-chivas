@@ -138,9 +138,9 @@ module.exports = function(wagner){
 		};
 	}));
 
-	api.get('/getFatMass/:_id', wagner.invoke(function(RegistroCita, Paciente){
+	api.get('/getFatMass/:_id', wagner.invoke(function(RegistroCita, Paciente, HistorialCitas){
 		return function(req, res){
-			return require('./controllers/appointmentRegisterController').getFatMass(req, res, RegistroCita, Paciente);
+			return require('./controllers/appointmentRegisterController').getFatMass(req, res, RegistroCita, Paciente, HistorialCitas);
 		};
 	}));
 	
