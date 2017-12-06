@@ -21,7 +21,7 @@ module.exports.getMessages = function (req, res, Mensaje){
 	} else {
 		return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
 	}
-	Mensaje.find({}).exec(handle.handleMany.bind(null, 'mensajes', res));
+	Mensaje.find({}).sort({fecha: -1}).exec(handle.handleMany.bind(null, 'mensajes', res));
 };
 
 module.exports.getMessage = function (req, res, Mensaje){
