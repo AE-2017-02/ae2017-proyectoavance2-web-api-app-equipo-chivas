@@ -47,6 +47,55 @@ module.exports.getMenuUser = function (req, res, MenuUsuario){
 	MenuUsuario.find({'_id': _id}).exec(handle.handleOne.bind(null, 'menu_user', res));
 };
 
+module.exports.getMenuUserWithData = function(req, res, MenuUsuario){
+	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
+	console.log(token);
+	if (token) {
+		try {
+			var decoded = jwt.decode(token, 'GarnicaUltraSecretKey');
+
+			if (decoded.exp <= Date.now()) {
+				return res.end('Access token has expired', 400);
+			};
+		} catch (err) {
+			return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+		}
+	} else {
+		return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+	}
+	try{
+		var _id = req.params._id;
+	} catch(e){
+		return res.status(status.BAD_REQUEST).json({error: "No menu_user id provided"});
+	}
+	MenuUsuario.find({'_id': _id})
+		.populate({path: "desayuno.idMenu", model:"Menu",  populate:[		
+			{path: "comidas", model: "Comida", populate: [
+                {path: "ingred._id", model: "Ingrediente"}
+            ]}
+		]})
+		.populate({path: "comida.idMenu", model:"Menu", populate:[
+			{path: "comidas", model: "Comida", populate: [
+                {path: "ingred._id", model: "Ingrediente"}
+            ]}
+		]})
+		.populate({path: "cena.idMenu", model:"Menu", populate:[
+			{path: "comidas", model: "Comida", populate: [
+                {path: "ingred._id", model: "Ingrediente"}
+            ]}
+		]})
+		.populate({path: "colacion1.idMenu", model:"Menu", populate:[
+			{path: "comidas", model: "Comida", populate: [
+                {path: "ingred._id", model: "Ingrediente"}
+            ]}
+		]})
+		.populate({path: "colacion2.idMenu", model:"Menu", populate:[
+			{path: "comidas", model: "Comida", populate: [
+                {path: "ingred._id", model: "Ingrediente"}
+            ]}
+		]}).exec(handle.handleOne.bind(null, 'menu_user', res));
+}
+
 module.exports.newMenuUser = function (req, res, MenuUsuario){
 	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
 	console.log(token);

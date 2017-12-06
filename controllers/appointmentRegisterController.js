@@ -4,6 +4,7 @@ var moment = require('moment');
 var jwt = require('jwt-simple');
 var express = require('express');
 var _ = require('underscore');
+var moment = require('moment');
 
 module.exports.getAppointmentRegisters = function(req, res, RegistroCita){
 	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
@@ -24,6 +25,215 @@ module.exports.getAppointmentRegisters = function(req, res, RegistroCita){
 	
 	RegistroCita.find({}).exec(handle.handleMany.bind(null, 'registrosdecitas', res));
 };
+
+module.exports.getFatMass = function (req, res, RegistroCita, Paciente, HistorialCitas){
+	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
+	console.log(token);
+	if (token) {
+		try {
+			var decoded = jwt.decode(token, 'GarnicaUltraSecretKey');
+
+			if (decoded.exp <= Date.now()) {
+				return res.end('Access token has expired', 400);
+			};
+		} catch (err) {
+			return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+		}
+	} else {
+		return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+	}
+	
+	try{
+		var _id = req.params._id;
+	} catch(e){
+		return res.status(status.BAD_REQUEST).json({error: "No appointment id provided"});
+	}
+	
+	HistorialCitas.findOne({'idRegistroCitas': _id}, {'paciente': true}, function(error, result){
+		if(error){
+			return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
+		}	
+		if(!result){
+			return res.status(status.NOT_FOUND).json({error: 'Not found'});
+		}
+
+		var idPaciente = result.paciente;
+
+		Paciente.findOne({'_id': idPaciente}, {'sexo': true, 'fecha_nacimiento':true}, function(error, resulta){
+		if(error){
+			return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
+		}	
+		if(!resulta){
+			return res.status(status.NOT_FOUND).json({error: 'Not found'});
+		}
+		
+		
+		var s = resulta.sexo;
+		var fechaActual = moment(new Date());
+		var fechaNac = resulta.fecha_nacimiento;
+		var valores = fechaNac.split('/');
+		switch (valores[1]){
+			case "Enero":
+				valores[1]='01';
+			break;
+			case "Febrero":
+				valores[1]='02';
+			break;
+			case "Marzo":
+				valores[1]='03';
+			break;
+			case "Abril":
+				valores[1]='04';
+			break;
+			case "Mayo":
+				valores[1]='05';
+			break;
+			case "Junio":
+				valores[1]='06';
+			break;
+			case "Julio":
+				valores[1]='07';
+			break;
+			case "Agosto":
+				valores[1]='08';
+			break;
+			case "Septiembre":
+				valores[1]='09';
+			break;
+			case "Octubre":
+				valores[1]='10';
+			break;
+			case "Noviembre":
+				valores[1]='11';
+			break;
+			case "Diciembre":
+				valores[1]='12';
+			break;
+			
+		}
+		fechaNac = valores[2]+'-'+valores[1]+'-'+valores[0];
+		fechaNac = moment(fechaNac); 
+
+		
+		var edad = fechaActual.diff(fechaNac,'years');
+		console.log(resulta.fecha_nacimiento);
+		console.log(fechaNac);
+		console.log(fechaActual);
+		console.log("edad:"+edad);
+
+		var verdadero = true;
+
+		switch(verdadero){
+			case  (edad >= 0 && edad <= 19):
+				if (s=="H"){
+					c1 = 1.162;
+					c2 = 0.063;
+				}
+				if (s=="M"){
+					c1 = 1.1549;
+					c2 = 0.0678;
+				}
+				break;
+			
+			case (edad >= 20 && edad <= 29):
+				if (s=="H"){
+					c1 = 1.1631;
+					c2 = 0.0632;
+				}
+				if (s=="M"){
+					c1 = 1.1599;
+					c2 = 0.0717; 
+				}
+				break;
+			case (edad >= 30 && edad <= 39):
+				if (s=="H"){
+					c1 = 1.1422;
+					c2 = 0.0544;
+				}
+				if (s=="M"){
+					c1 = 1.1599;
+					c2 = 0.0717; 
+				}
+				break;
+			case (edad >= 40 && edad <= 50):
+				if (resulta.s=="H"){
+					c1 = 1.162;
+					c2 = 0.07;
+				}
+				if (s=="M"){
+					c1 = 1.1333;
+					c2 = 0.0612; 
+				}
+				break;
+			case (edad >= 50):
+				if (resulta.s=="H"){
+					c1 = 1.1715;
+					c2 = 0.0779;
+				}
+				if (s=="M"){
+					c1 = 1.1339;
+					c2 = 0.0645; 
+				}
+				break;			
+		}
+		console.log("c1: "+c1+" c2: "+c2);
+		RegistroCita.findOne({'_id': _id}, function(error, resulta2){
+		if(error){
+			return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
+		}	
+		if(!resulta2){
+			return res.status(status.NOT_FOUND).json({error: 'Not found'});
+		}
+	    var resulta3 = resulta2.toObject();
+		var pliegues = resulta2.mediciones.pliegues;
+		console.log(resulta3.mediciones.circunferencias);
+		console.log(resulta3.mediciones.cirfunferencias);
+		if (resulta3.mediciones.circunferencias != undefined){
+		var circunferencias = resulta3.mediciones.circunferencias;
+		}else{
+		var circunferencias = resulta3.mediciones.cirfunferencias;	
+		}
+
+		var suma = pliegues.tricipital + pliegues.sEscapulada + pliegues.bicipital + pliegues.siliaco + pliegues.siliaco + pliegues.sespinale + pliegues.abdominal + pliegues.muslo + pliegues.pantorrilla;
+  
+		var f1 = (c1-(c2*(Math.log(suma))));
+		console.log('f1:'+f1);
+		var f2 = (((4.95/f1)-4.5)*100);
+		console.log('f2:'+f2);
+		var f3 = ((f2*resulta2.peso)/1000);
+		console.log('f3:'+f3);
+		var MMT;
+		var AMBdH;
+		var AMBdM;
+		console.log("brazo:"+circunferencias.brazo);
+		AMBdH = ((circunferencias.brazo-(Math.PI*(pliegues.sEscapulada/10)))*((circunferencias.brazo-(Math.PI*(pliegues.sEscapulada/10)))/4*Math.PI)-10);
+		AMBdM = ((circunferencias.brazo-(Math.PI*(pliegues.sEscapulada/10)))*((circunferencias.brazo-(Math.PI*(pliegues.sEscapulada/10)))/4*Math.PI)-6.5);		
+		console.log('AMBdH:'+AMBdH);
+		console.log('AMBdM:'+AMBdM);
+		if(s=="H"){
+			MMT=(resulta2.talla*(0.0264+(0.0029*AMBdH)));
+		}
+		if(s=="M"){
+			MMT=(resulta2.talla*(0.0264+(0.0029*AMBdM)));
+		}
+		console.log('MMT:'+MMT);
+		var masaOsea = ((resulta2.peso-f3)-MMT);
+		console.log('Masa Osea:'+masaOsea);
+				
+		var valores = {
+			"MasaGrasa" : f3,
+			"MasaOsea" : masaOsea,
+			"MMT": MMT
+		}
+
+		res.status(status.OK).json({resultado : valores});
+		
+	});
+});
+});
+
+}	
+
 
 module.exports.getAppointmentRegister = function(req, res, RegistroCita){
 	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
@@ -201,7 +411,7 @@ module.exports.deleteAppointmentRegister = function(req, res, RegistroCita){
 		return res.status(status.BAD_REQUEST).json({error: e.toString()});
 	}
 
-	RegistrCita.remove({'id':_id}, handle.handleOne.bind(null, 'appointmentRegister', res));
+	RegistroCita.remove({'id':_id}, handle.handleOne.bind(null, 'appointmentRegister', res));
 };
 
 module.exports.updateAppointmentRegister = function(req, res, RegistroCita){

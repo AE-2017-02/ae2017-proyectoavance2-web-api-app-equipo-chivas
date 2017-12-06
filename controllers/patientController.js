@@ -16,7 +16,7 @@ module.exports.getPatients = function (req, res, Paciente){
 				return res.end('Access token has expired', 400);
 			};
 			
-			Paciente.find({}).exec(handle.handleMany.bind(null, 'pacientes', res));
+			Paciente.find({},{"despensa": 0}).exec(handle.handleMany.bind(null, 'pacientes', res));
 
 		} catch (err) {
 			return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
@@ -47,7 +47,7 @@ module.exports.getPatient = function (req, res, Paciente){
 	} catch(e){
 		return res.status(status.BAD_REQUEST).json({error: "No patient id provided"});
 	}
-	Paciente.find({'_id': _id}).exec(handle.handleOne.bind(null, 'paciente', res));
+	Paciente.find({'_id': _id},{"despensa": 0}).exec(handle.handleOne.bind(null, 'paciente', res));
 };
 
 module.exports.getPatientByLogin = function(req, res, Paciente){
@@ -63,7 +63,7 @@ module.exports.getPatientByLogin = function(req, res, Paciente){
 		return res.status(status.BAD_REQUEST).json({error: e.toString()});
 	}
 
-	Paciente.find({'email': email, 'pin': pin}, function(err, resulta){
+	Paciente.find({'email': email, 'pin': pin},{"despensa": 0}, function(err, resulta){
 		if(err){
 			return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
 		}
@@ -85,9 +85,85 @@ module.exports.getPatientByLogin = function(req, res, Paciente){
 			});
 		});
 
+	});	
+}
+
+module.exports.getPatientsWithValidDate = function(req, res, Paciente, Cita){
+	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
+	console.log(token);
+	if (token) {
+		try {
+			var decoded = jwt.decode(token, 'GarnicaUltraSecretKey');
+
+			if (decoded.exp <= Date.now()) {
+				return res.end('Access token has expired', 400);
+			};
+		} catch (err) {
+			return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+		}
+	} else {
+		return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+	}
+	Paciente.find({activo: true},{"despensa": 0}, function(err, result){
+		if(err){
+			return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
+		}
+		
+		var i = 0;
+		var numberUsers = 0;
+		
+		var funcion1 = function(){
+			if(i == result.length){
+				return res.status(status.OK).json({numUsers: numberUsers});
+			}else{
+				funcion2(result[i]);				
+			}
+		}
+		
+		var funcion2 = function(elemento){
+			
+			Cita.findOne({"_id": elemento.idCita}, function(err2, resulta){
+				if(err2){
+					return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
+				}
+				
+				if(resulta != undefined){
+					if(resulta.status == "pendiente" && resulta.fecha >= new Date( new Date().getTime() + 7 * 3600 * 1000)){
+						numberUsers++;
+					}
+				}
+				i++;
+				funcion1();
+			});
+		}
+		
+		funcion1();
 	});
-	
-	
+}
+
+module.exports.getPantryMenusForDate = function(req, res, Paciente){
+	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
+	console.log(token);
+	if (token) {
+		try {
+			var decoded = jwt.decode(token, 'GarnicaUltraSecretKey');
+
+			if (decoded.exp <= Date.now()) {
+				return res.end('Access token has expired', 400);
+			};
+		} catch (err) {
+			return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+		}
+	} else {
+		return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+	}
+	try{
+		var _id = req.params._id;
+		var fecha = req.params.fecha;
+	} catch(e){
+		return res.status(status.BAD_REQUEST).json({error: "No patient provided"});
+	}
+	Paciente.find({"_id": _id, "despensa.fecha" : fecha}, {"despensa.$" : 1}).exec(handle.handleOne.bind(null, 'paciente', res));
 }
 
 module.exports.newPatient = function (req, res, Paciente){
@@ -123,6 +199,74 @@ module.exports.newPatient = function (req, res, Paciente){
 		}
 	});
 };
+
+module.exports.setPatientPantry = function(req, res, Paciente, Comida){
+	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
+	console.log(token);
+	if (token) {
+		try {
+			var decoded = jwt.decode(token, 'GarnicaUltraSecretKey');
+
+			if (decoded.exp <= Date.now()) {
+				return res.end('Access token has expired', 400);
+			};
+		} catch (err) {
+			return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+		}
+	} else {
+		return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+	}
+	try{
+		var _id = req.params._id;
+		var idComida = req.body.paciente.idComida;
+		var fecha = req.body.paciente.fecha;
+	}catch(e){
+		return res.status(status.BAD_REQUEST).json({error: e.toString()});
+	}
+	Comida.findOne({"_id": idComida})
+		.populate({path: "ingred._id", model: "Ingrediente"}).exec(function(error, result){
+			
+			var i = 0;
+			var j = 0;
+			
+			var funcion1 = function(element){
+				Paciente.update({"_id": _id,
+					"despensa":{
+						"$not":{
+							"$elemMatch":{
+								"fecha":fecha,
+								"comidaTiempo":result.tipo,
+								"menuId":idComida
+							}
+						}
+					}
+				}, {$addToSet: {"despensa" : {"fecha": fecha, "comidaTiempo": result.tipo, "menuId": idComida, "ingredientes": []}}}).exec(function(err, resulta){
+					if(err){
+						return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
+					}
+					
+					Paciente.update({ $and : [{"_id": _id}, {"despensa": { $elemMatch: {"fecha":fecha}}} , {"despensa": { $elemMatch: {"comidaTiempo": result.tipo}}}, {"despensa" : {$elemMatch:{"menuId" : idComida}}}]}, {$push: {"despensa.$.ingredientes" : element._id.nombre } }).exec(function(error, resultad){
+						if(error){
+							return res.status(status.INTERNAL_SERVER_ERROR).json({error: error.toString()});
+						}
+							console.log(resultad);
+							i++;
+							funcion2();
+					});
+				});	
+			}
+			
+			var funcion2 = function(){
+				if(i == result.ingred.length){
+					res.status(status.OK).json({"updatedPantry":true});
+				}else{
+					funcion1(result.ingred[i]);	
+				}
+			}
+			
+			funcion2();
+		});
+}
 
 module.exports.sendPatientActivationEmail = function (req, res, Paciente){
 	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
@@ -214,6 +358,35 @@ module.exports.deletePatient = function (req, res, Paciente){
 		return res.status(status.BAD_REQUEST).json({error: e.toString()});
 	}
 	Paciente.remove({'_id': _id}, handle.handleOne.bind(null, 'paciente', res));
+};
+
+module.exports.removePatientPantry = function(req, res, Paciente, Comida){
+	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
+	console.log(token);
+	if (token) {
+		try {
+			var decoded = jwt.decode(token, 'GarnicaUltraSecretKey');
+
+			if (decoded.exp <= Date.now()) {
+				return res.end('Access token has expired', 400);
+			};
+		} catch (err) {
+			return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+		}
+	} else {
+		return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+	}
+	try{
+		var _id = req.params._id;
+		var idComida = req.body.paciente.idComida;
+		var fecha = req.body.paciente.fecha;
+	}catch(e){
+		return res.status(status.BAD_REQUEST).json({error: e.toString()});
+	}
+	Comida.findOne({"_id": idComida})
+		.populate({path: "ingred._id", model: "Ingrediente"}).exec(function(error, result){
+			Paciente.update({ $and : [{"_id": _id}, {"despensa": { $elemMatch: {"fecha":fecha}}} , {"despensa": { $elemMatch: {"comidaTiempo": result.tipo}}}]}, {$pull: {"despensa" : {"menuId" : idComida} }}).exec(handle.handleOne.bind(null, 'paciente', res));
+		});	
 };
 
 module.exports.updatePatient = function(req, res, Paciente){

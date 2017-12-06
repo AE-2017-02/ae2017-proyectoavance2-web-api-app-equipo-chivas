@@ -24,7 +24,19 @@ module.exports = function(wagner){
 			return require('./controllers/patientController').getPatients(req, res, Paciente);
 		};
 	}));
-
+	
+	api.get('/patientPantry/:_id/date/:fecha', wagner.invoke(function(Paciente){
+		return function(req, res){
+			return require('./controllers/patientController').getPantryMenusForDate(req, res, Paciente);
+		}
+	}));
+	
+	api.get('/patient/pendingAmount/', wagner.invoke(function (Paciente, Cita){
+		return function(req, res){
+			return require('./controllers/patientController').getPatientsWithValidDate(req, res, Paciente, Cita);
+		}
+	}));
+	
 	api.get('/patient/:_id', wagner.invoke(function (Paciente){
 		return function(req, res){
 			return require('./controllers/patientController').getPatient(req, res, Paciente);
@@ -34,6 +46,12 @@ module.exports = function(wagner){
 	api.post('/patient/login', wagner.invoke(function(Paciente){
 		return function(req, res){
 			return require('./controllers/patientController').getPatientByLogin(req, res, Paciente);
+		}
+	}));
+	
+	api.post('/patientPantry/:_id', wagner.invoke(function(Paciente, Comida){
+		return function(req, res){
+			return require('./controllers/patientController').setPatientPantry(req, res, Paciente, Comida);
 		}
 	}));
 	
@@ -59,6 +77,12 @@ module.exports = function(wagner){
 		return function(req, res){
 			return require('./controllers/patientController').deletePatient(req, res, Paciente);
 		};
+	}));
+	
+	api.delete('/patientPantry/:_id', wagner.invoke(function(Paciente, Comida){
+		return function(req, res){
+			return require('./controllers/patientController').removePatientPantry(req, res, Paciente, Comida);
+		}
 	}));
 	//endregion Paciente
 
@@ -111,6 +135,12 @@ module.exports = function(wagner){
 	api.get('/appointmentRegister/appointment/:_id', wagner.invoke(function(RegistroCita){
 		return function(req, res){
 			return require('./controllers/appointmentRegisterController').getAppointmentRegisterByAppointment(req, res, RegistroCita);
+		};
+	}));
+
+	api.get('/getFatMass/:_id', wagner.invoke(function(RegistroCita, Paciente, HistorialCitas){
+		return function(req, res){
+			return require('./controllers/appointmentRegisterController').getFatMass(req, res, RegistroCita, Paciente, HistorialCitas);
 		};
 	}));
 	
@@ -220,6 +250,12 @@ module.exports = function(wagner){
 	api.get('/menu_user/:_id', wagner.invoke(function(MenuUsuario){
 		return function(req, res){
 			return require('./controllers/menuCompletoController').getMenuUser(req, res, MenuUsuario);
+		}
+	}));
+	
+	api.get('/menu_user/data/:_id', wagner.invoke(function(MenuUsuario){
+		return function(req, res){
+			return require('./controllers/menuCompletoController').getMenuUserWithData(req, res, MenuUsuario);
 		}
 	}));
 	
@@ -375,9 +411,21 @@ module.exports = function(wagner){
 		}
 	}));
 	
+	api.get('/generalMessage/', wagner.invoke(function(Mensaje){
+		return function(req, res){
+			return require('./controllers/messageController').getGeneralMessages(req, res, Mensaje);
+		}
+	}));
+	
 	api.post('/message/', wagner.invoke(function(Mensaje){
 		return function(req, res){
 			return require('./controllers/messageController').newMessage(req, res, Mensaje);
+		}
+	}));
+	
+	api.post('/generalMessage/', wagner.invoke(function(Mensaje){
+		return function(req, res){
+			return require('./controllers/messageController').newGeneralMessage(req, res, Mensaje);
 		}
 	}));
 	

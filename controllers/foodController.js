@@ -281,7 +281,15 @@ module.exports.updateFood = function(req, res, Comida){
 				funcion1();
 			}
 		}
+		
+		var funcion3 = function(){
+			if(comida.tipo != undefined && food[0].tipo != comida.tipo){
+				actualizaCampo('tipo', comida.tipo, funcion2);
+			}else{
+				funcion2();
+			}
+		}
 
-		funcion2();
+		funcion3();
 	});
 }
