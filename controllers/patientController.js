@@ -163,7 +163,32 @@ module.exports.getPantryMenusForDate = function(req, res, Paciente){
 	} catch(e){
 		return res.status(status.BAD_REQUEST).json({error: "No patient provided"});
 	}
-	Paciente.find({"_id": _id, "despensa.fecha" : fecha}, {"despensa.$" : 1}).exec(handle.handleOne.bind(null, 'paciente', res));
+	
+	var response = [];
+	
+	Paciente.findOne({"_id": _id}, function(err, result){
+		
+		var i = 0;
+		
+		var function1 = function(){
+			if(result.despensa.length == i){
+				return res.status(status.OK).json('despensa': response);
+			}else{
+				function2(result.despensa[i]);	
+			}
+		}
+		
+		var function2 = function(value){
+			if(value.fecha == fecha){
+				response.push(value);
+			}
+			i++;
+			function1();
+		}
+		
+		function1();
+	});
+	//Paciente.aggregate({$project : {despensa:1, _id:1}}{$unwind: "$despensa"}, {$match:{"despensa.fecha": fecha, "_id": _id}})
 }
 
 module.exports.newPatient = function (req, res, Paciente){
@@ -174,7 +199,7 @@ module.exports.newPatient = function (req, res, Paciente){
 			var decoded = jwt.decode(token, 'GarnicaUltraSecretKey');
 
 			if (decoded.exp <= Date.now()) {
-				return res.end('Access token has expired', 400);
+				return res.end('Access token has expired', 400m);
 			};
 		} catch (err) {
 			return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
