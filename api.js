@@ -453,6 +453,12 @@ module.exports = function(wagner){
 			return require('./controllers/appointmentHistoryController').getAppointmentHistory(req, res, HistorialCitas);
 		}
 	}));
+
+	api.get('/appointmentHistoryByPatient/:_id', wagner.invoke(function(HistorialCitas){
+		return function(req, res){
+			return require('./controllers/appointmentHistoryController').getAppointmentHistoryByPatient(req, res, HistorialCitas);
+		}
+	}));
 	
 	api.post('/appointmentHistory/', wagner.invoke(function(HistorialCitas){
 		return function(req, res){
