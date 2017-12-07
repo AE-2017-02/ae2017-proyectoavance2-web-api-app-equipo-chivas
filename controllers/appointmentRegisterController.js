@@ -4,7 +4,6 @@ var moment = require('moment');
 var jwt = require('jwt-simple');
 var express = require('express');
 var _ = require('underscore');
-var moment = require('moment');
 
 module.exports.getAppointmentRegisters = function(req, res, RegistroCita){
 	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
@@ -26,7 +25,7 @@ module.exports.getAppointmentRegisters = function(req, res, RegistroCita){
 	RegistroCita.find({}).exec(handle.handleMany.bind(null, 'registrosdecitas', res));
 };
 
-module.exports.getFatMass = function (req, res, RegistroCita, Paciente){
+module.exports.getFatMass = function (req, res, RegistroCita, Paciente, HistorialCitas){
 	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
 	console.log(token);
 	if (token) {
@@ -49,7 +48,17 @@ module.exports.getFatMass = function (req, res, RegistroCita, Paciente){
 		return res.status(status.BAD_REQUEST).json({error: "No appointment id provided"});
 	}
 	
-		Paciente.findOne({'idCita': _id}, {'sexo': true, 'fecha_nacimiento':true}, function(error, resulta){
+	HistorialCitas.findOne({'idRegistroCitas': _id}, {'paciente': true}, function(error, result){
+		if(error){
+			return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
+		}	
+		if(!result){
+			return res.status(status.NOT_FOUND).json({error: 'Not found'});
+		}
+
+		var idPaciente = result.paciente;
+
+		Paciente.findOne({'_id': idPaciente}, {'sexo': true, 'fecha_nacimiento':true}, function(error, resulta){
 		if(error){
 			return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
 		}	
@@ -167,16 +176,23 @@ module.exports.getFatMass = function (req, res, RegistroCita, Paciente){
 				break;			
 		}
 		console.log("c1: "+c1+" c2: "+c2);
-		RegistroCita.findOne({'idCita': _id}, function(error, resulta2){
+		RegistroCita.findOne({'_id': _id}, function(error, resulta2){
 		if(error){
 			return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
 		}	
 		if(!resulta2){
 			return res.status(status.NOT_FOUND).json({error: 'Not found'});
 		}
-
+	    var resulta3 = resulta2.toObject();
 		var pliegues = resulta2.mediciones.pliegues;
-		var circunferencias = resulta2.mediciones.circunferencias;
+		console.log(resulta3.mediciones.circunferencias);
+		console.log(resulta3.mediciones.circunferencias);
+		if (resulta3.mediciones.circunferencias != undefined){
+		var circunferencias = resulta3.mediciones.circunferencias;
+		}else{
+		var circunferencias = resulta3.mediciones.circunferencias;	
+		}
+
 		var suma = pliegues.tricipital + pliegues.sEscapulada + pliegues.bicipital + pliegues.siliaco + pliegues.siliaco + pliegues.sespinale + pliegues.abdominal + pliegues.muslo + pliegues.pantorrilla;
   
 		var f1 = (c1-(c2*(Math.log(suma))));
@@ -204,13 +220,15 @@ module.exports.getFatMass = function (req, res, RegistroCita, Paciente){
 		console.log('Masa Osea:'+masaOsea);
 				
 		var valores = {
-			"MasaGrasa" : f3,
-			"MasaOsea" : masaOsea
+			"MasaGrasa" : f3.toFixed(2),
+			"MasaOsea" : masaOsea.toFixed(2),
+			"MMT": MMT.toFixed(2)
 		}
 
 		res.status(status.OK).json({resultado : valores});
 		
 	});
+});
 });
 
 }	
