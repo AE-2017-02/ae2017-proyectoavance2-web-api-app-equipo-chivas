@@ -303,6 +303,12 @@ module.exports = function(wagner){
 		}
 	}));
 	
+	api.get('/appointmentLastCompleted/:_id', wagner.invoke(function(Cita, HistorialCitas){
+		return function(req, res){
+			return require('./controllers/appointmentController').getLastCompletedApointmentForPatient(req, res, Cita, HistorialCitas);
+		}
+	}));
+
 	api.get('/appointmentRegisteredHistory/:_id', wagner.invoke(function(Cita, HistorialCitas){
 		return function(req, res){
 			return require('./controllers/appointmentController').getAppointmentRecordForPatient(req, res, HistorialCitas, Cita);

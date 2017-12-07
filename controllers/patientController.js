@@ -199,7 +199,7 @@ module.exports.newPatient = function (req, res, Paciente){
 			var decoded = jwt.decode(token, 'GarnicaUltraSecretKey');
 
 			if (decoded.exp <= Date.now()) {
-				return res.end('Access token has expired', 400m);
+				return res.end('Access token has expired', 400);
 			};
 		} catch (err) {
 			return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});

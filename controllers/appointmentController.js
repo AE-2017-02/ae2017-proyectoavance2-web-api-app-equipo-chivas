@@ -180,6 +180,69 @@ module.exports.getAppointmentsUsedForDate = function (req, res, Cita){
 	});
 };
 
+
+module.exports.getLastCompletedApointmentForPatient = function(req, res, Cita, HistorialCitas){
+	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
+	console.log(token);
+	if (token) {
+		try {
+			var decoded = jwt.decode(token, 'GarnicaUltraSecretKey');
+
+			if (decoded.exp <= Date.now()) {
+				return res.end('Access token has expired', 400);
+			};
+		} catch (error) {
+			return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+		}
+	} else {
+		return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+	}
+	
+	try{
+		var _id = req.params._id;
+	} catch(e){
+		return res.status(status.BAD_REQUEST).json({error: "No appointment provided"});
+	}
+	
+	HistorialCitas.findOne({'paciente':_id}).populate('idRegistroCitas').exec(function(error, result){
+		if(error){
+			res.status(status.INTERNAL_SERVER_ERROR).json({error: error.toString()});
+		}
+		
+		if(!result){
+			res.status(status.NOT_FOUND).json({error: "Not Found"});
+		}
+		
+		Cita.find({"_id": {$in: _.pluck( result.idRegistroCitas , "idCita")}}, function(error, resulta){
+		if(error){
+			res.status(status.INTERNAL_SERVER_ERROR).json({error: error.toString()});
+		}
+		if(!resulta){
+			res.status(status.NOT_FOUND).json({error: "Not Found"});
+		}
+		console.log(resulta);
+		var id = "";
+		var i=resulta.length-1;
+		for (i;i>=0;i--){
+		console.log(resulta[i].status)
+		console.log(resulta[i]._id)	
+		if (resulta[i].status == "terminada"){
+		id = resulta[i]._id;
+		}
+		}
+	if(id!=""){
+	res.status(status.OK).send(id);	
+	}
+	else{
+	res.status(status.NOT_FOUND).json({error: "No tiene citas terminadas"});	
+	}
+	
+ });
+
+    
+});
+}
+
 module.exports.getAppointmentRecordForPatient = function(req, res, HistorialCitas, Cita){
 	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
 	console.log(token);
