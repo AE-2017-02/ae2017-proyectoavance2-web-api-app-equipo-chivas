@@ -66,6 +66,7 @@ module.exports.getFoods = function (req, res, Comida, Ingrediente){
 						ingred2.nombre = resulta.nombre;
 						ingred2.calorias = resulta.calorias;
 						ingred2.grupoAlimento = resulta.grupoAlimento;
+						ingred2.porcion = resulta.porcion;
 						result[i].ingred[j] = ingred2;
 					}
 					
