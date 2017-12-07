@@ -172,7 +172,7 @@ module.exports.getPantryMenusForDate = function(req, res, Paciente){
 		
 		var function1 = function(){
 			if(result.despensa.length == i){
-				return res.status(status.OK).json('despensa': response);
+				return res.status(status.OK).json({'despensa': response});
 			}else{
 				function2(result.despensa[i]);	
 			}
