@@ -58,13 +58,14 @@ module.exports.getFoods = function (req, res, Comida, Ingrediente){
 			var funcion4 = function(value2){
 				var aux = value2.toObject();
 				console.log(aux.idIngred);
-				Ingrediente.findOne({'_id': aux._id }, {'nombre':true, 'calorias':true}, function(err, resulta){
+				Ingrediente.findOne({'_id': aux._id }, {'nombre':true, 'calorias':true, 'grupoAlimento':true}).populate('grupoAlimento').exec( function(err, resulta){
 					if(!resulta){
 						
 					}else{
 						ingred2 = result[i].ingred[j].toObject();
 						ingred2.nombre = resulta.nombre;
 						ingred2.calorias = resulta.calorias;
+						ingred2.grupoAlimento = resulta.grupoAlimento;
 						result[i].ingred[j] = ingred2;
 					}
 					

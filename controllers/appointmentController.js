@@ -180,6 +180,42 @@ module.exports.getAppointmentsUsedForDate = function (req, res, Cita){
 	});
 };
 
+module.exports.getAppointmentRecordForPatient = function(req, res, HistorialCitas, Cita){
+	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
+	console.log(token);
+	if (token) {
+		try {
+			var decoded = jwt.decode(token, 'GarnicaUltraSecretKey');
+
+			if (decoded.exp <= Date.now()) {
+				return res.end('Access token has expired', 400);
+			};
+		} catch (err) {
+			return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+		}
+	} else {
+		return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+	}
+	
+	try{
+		var _id = req.params._id;
+	} catch(e){
+		return res.status(status.BAD_REQUEST).json({error: "No appointment provided"});
+	}
+	
+	HistorialCitas.findOne({'paciente':_id}).populate('idRegistroCitas').exec(function(err, result){
+		if(err){
+			res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
+		}
+		
+		if(!result){
+			res.status(status.NOT_FOUND).json({error: "Not Found"});
+		}
+		
+		Cita.find({"_id": {$in: _.pluck( result.idRegistroCitas , "idCita")}}).exec(handle.handleOne.bind(null, 'appointment', res));
+	});
+}
+
 module.exports.newAppointment = function (req, res, Cita){
 	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
 	console.log(token);
