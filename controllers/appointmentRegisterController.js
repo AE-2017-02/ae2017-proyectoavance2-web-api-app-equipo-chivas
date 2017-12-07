@@ -4,7 +4,6 @@ var moment = require('moment');
 var jwt = require('jwt-simple');
 var express = require('express');
 var _ = require('underscore');
-var moment = require('moment');
 
 module.exports.getAppointmentRegisters = function(req, res, RegistroCita){
 	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
@@ -187,11 +186,11 @@ module.exports.getFatMass = function (req, res, RegistroCita, Paciente, Historia
 	    var resulta3 = resulta2.toObject();
 		var pliegues = resulta2.mediciones.pliegues;
 		console.log(resulta3.mediciones.circunferencias);
-		console.log(resulta3.mediciones.cirfunferencias);
+		console.log(resulta3.mediciones.circunferencias);
 		if (resulta3.mediciones.circunferencias != undefined){
 		var circunferencias = resulta3.mediciones.circunferencias;
 		}else{
-		var circunferencias = resulta3.mediciones.cirfunferencias;	
+		var circunferencias = resulta3.mediciones.circunferencias;	
 		}
 
 		var suma = pliegues.tricipital + pliegues.sEscapulada + pliegues.bicipital + pliegues.siliaco + pliegues.siliaco + pliegues.sespinale + pliegues.abdominal + pliegues.muslo + pliegues.pantorrilla;
@@ -221,9 +220,9 @@ module.exports.getFatMass = function (req, res, RegistroCita, Paciente, Historia
 		console.log('Masa Osea:'+masaOsea);
 				
 		var valores = {
-			"MasaGrasa" : f3,
-			"MasaOsea" : masaOsea,
-			"MMT": MMT
+			"MasaGrasa" : f3.toFixed(2),
+			"MasaOsea" : masaOsea.toFixed(2),
+			"MMT": MMT.toFixed(2)
 		}
 
 		res.status(status.OK).json({resultado : valores});
