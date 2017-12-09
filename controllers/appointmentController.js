@@ -221,20 +221,19 @@ module.exports.getLastCompletedApointmentForPatient = function (req, res, Cita, 
 				res.status(status.NOT_FOUND).json({ error: "Not Found" });
 			}
 			console.log(resulta);
-			var last = {};
+			var id = "";
+			var date = "";
 			var i = resulta.length - 1;
 			for (i; i >= 0; i--) {
 				console.log(resulta[i].status)
 				console.log(resulta[i]._id)
 				if (resulta[i].status == "terminada") {
-					last = {
-						id: resulta[i]._id,
-						date: resulta[i].fecha
-					};
+					id = resulta[i]._id;
+					date = resulta[i].fecha;
 				}
 			}
 			if (id != "") {
-				res.status(status.OK).send(last);
+				res.status(status.OK).send({last: {id: id, date: date}});
 			}
 			else {
 				res.status(status.NOT_FOUND).json({ error: "No tiene citas terminadas" });
