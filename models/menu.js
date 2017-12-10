@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 var menuSchema = {
-        nombre: { type: String, required:true },
+        nombre: { type: String },
         comidas: [{ type: mongoose.Schema.Types.ObjectId, required:true, ref:"Comida" }],
         tipo: { type: String, required:true }       
         
