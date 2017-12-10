@@ -79,7 +79,7 @@ module.exports = function(wagner){
 		};
 	}));
 	
-	api.delete('/patientPantry/:_id', wagner.invoke(function(Paciente, Comida){
+	api.put('/patientPantry/:_id', wagner.invoke(function(Paciente, Comida){
 		return function(req, res){
 			return require('./controllers/patientController').removePatientPantry(req, res, Paciente, Comida);
 		}
