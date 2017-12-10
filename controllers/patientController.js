@@ -191,6 +191,60 @@ module.exports.getPantryMenusForDate = function(req, res, Paciente){
 	//Paciente.aggregate({$project : {despensa:1, _id:1}}{$unwind: "$despensa"}, {$match:{"despensa.fecha": fecha, "_id": _id}})
 }
 
+module.exports.getPantryMenusForDate2 = function(req, res, Paciente){
+	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
+	console.log(token);
+	if (token) {
+		try {
+			var decoded = jwt.decode(token, 'GarnicaUltraSecretKey');
+
+			if (decoded.exp <= Date.now()) {
+				return res.end('Access token has expired', 400);
+			};
+		} catch (err) {
+			return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+		}
+	} else {
+		return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+	}
+	try{
+		var _id = req.params._id;
+		var fecha = req.params.fecha;
+	} catch(e){
+		return res.status(status.BAD_REQUEST).json({error: "No patient provided"});
+	}
+	
+	var response = [];
+	
+	Paciente.findOne({"_id": _id}, function(err, result){
+		
+		var i = 0;
+		
+		var function1 = function(){
+			if(result.despensa.length == i){
+				return res.status(status.OK).json({'despensa': response});
+			}else{
+				function2(result.despensa[i]);	
+			}
+		}
+		
+		var function2 = function(value){
+			if(value.fecha == fecha){
+				for(var i=0; i<value.ingredientes.length; i++){
+					if(response.indexOf(value.ingredientes[i]) === -1){
+						response.push(value.ingredientes[i]);	
+					}
+				}
+			}
+			i++;
+			function1();
+		}
+		
+		function1();
+	});
+	//Paciente.aggregate({$project : {despensa:1, _id:1}}{$unwind: "$despensa"}, {$match:{"despensa.fecha": fecha, "_id": _id}})
+}
+
 module.exports.newPatient = function (req, res, Paciente){
 	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
 	console.log(token);
@@ -362,7 +416,7 @@ module.exports.sendPatientActivationEmail = function (req, res, Paciente){
 	});
 };
 
-module.exports.deletePatient = function (req, res, Paciente){
+module.exports.deletePatient = function (req, res, Paciente, Comida){
 	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
 	console.log(token);
 	if (token) {

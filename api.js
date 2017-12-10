@@ -31,6 +31,12 @@ module.exports = function(wagner){
 		}
 	}));
 	
+	api.get('/pantry/:_id/date/:fecha', wagner.invoke(function(Paciente){
+		return function(req, res){
+			return require('./controllers/patientController').getPantryMenusForDate2(req, res, Paciente);
+		}
+	}));
+	
 	api.get('/patient/pendingAmount/', wagner.invoke(function (Paciente, Cita){
 		return function(req, res){
 			return require('./controllers/patientController').getPatientsWithValidDate(req, res, Paciente, Cita);
