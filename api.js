@@ -112,9 +112,9 @@ module.exports = function(wagner){
 		};
 	}));
 
-	api.delete('/food/:_id', wagner.invoke(function (Comida){
+	api.delete('/food/:_id', wagner.invoke(function (Comida, Menu){
 		return function(req, res){
-			return require('./controllers/foodController').deleteFood(req, res, Comida);
+			return require('./controllers/foodController').deleteFood(req, res, Comida, Menu);
 		};
 	}));
 	
@@ -200,7 +200,7 @@ module.exports = function(wagner){
 		}
 	}));
 
-	api.delete('/ingredient/:_id', wagner.invoke(function (Ingrediente){
+	api.delete('/ingredient/:_id', wagner.invoke(function (Ingrediente, Comida){
 		return function(req, res){
 			return require('./controllers/ingredientsController').deleteIngredient(req, res, Ingrediente);
 		};
