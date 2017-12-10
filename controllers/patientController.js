@@ -271,7 +271,7 @@ module.exports.setPatientPantry = function(req, res, Paciente, Comida){
 					}
 					
 					console.log(resulta)
-					Paciente.update({ $and : [{"_id": _id}, {"despensa": { $elemMatch: {"fecha":fecha}}} , {"despensa": { $elemMatch: {"comidaTiempo": result.tipo}}}, {"despensa" : {$elemMatch:{"menuId" : idComida}}}]}, {$push: {"despensa.$.ingredientes" : element._id.nombre } }).exec(function(error, resultad){
+					Paciente.update({"_id": _id, "despensa": { $elemMatch: {"fecha":fecha, "comidaTiempo": result.tipo, "menuId" : idComida}}}, {$push: {"despensa.$.ingredientes" : element._id.nombre } }).exec(function(error, resultad){
 						if(error){
 							return res.status(status.INTERNAL_SERVER_ERROR).json({error: error.toString()});
 						}
