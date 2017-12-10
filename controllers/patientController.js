@@ -411,7 +411,16 @@ module.exports.removePatientPantry = function(req, res, Paciente, Comida){
 	}
 	Comida.findOne({"_id": idComida})
 		.populate({path: "ingred._id", model: "Ingrediente"}).exec(function(error, result){
-			Paciente.update({ $and : [{"_id": _id}, {"despensa": { $elemMatch: {"fecha":fecha}}} , {"despensa": { $elemMatch: {"comidaTiempo": result.tipo}}}]}, {$pull: {"despensa" : {"menuId" : idComida} }}).exec(handle.handleOne.bind(null, 'paciente', res));
+			Paciente.update({"_id": _id}, {$pull: 
+				{"despensa" : 
+					{ $elemMatch: 
+						{"fecha":fecha, 
+						"comidaTiempo": result.tipo,
+						"menuId" : idComida
+						}
+					} 
+				}
+			}).exec(handle.handleOne.bind(null, 'paciente', res));
 		});	
 };
 
