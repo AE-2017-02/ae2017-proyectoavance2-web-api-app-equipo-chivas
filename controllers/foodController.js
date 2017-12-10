@@ -151,6 +151,9 @@ module.exports.newFood = function (req, res, Comida, Ingrediente){
 			objTemp._id = resulta._id;
 			objTemp.nombre = resulta.nombre;
 			objTemp.calorias = resulta.calorias;
+			objTemp.grupoAlimento = resulta.grupoAlimento;
+			objTemp.porcion = resulta.porcion;
+			objTemp.unitMeasure = resulta.unitMeasure;
 			objTemp.cant = comida.ingred[index].cant;
 			ingredComplets.push(objTemp);
 		
