@@ -442,7 +442,7 @@ module.exports.updatePatient = function(req, res, Paciente){
 	var actualizaCampo = function(campo, valor, funcion){
 		var query = {'$set':{}};
 		query['$set'][campo] = valor;
-		Paciente.update({_id: idPaciente}, query, function(err, resu){
+		Paciente.update({_id: idPaciente}, query, {upsert: true},function(err, resu){
 			if(err){
 				return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
 			}
