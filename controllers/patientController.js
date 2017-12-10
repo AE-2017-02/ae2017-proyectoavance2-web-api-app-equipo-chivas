@@ -413,11 +413,9 @@ module.exports.removePatientPantry = function(req, res, Paciente, Comida){
 		.populate({path: "ingred._id", model: "Ingrediente"}).exec(function(error, result){
 			Paciente.update({"_id": _id}, {$pull: 
 				{"despensa" : 
-					{ $elemMatch: 
-						{"fecha":fecha, 
-						"comidaTiempo": result.tipo,
-						"menuId" : idComida
-						}
+					{"fecha":fecha, 
+					"comidaTiempo": result.tipo,
+					"menuId" : idComida
 					} 
 				}
 			}).exec(handle.handleOne.bind(null, 'paciente', res));
