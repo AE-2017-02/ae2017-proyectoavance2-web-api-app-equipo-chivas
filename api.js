@@ -84,6 +84,7 @@ module.exports = function(wagner){
 			return require('./controllers/patientController').removePatientPantry(req, res, Paciente, Comida);
 		}
 	}));
+
 	//endregion Paciente
 
 	//region Comida
@@ -262,6 +263,12 @@ module.exports = function(wagner){
 	api.post('/menu_user/', wagner.invoke(function(MenuUsuario){
 		return function(req, res){
 			return require('./controllers/menuCompletoController').newMenuUser(req, res, MenuUsuario);
+		}
+	}));
+
+	api.post('/menu_complete/', wagner.invoke(function(MenuUsuario, Menu){
+		return function(req, res){
+			return require('./controllers/menuCompletoController').newMenuUserComplete(req, res, MenuUsuario, Menu);
 		}
 	}));
 	

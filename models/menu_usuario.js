@@ -4,27 +4,27 @@ var menu_usuarioSchema = {
     desayuno : {
         idMenu: { type: mongoose.Schema.Types.ObjectId, required:true , ref: "Menu" },
         hora: { type: String, required:true },
-        cumplido: { type: Boolean, required:true }       
+        cumplido: { type: Boolean}       
     },
     comida: {
         idMenu: { type: mongoose.Schema.Types.ObjectId, required:true , ref: "Menu" },
         hora: { type: String, required:true },
-        cumplido: { type: Boolean, required:true}
+        cumplido: { type: Boolean}
     },
     cena: {
         idMenu: { type: mongoose.Schema.Types.ObjectId, required:true , ref: "Menu" },
         hora: { type: String, required:true },
-        cumplido: { type: Boolean, required:true }
+        cumplido: { type: Boolean}
     },
     colacion1: {
         idMenu: { type: mongoose.Schema.Types.ObjectId, required:true , ref: "Menu" },
         hora: { type: String, required:true },
-        cumplido: { type: Boolean, required:true }
+        cumplido: { type: Boolean}
     },
     colacion2: {
         idMenu: { type: mongoose.Schema.Types.ObjectId, required:true , ref: "Menu" },
         hora: { type: String, required:true },
-        cumplido: { type: Boolean, required:true }
+        cumplido: { type: Boolean }
     }
 };
 

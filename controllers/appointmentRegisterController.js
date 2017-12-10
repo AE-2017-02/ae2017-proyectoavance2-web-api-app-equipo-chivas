@@ -204,6 +204,7 @@ module.exports.getFatMass = function (req, res, RegistroCita, Paciente, Historia
 		var MMT;
 		var AMBdH;
 		var AMBdM;
+		var pesoIdeal;
 		console.log("brazo:"+circunferencias.brazo);
 		AMBdH = ((circunferencias.brazo-(Math.PI*(pliegues.sEscapulada/10)))*((circunferencias.brazo-(Math.PI*(pliegues.sEscapulada/10)))/4*Math.PI)-10);
 		AMBdM = ((circunferencias.brazo-(Math.PI*(pliegues.sEscapulada/10)))*((circunferencias.brazo-(Math.PI*(pliegues.sEscapulada/10)))/4*Math.PI)-6.5);		
@@ -211,14 +212,20 @@ module.exports.getFatMass = function (req, res, RegistroCita, Paciente, Historia
 		console.log('AMBdM:'+AMBdM);
 		if(s=="H"){
 			MMT=(resulta2.talla*(0.0264+(0.0029*AMBdH)));
+			pesoIdeal = ((resulta2.talla*0.01)*(resulta2.talla*0.01))*23;
 		}
 		if(s=="M"){
 			MMT=(resulta2.talla*(0.0264+(0.0029*AMBdM)));
+			pesoIdeal = ((resulta2.talla*0.01)*(resulta2.talla*0.01))*21;
 		}
 		console.log('MMT:'+MMT);
 		var masaOsea = ((resulta2.peso-f3)-MMT);
 		console.log('Masa Osea:'+masaOsea);
-				
+		var IMC = resulta2.peso/((resulta2.talla*0.01)*(resulta2.talla*0.01));
+		var ICC = circunferencias.cintura/circunferencias.cadera
+
+
+
 		var valores = {
 			"MasaGrasa" : f3.toFixed(2),
 			"MasaOsea" : masaOsea.toFixed(2),
