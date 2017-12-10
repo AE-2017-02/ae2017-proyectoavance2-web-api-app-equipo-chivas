@@ -270,6 +270,7 @@ module.exports.setPatientPantry = function(req, res, Paciente, Comida){
 						return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
 					}
 					
+					console.log(resulta)
 					Paciente.update({ $and : [{"_id": _id}, {"despensa": { $elemMatch: {"fecha":fecha}}} , {"despensa": { $elemMatch: {"comidaTiempo": result.tipo}}}, {"despensa" : {$elemMatch:{"menuId" : idComida}}}]}, {$push: {"despensa.$.ingredientes" : element._id.nombre } }).exec(function(error, resultad){
 						if(error){
 							return res.status(status.INTERNAL_SERVER_ERROR).json({error: error.toString()});
