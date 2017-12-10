@@ -707,6 +707,14 @@ module.exports.updatePatient = function(req, res, Paciente){
 			}
 		}
 		
-		funcion29();
+		var funcion30 = function(){
+			if(paciente.userconfig != undefined && patient[0].userconfig != paciente.userconfig){
+				actualizaCampo('userconfig', paciente.userconfig, funcion29);
+			}else{
+				funcion29();
+			}
+		}
+		
+		funcion30();
 	});
 }
