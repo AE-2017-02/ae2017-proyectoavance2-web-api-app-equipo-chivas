@@ -144,10 +144,10 @@ module.exports.newFood = function (req, res, Comida, Ingrediente){
 		var ingredComplets = [];
 		
 		result.ingred.forEach(function(value, index, ar){
-			Ingrediente.findOne({'_id' : value._id}, function(erro, resulta){
+			Ingrediente.findOne({'_id' : value._id}).populate('grupoAlimento').exec(function(erro, resulta){
 					
 			var objTemp = {};
-			
+						
 			objTemp._id = resulta._id;
 			objTemp.nombre = resulta.nombre;
 			objTemp.calorias = resulta.calorias;
