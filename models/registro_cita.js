@@ -4,6 +4,7 @@ var registro_citaSchema = {
         idCita: { type: mongoose.Schema.Types.ObjectId, required:true, ref:"Cita" ,  unique : true},
         peso: { type: Number, required:true },
         talla: { type: Number, required:true },
+        presion_arterial: {type: String, required: true},
         mediciones: {
         circunferencias:{
             brazo:{type:Number, required:true},
