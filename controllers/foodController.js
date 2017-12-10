@@ -154,7 +154,7 @@ module.exports.newFood = function (req, res, Comida, Ingrediente){
 			objTemp.grupoAlimento = resulta.grupoAlimento;
 			objTemp.porcion = resulta.porcion;
 			objTemp.unitMeasure = resulta.unitMeasure;
-			objTemp.cant = comida.ingred[index].cant;
+			objTemp.cant = 1
 			ingredComplets.push(objTemp);
 		
 			if(index == ar.length-1){
@@ -187,7 +187,7 @@ module.exports.newFood = function (req, res, Comida, Ingrediente){
 	});
 };
 
-module.exports.deleteFood = function (req, res, Comida){
+module.exports.deleteFood = function (req, res, Comida, Menu){
 	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
 	console.log(token);
 	if (token) {
@@ -209,7 +209,14 @@ module.exports.deleteFood = function (req, res, Comida){
 	}catch(e){
 		return res.status(status.BAD_REQUEST).json({error: e.toString()});
 	}
-	Comida.remove({'_id': _id}, handle.handleOne.bind(null, 'comida', res));
+	
+	Menu.findOne({"comidas":{$in:[_id]}}, function(error, result){
+		if(result){
+			return res.status(status.BAD_REQUEST).json({error: "Impossible to delete, value is used"});
+		}else{
+			Comida.remove({'_id': _id}, handle.handleOne.bind(null, 'comida', res));
+		}
+	});
 };
 
 module.exports.updateFood = function(req, res, Comida){
