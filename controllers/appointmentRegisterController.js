@@ -58,7 +58,7 @@ module.exports.getFatMass = function (req, res, RegistroCita, Paciente, Historia
 
 		var idPaciente = result.paciente;
 
-		Paciente.findOne({'_id': idPaciente}, {'sexo': true, 'fecha_nacimiento':true}, function(error, resulta){
+		Paciente.findOne({'_id': idPaciente}, {'sexo': true, 'fecha_nacimiento':true, 'pesohabitual':true}, function(error, resulta){
 		if(error){
 			return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
 		}	
@@ -70,6 +70,8 @@ module.exports.getFatMass = function (req, res, RegistroCita, Paciente, Historia
 		var s = resulta.sexo;
 		var fechaActual = moment(new Date());
 		var fechaNac = resulta.fecha_nacimiento;
+		var pesohabitual = resulta.pesohabitual;
+		console.log("peso habitual: "+pesohabitual)
 		var valores = fechaNac.split('/');
 		switch (valores[1]){
 			case "Enero":
@@ -124,52 +126,52 @@ module.exports.getFatMass = function (req, res, RegistroCita, Paciente, Historia
 
 		switch(verdadero){
 			case  (edad >= 0 && edad <= 19):
-				if (s=="H"){
+				if (s=="M"||s=="m"){
 					c1 = 1.162;
 					c2 = 0.063;
 				}
-				if (s=="M"){
+				if (s=="F"||s=="f"){
 					c1 = 1.1549;
 					c2 = 0.0678;
 				}
 				break;
 			
 			case (edad >= 20 && edad <= 29):
-				if (s=="H"){
+				if (s=="M"||s=="m"){
 					c1 = 1.1631;
 					c2 = 0.0632;
 				}
-				if (s=="M"){
+				if (s=="F"||s=="f"){
 					c1 = 1.1599;
 					c2 = 0.0717; 
 				}
 				break;
 			case (edad >= 30 && edad <= 39):
-				if (s=="H"){
+				if (s=="M"||s=="m"){
 					c1 = 1.1422;
 					c2 = 0.0544;
 				}
-				if (s=="M"){
+				if (s=="F"||s=="f"){
 					c1 = 1.1599;
 					c2 = 0.0717; 
 				}
 				break;
 			case (edad >= 40 && edad <= 50):
-				if (resulta.s=="H"){
+				if (s=="M"||s=="m"){
 					c1 = 1.162;
 					c2 = 0.07;
 				}
-				if (s=="M"){
+				if (s=="F"||s=="f"){
 					c1 = 1.1333;
 					c2 = 0.0612; 
 				}
 				break;
 			case (edad >= 50):
-				if (resulta.s=="H"){
+				if (s=="M"||s=="m"){
 					c1 = 1.1715;
 					c2 = 0.0779;
 				}
-				if (s=="M"){
+				if (s=="F"||s=="f"){
 					c1 = 1.1339;
 					c2 = 0.0645; 
 				}
@@ -186,35 +188,37 @@ module.exports.getFatMass = function (req, res, RegistroCita, Paciente, Historia
 	    var resulta3 = resulta2.toObject();
 		var pliegues = resulta2.mediciones.pliegues;
 		console.log(resulta3.mediciones.circunferencias);
-		console.log(resulta3.mediciones.circunferencias);
+		console.log(resulta3.mediciones.pliegues);
 		if (resulta3.mediciones.circunferencias != undefined){
 		var circunferencias = resulta3.mediciones.circunferencias;
 		}else{
 		var circunferencias = resulta3.mediciones.circunferencias;	
 		}
 
-		var suma = pliegues.tricipital + pliegues.sEscapulada + pliegues.bicipital + pliegues.siliaco + pliegues.siliaco + pliegues.sespinale + pliegues.abdominal + pliegues.muslo + pliegues.pantorrilla;
-  
-		var f1 = (c1-(c2*(Math.log(suma))));
+		var suma = pliegues.tricipital + pliegues.sEscapulada + pliegues.bicipital + pliegues.siliaco;
+		console.log("suma: "+suma);
+		var log=((Math.log(suma)/ Math.log(10)))
+		var f1 = (c1-(c2*(log)));
 		console.log('f1:'+f1);
 		var f2 = (((4.95/f1)-4.5)*100);
 		console.log('f2:'+f2);
-		var f3 = ((f2*resulta2.peso)/1000);
+		var f3 = ((f2*resulta2.peso)/100);
 		console.log('f3:'+f3);
 		var MMT;
 		var AMBdH;
 		var AMBdM;
 		var pesoIdeal;
 		console.log("brazo:"+circunferencias.brazo);
-		AMBdH = ((circunferencias.brazo-(Math.PI*(pliegues.sEscapulada/10)))*((circunferencias.brazo-(Math.PI*(pliegues.sEscapulada/10)))/4*Math.PI)-10);
-		AMBdM = ((circunferencias.brazo-(Math.PI*(pliegues.sEscapulada/10)))*((circunferencias.brazo-(Math.PI*(pliegues.sEscapulada/10)))/4*Math.PI)-6.5);		
+		console.log(("sEscapulada"+pliegues.sEscapulada));
+		AMBdH = (((circunferencias.brazo-(3.14159265358979*(pliegues.sEscapulada*0.1)))*((circunferencias.brazo-(3.14159265358979*(pliegues.sEscapulada*0.1)))/(4*3.14159265358979))-10))
+		AMBdM = (((circunferencias.brazo-(3.14159265358979*(pliegues.sEscapulada*0.1)))*((circunferencias.brazo-(3.14159265358979*(pliegues.sEscapulada*0.1)))/(4*3.14159265358979))-6.5))	
 		console.log('AMBdH:'+AMBdH);
 		console.log('AMBdM:'+AMBdM);
-		if(s=="H"){
+		if(s=="M"||s=="m"){
 			MMT=(resulta2.talla*(0.0264+(0.0029*AMBdH)));
 			pesoIdeal = ((resulta2.talla*0.01)*(resulta2.talla*0.01))*23;
 		}
-		if(s=="M"){
+		if(s=="F"||s=="f"){
 			MMT=(resulta2.talla*(0.0264+(0.0029*AMBdM)));
 			pesoIdeal = ((resulta2.talla*0.01)*(resulta2.talla*0.01))*21;
 		}
@@ -223,13 +227,20 @@ module.exports.getFatMass = function (req, res, RegistroCita, Paciente, Historia
 		console.log('Masa Osea:'+masaOsea);
 		var IMC = resulta2.peso/((resulta2.talla*0.01)*(resulta2.talla*0.01));
 		var ICC = circunferencias.cintura/circunferencias.cadera
-
+		var cambioPeso = ((resulta.pesohabitual-resulta2.peso)/resulta.pesohabitual)*100
+		console.log("pesohabitual: "+resulta.pesohabitual)
+		var complexion = resulta2.talla/circunferencias.muneca
 
 
 		var valores = {
 			"MasaGrasa" : f3.toFixed(2),
 			"MasaOsea" : masaOsea.toFixed(2),
-			"MMT": MMT.toFixed(2)
+			"MMT": MMT.toFixed(2),
+			"IMC": IMC.toFixed(2),
+			"ICC": ICC.toFixed(2),
+			"Peso ideal": pesoIdeal.toFixed(2),
+			"Cambio de peso": cambioPeso.toFixed(2),
+			"complexion" : complexion.toFixed(2)
 		}
 
 		res.status(status.OK).json({resultado : valores});

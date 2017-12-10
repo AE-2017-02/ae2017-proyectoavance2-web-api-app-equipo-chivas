@@ -200,9 +200,9 @@ module.exports = function(wagner){
 		}
 	}));
 
-	api.delete('/ingredient/:_id', wagner.invoke(function (Ingrediente){
+	api.delete('/ingredient/:_id', wagner.invoke(function (Ingrediente, Comida){
 		return function(req, res){
-			return require('./controllers/ingredientsController').deleteIngredient(req, res, Ingrediente);
+			return require('./controllers/ingredientsController').deleteIngredient(req, res, Ingrediente, Comida);
 		};
 	}));
 	// end Ingrediente

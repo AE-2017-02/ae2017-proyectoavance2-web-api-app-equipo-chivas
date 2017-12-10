@@ -435,7 +435,7 @@ module.exports.newIngredient = function (req, res, Ingrediente){
 	Ingrediente.create(ingrediente, handle.handleMany.bind(null, 'ingrediente', res));
 };
 
-module.exports.deleteIngredient = function (req, res, Ingrediente){
+module.exports.deleteIngredient = function (req, res, Ingrediente, Comida){
 	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
 	console.log(token);
 	if (token) {
