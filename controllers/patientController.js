@@ -270,7 +270,8 @@ module.exports.setPatientPantry = function(req, res, Paciente, Comida){
 						return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
 					}
 					
-					Paciente.update({ $and : [{"_id": _id}, {"despensa": { $elemMatch: {"fecha":fecha}}} , {"despensa": { $elemMatch: {"comidaTiempo": result.tipo}}}, {"despensa" : {$elemMatch:{"menuId" : idComida}}}]}, {$push: {"despensa.$.ingredientes" : element._id.nombre } }).exec(function(error, resultad){
+					console.log(resulta)
+					Paciente.update({"_id": _id, "despensa": { $elemMatch: {"fecha":fecha, "comidaTiempo": result.tipo, "menuId" : idComida}}}, {$push: {"despensa.$.ingredientes" : element._id.nombre } }).exec(function(error, resultad){
 						if(error){
 							return res.status(status.INTERNAL_SERVER_ERROR).json({error: error.toString()});
 						}
@@ -410,7 +411,14 @@ module.exports.removePatientPantry = function(req, res, Paciente, Comida){
 	}
 	Comida.findOne({"_id": idComida})
 		.populate({path: "ingred._id", model: "Ingrediente"}).exec(function(error, result){
-			Paciente.update({ $and : [{"_id": _id}, {"despensa": { $elemMatch: {"fecha":fecha}}} , {"despensa": { $elemMatch: {"comidaTiempo": result.tipo}}}]}, {$pull: {"despensa" : {"menuId" : idComida} }}).exec(handle.handleOne.bind(null, 'paciente', res));
+			Paciente.update({"_id": _id}, {$pull: 
+				{"despensa" : 
+					{"fecha":fecha, 
+					"comidaTiempo": result.tipo,
+					"menuId" : idComida
+					} 
+				}
+			}).exec(handle.handleOne.bind(null, 'paciente', res));
 		});	
 };
 
@@ -442,7 +450,7 @@ module.exports.updatePatient = function(req, res, Paciente){
 	var actualizaCampo = function(campo, valor, funcion){
 		var query = {'$set':{}};
 		query['$set'][campo] = valor;
-		Paciente.update({_id: idPaciente}, query, function(err, resu){
+		Paciente.update({_id: idPaciente}, query, {upsert: true},function(err, resu){
 			if(err){
 				return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
 			}
@@ -525,8 +533,8 @@ module.exports.updatePatient = function(req, res, Paciente){
 
 
 		var funcion7 = function(){
-			if(paciente.Obesidad != undefined && patient[0].Obesidad != paciente.Obesidad){
-				actualizaCampo('Obesidad', paciente.Obesidad, funcion6);
+			if(paciente.obesidad != undefined && patient[0].obesidad != paciente.obesidad){
+				actualizaCampo('obesidad', paciente.obesidad, funcion6);
 			}else{
 				funcion6();
 			}
@@ -584,8 +592,8 @@ module.exports.updatePatient = function(req, res, Paciente){
 		}
 
 		var funcion14 = function(){
-			if(paciente.No_gusta != undefined && patient[0].No_gusta != paciente.No_gusta){
-				actualizaCampo('No_gusta', paciente.No_gusta, funcion13);
+			if(paciente.no_gusta != undefined && patient[0].no_gusta != paciente.no_gusta){
+				actualizaCampo('no_gusta', paciente.no_gusta, funcion13);
 			}else{
 				funcion13();
 			}
@@ -640,8 +648,8 @@ module.exports.updatePatient = function(req, res, Paciente){
 		}
 
 		var funcion21 = function(){
-			if(paciente.tomando_medica != undefined && patient[0].tomando_medica != paciente.tomando_medica){
-				actualizaCampo('tomando_medica', paciente.tomando_medica, funcion20);
+			if(paciente.tomando_medicacion != undefined && patient[0].tomando_medicacion != paciente.tomando_medicacion){
+				actualizaCampo('tomando_medicacion', paciente.tomando_medicacion, funcion20);
 			}else{
 				funcion20();
 			}
@@ -707,6 +715,14 @@ module.exports.updatePatient = function(req, res, Paciente){
 			}
 		}
 		
-		funcion29();
+		var funcion30 = function(){
+			if(paciente.userconfig != undefined && patient[0].userconfig != paciente.userconfig){
+				actualizaCampo('userconfig', paciente.userconfig, funcion29);
+			}else{
+				funcion29();
+			}
+		}
+		
+		funcion30();
 	});
 }
