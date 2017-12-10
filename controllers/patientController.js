@@ -230,9 +230,9 @@ module.exports.getPantryMenusForDate2 = function(req, res, Paciente){
 		
 		var function2 = function(value){
 			if(value.fecha == fecha){
-				for(var i=0; i<value.ingredientes.length; i++){
-					if(response.indexOf(value.ingredientes[i]) === -1){
-						response.push(value.ingredientes[i]);	
+				for(var k=0; k<value.ingredientes.length; k++){
+					if(response.indexOf(value.ingredientes[k]) === -1){
+						response.push(value.ingredientes[k]);	
 					}
 				}
 			}
