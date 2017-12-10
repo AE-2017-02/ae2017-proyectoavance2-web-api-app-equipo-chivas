@@ -525,8 +525,8 @@ module.exports.updatePatient = function(req, res, Paciente){
 
 
 		var funcion7 = function(){
-			if(paciente.Obesidad != undefined && patient[0].Obesidad != paciente.Obesidad){
-				actualizaCampo('Obesidad', paciente.Obesidad, funcion6);
+			if(paciente.obesidad != undefined && patient[0].obesidad != paciente.obesidad){
+				actualizaCampo('obesidad', paciente.obesidad, funcion6);
 			}else{
 				funcion6();
 			}
@@ -584,8 +584,8 @@ module.exports.updatePatient = function(req, res, Paciente){
 		}
 
 		var funcion14 = function(){
-			if(paciente.No_gusta != undefined && patient[0].No_gusta != paciente.No_gusta){
-				actualizaCampo('No_gusta', paciente.No_gusta, funcion13);
+			if(paciente.no_gusta != undefined && patient[0].no_gusta != paciente.no_gusta){
+				actualizaCampo('no_gusta', paciente.no_gusta, funcion13);
 			}else{
 				funcion13();
 			}
@@ -640,8 +640,8 @@ module.exports.updatePatient = function(req, res, Paciente){
 		}
 
 		var funcion21 = function(){
-			if(paciente.tomando_medica != undefined && patient[0].tomando_medica != paciente.tomando_medica){
-				actualizaCampo('tomando_medica', paciente.tomando_medica, funcion20);
+			if(paciente.tomando_medicacion != undefined && patient[0].tomando_medicacion != paciente.tomando_medicacion){
+				actualizaCampo('tomando_medicacion', paciente.tomando_medicacion, funcion20);
 			}else{
 				funcion20();
 			}
