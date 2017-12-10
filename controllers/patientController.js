@@ -270,7 +270,8 @@ module.exports.setPatientPantry = function(req, res, Paciente, Comida){
 						return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
 					}
 					
-					Paciente.update({ $and : [{"_id": _id}, {"despensa": { $elemMatch: {"fecha":fecha}}} , {"despensa": { $elemMatch: {"comidaTiempo": result.tipo}}}, {"despensa" : {$elemMatch:{"menuId" : idComida}}}]}, {$push: {"despensa.$.ingredientes" : element._id.nombre } }).exec(function(error, resultad){
+					console.log(resulta)
+					Paciente.update({"_id": _id, "despensa": { $elemMatch: {"fecha":fecha, "comidaTiempo": result.tipo, "menuId" : idComida}}}, {$push: {"despensa.$.ingredientes" : element._id.nombre } }).exec(function(error, resultad){
 						if(error){
 							return res.status(status.INTERNAL_SERVER_ERROR).json({error: error.toString()});
 						}
@@ -410,7 +411,14 @@ module.exports.removePatientPantry = function(req, res, Paciente, Comida){
 	}
 	Comida.findOne({"_id": idComida})
 		.populate({path: "ingred._id", model: "Ingrediente"}).exec(function(error, result){
-			Paciente.update({ $and : [{"_id": _id}, {"despensa": { $elemMatch: {"fecha":fecha}}} , {"despensa": { $elemMatch: {"comidaTiempo": result.tipo}}}]}, {$pull: {"despensa" : {"menuId" : idComida} }}).exec(handle.handleOne.bind(null, 'paciente', res));
+			Paciente.update({"_id": _id}, {$pull: 
+				{"despensa" : 
+					{"fecha":fecha, 
+					"comidaTiempo": result.tipo,
+					"menuId" : idComida
+					} 
+				}
+			}).exec(handle.handleOne.bind(null, 'paciente', res));
 		});	
 };
 
@@ -442,7 +450,7 @@ module.exports.updatePatient = function(req, res, Paciente){
 	var actualizaCampo = function(campo, valor, funcion){
 		var query = {'$set':{}};
 		query['$set'][campo] = valor;
-		Paciente.update({_id: idPaciente}, query, function(err, resu){
+		Paciente.update({_id: idPaciente}, query, {upsert: true},function(err, resu){
 			if(err){
 				return res.status(status.INTERNAL_SERVER_ERROR).json({error: err.toString()});
 			}
@@ -707,6 +715,14 @@ module.exports.updatePatient = function(req, res, Paciente){
 			}
 		}
 		
-		funcion29();
+		var funcion30 = function(){
+			if(paciente.userconfig != undefined && patient[0].userconfig != paciente.userconfig){
+				actualizaCampo('userconfig', paciente.userconfig, funcion29);
+			}else{
+				funcion29();
+			}
+		}
+		
+		funcion30();
 	});
 }
