@@ -277,7 +277,7 @@ module.exports.getAppointmentRecordForPatient = function (req, res, HistorialCit
 			res.status(status.NOT_FOUND).json({ error: "Not Found" });
 		}
 
-		Cita.find({ "_id": { $in: _.pluck(result.idRegistroCitas, "idCita") } }).exec(handle.handleOne.bind(null, 'appointment', res));
+		Cita.find({ "_id": { $in: _.pluck(result.idRegistroCitas, "idCita") } }).sort({fecha: -1}).exec(handle.handleOne.bind(null, 'appointment', res));
 	});
 }
 
