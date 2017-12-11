@@ -141,7 +141,7 @@ module.exports.newMenuUser = function (req, res, MenuUsuario) {
 };
 
 
-module.exports.newMenuUserComplete = function (req, res, MenuUsuario, Menu) {
+module.exports.newMenuUserComplete = function (req, res, MenuUsuario, Menu, Paciente) {
 	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
 	console.log(token);
 	if (token) {
@@ -159,6 +159,7 @@ module.exports.newMenuUserComplete = function (req, res, MenuUsuario, Menu) {
 	}
 	try {
 		var menu_user = req.body.menu_usuario;
+		var idUser = req.params.patient;
 	} catch (e) {
 		return res.status(status.BAD_REQUEST).json({ error: "No menu_user provided" });
 	}
@@ -213,7 +214,15 @@ module.exports.newMenuUserComplete = function (req, res, MenuUsuario, Menu) {
 		}
 		
 		console.log(menucompleto);
-		MenuUsuario.create(menucompleto.menu_usuario, handle.handleMany.bind(null, 'menu_user', res));
+		MenuUsuario.create(menucompleto.menu_usuario, function (err, result){
+			if(err){
+				return res.status(status.INTERNAL_SERVER_ERROR).json({"error": err});
+			}
+			console.log(result);
+			console.log(result._id);
+			console.log(idUser);
+			Paciente.findOneAndUpdate({"_id":idUser}, {$set:{"menu_asignado":[result._id]}}, {new: true}).exec(handle.handleOne.bind(null, 'patient', res));
+		});
 	}	
 
 	var funcion9 = function () {
