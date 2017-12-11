@@ -272,9 +272,9 @@ module.exports = function(wagner){
 		}
 	}));
 
-	api.post('/menu_complete/', wagner.invoke(function(MenuUsuario, Menu){
+	api.post('/menu_complete/:patient', wagner.invoke(function(MenuUsuario, Menu, Paciente){
 		return function(req, res){
-			return require('./controllers/menuCompletoController').newMenuUserComplete(req, res, MenuUsuario, Menu);
+			return require('./controllers/menuCompletoController').newMenuUserComplete(req, res, MenuUsuario, Menu, Paciente);
 		}
 	}));
 	
