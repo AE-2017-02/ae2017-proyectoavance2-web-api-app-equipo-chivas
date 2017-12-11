@@ -219,7 +219,9 @@ module.exports.newMenuUserComplete = function (req, res, MenuUsuario, Menu, Paci
 				return res.status(status.INTERNAL_SERVER_ERROR).json({"error": err});
 			}
 			console.log(result);
-			Paciente.update({"_id":idUser}, {$set:{"menu_asigando":[result._id]}}).exec(handle.handleOne.bind(null, 'patient', res));
+			console.log(result._id);
+			console.log(idUser);
+			Paciente.findOneAndUpdate({"_id":idUser}, {$set:{"menu_asigando":[result._id]}}, {new: true}).exec(handle.handleOne.bind(null, 'patient', res));
 		});
 	}	
 
