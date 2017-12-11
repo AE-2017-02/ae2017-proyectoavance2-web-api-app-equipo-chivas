@@ -66,12 +66,7 @@ module.exports.getActivePatients = function (req, res, Paciente){
 	} else {
 		return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
 	}
-	try{
-		var _id = req.params._id;
-	} catch(e){
-		return res.status(status.BAD_REQUEST).json({error: "No patient id provided"});
-	}
-	Paciente.find({'_id': _id, "activo":true},{"despensa": 0}).exec(handle.handleOne.bind(null, 'paciente', res));
+	Paciente.find({"activo":true},{"despensa": 0}).exec(handle.handleOne.bind(null, 'paciente', res));
 };
 
 module.exports.getPatientByLogin = function(req, res, Paciente){
@@ -254,18 +249,24 @@ module.exports.getPantryMenusForDate2 = function(req, res, Paciente){
 		
 		var function2 = function(value){
 			if(value.fecha == fecha){
-				for(var k=0; k<value.ingredientes.length; k++){
-					if(response.indexOf(value.ingredientes[k]) === -1){
-						response.push(value.ingredientes[k]);	
-					}else{
-						var number = value.ingredientes[k].split(' ')[0];
-						var number2 = response[response.indexOf(value.ingredientes[k])].split(' ')[0];
+				for(var k=0; k<value.ingredientes.length; k++){	
+					for(var l = 0; l<response.length; l++){
 						
-						var number3 = parseInt(number)+parseInt(number2);
+						var indexOfIngred1 = value.ingredientes[k].split(' ', 3).join(' ').length;
+						var indexOfIngred2 = response[l].split(' ', 3).join(' ').length;
 						
-						var newString = response[response.indexOf(value.ingredientes[k])].replace(number2, number3);
-						console.log(newString)
-						response[response.indexOf(value.ingredientes[k])] = newString;
+						if(value.ingredientes[k].slice(indexOfIngred1) === response[l].slice(indexOfIngred2)){
+							var number = value.ingredientes[k].split(' ')[0];
+							var number2 = response[l].split(' ')[0];
+						
+							var number3 = parseInt(number)+parseInt(number2);
+						
+							var newString = response[l].replace(number2, number3);
+							console.log(newString)
+							response[l] = newString;							
+						}else{
+							response.push(value.ingredientes[k]);	
+						}						
 					}
 				}
 			}
