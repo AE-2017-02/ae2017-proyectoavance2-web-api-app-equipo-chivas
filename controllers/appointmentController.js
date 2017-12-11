@@ -72,7 +72,7 @@ module.exports.getAppointmentsWithPatient = function (req, res, Cita, Paciente) 
 		return res.status(status.BAD_REQUEST).json({ error: "No appointment id provided" });
 	}
 	var offset = -7;
-	Cita.find({ 'fecha': { $gte: new Date(new Date().getTime() + offset * 3600 * 1000) } }, {}, {
+	Cita.find({ 'fecha': { $gte: new Date(new Date().getTime() + offset * 3600 * 1000) }, $or:[{status : "pendiente"},{status : "cancelada"}]}, {}, {
 		sort: {
 			'fecha': 1 //Sort by Date Added DESC
 		}
@@ -96,6 +96,7 @@ module.exports.getAppointmentsWithPatient = function (req, res, Cita, Paciente) 
 		}
 
 		var funcion2 = function (element) {
+
 			Paciente.findOne({ 'idCita': element._id }, { 'nombre': true }, function (error, resulta) {
 				if (error) {
 					return res.status(status.INTERNAL_SERVER_ERROR).json({ error: err.toString() });
@@ -145,7 +146,7 @@ module.exports.getAppointmentsUsedForDate = function (req, res, Cita) {
 		return res.status(status.BAD_REQUEST).json({ error: "No appointment id provided" });
 	}
 
-	Cita.find({ $and: [{ 'fecha': { $gte: new Date(date + "T00:00:00") } }, { 'fecha': { $lte: new Date(date + "T23:59:59") } }] }, function (error, result) {
+	Cita.find({ $and: [{ 'fecha': { $gte: new Date(date + "T00:00:00") } }, { 'fecha': { $lte: new Date(date + "T23:59:59") } }, {'status': 'pendiente'}] }, function (error, result) {
 
 		if (error) {
 			return res.status(status.INTERNAL_SERVER_ERROR).json({ error: err.toString() });
@@ -230,6 +231,7 @@ module.exports.getLastCompletedApointmentForPatient = function (req, res, Cita, 
 				if (resulta[i].status == "terminada") {
 					id = resulta[i]._id;
 					date = resulta[i].fecha;
+					i = -1;
 				}
 			}
 			if (id != "") {
