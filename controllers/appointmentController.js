@@ -145,7 +145,7 @@ module.exports.getAppointmentsUsedForDate = function (req, res, Cita) {
 		return res.status(status.BAD_REQUEST).json({ error: "No appointment id provided" });
 	}
 
-	Cita.find({ $and: [{ 'fecha': { $gte: new Date(date + "T00:00:00") } }, { 'fecha': { $lte: new Date(date + "T23:59:59") } }] }, function (error, result) {
+	Cita.find({ $and: [{ 'fecha': { $gte: new Date(date + "T00:00:00") } }, { 'fecha': { $lte: new Date(date + "T23:59:59") } }, {'status': 'pendiente'}] }, function (error, result) {
 
 		if (error) {
 			return res.status(status.INTERNAL_SERVER_ERROR).json({ error: err.toString() });
