@@ -72,7 +72,7 @@ module.exports.getAppointmentsWithPatient = function (req, res, Cita, Paciente) 
 		return res.status(status.BAD_REQUEST).json({ error: "No appointment id provided" });
 	}
 	var offset = -7;
-	Cita.find({ 'fecha': { $gte: new Date(new Date().getTime() + offset * 3600 * 1000) }, $and:[{status : "pendiente"},{status : "cancelada"}]}, {}, {
+	Cita.find({ 'fecha': { $gte: new Date(new Date().getTime() + offset * 3600 * 1000) }, $or:[{status : "pendiente"},{status : "cancelada"}]}, {}, {
 		sort: {
 			'fecha': 1 //Sort by Date Added DESC
 		}
