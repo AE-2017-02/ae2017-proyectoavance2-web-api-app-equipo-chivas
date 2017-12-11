@@ -215,6 +215,10 @@ module.exports.newMenuUserComplete = function (req, res, MenuUsuario, Menu, Paci
 		
 		console.log(menucompleto);
 		MenuUsuario.create(menucompleto.menu_usuario, function (err, result){
+			if(err){
+				return res.status(status.INTERNAL_SERVER_ERROR).json({"error": err});
+			}
+			console.log(result);
 			Paciente.update({"_id":idUser}, {$set:{"menu_asigando":[result._id]}}).exec(handle.handleOne.bind(null, 'patient', res));
 		});
 	}	
