@@ -249,7 +249,8 @@ module.exports.getPantryMenusForDate2 = function(req, res, Paciente){
 		
 		var function2 = function(value){
 			if(value.fecha == fecha){
-				for(var k=0; k<value.ingredientes.length; k++){	
+				for(var k=0; k<value.ingredientes.length; k++){
+					var actualizado = false;
 					for(var l = 0; l<response.length; l++){
 						
 						var indexOfIngred1 = value.ingredientes[k].split(' ', 3).join(' ').length;
@@ -264,10 +265,12 @@ module.exports.getPantryMenusForDate2 = function(req, res, Paciente){
 						
 							var newString = response[l].replace(number2, number3);
 							console.log(newString)
-							response[l] = newString;							
-						}else{
-							response.push(value.ingredientes[k]);	
-						}						
+							response[l] = newString;
+							actualizado = true;
+						}	
+					}
+					if(!actualizado){
+						response.push(value.ingredientes[k]);	
 					}
 				}
 			}
