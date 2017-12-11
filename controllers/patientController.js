@@ -233,6 +233,15 @@ module.exports.getPantryMenusForDate2 = function(req, res, Paciente){
 				for(var k=0; k<value.ingredientes.length; k++){
 					if(response.indexOf(value.ingredientes[k]) === -1){
 						response.push(value.ingredientes[k]);	
+					}else{
+						var number = value.ingredientes[k].split(' ')[0];
+						var number2 = response[response.indexOf(value.ingredientes[k])].split(' ')[0];
+						
+						var number3 = parseInt(number)+parseInt(number2);
+						
+						var newString = response[response.indexOf(value.ingredientes[k])].replace(number2, number3);
+						console.log(newString)
+						response[response.indexOf(value.ingredientes[k])] = newString;
 					}
 				}
 			}
