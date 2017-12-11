@@ -50,6 +50,25 @@ module.exports.getPatient = function (req, res, Paciente){
 	Paciente.find({'_id': _id},{"despensa": 0}).exec(handle.handleOne.bind(null, 'paciente', res));
 };
 
+module.exports.getActivePatients = function (req, res, Paciente){
+	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
+	console.log(token);
+	if (token) {
+		try {
+			var decoded = jwt.decode(token, 'GarnicaUltraSecretKey');
+
+			if (decoded.exp <= Date.now()) {
+				return res.end('Access token has expired', 400);
+			};
+		} catch (err) {
+			return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+		}
+	} else {
+		return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
+	}
+	Paciente.find({"activo":true},{"despensa": 0}).exec(handle.handleOne.bind(null, 'paciente', res));
+};
+
 module.exports.getPatientByLogin = function(req, res, Paciente){
 	var expires = moment().add('days', 7).valueOf();
 	var app = express();
@@ -230,9 +249,24 @@ module.exports.getPantryMenusForDate2 = function(req, res, Paciente){
 		
 		var function2 = function(value){
 			if(value.fecha == fecha){
-				for(var k=0; k<value.ingredientes.length; k++){
-					if(response.indexOf(value.ingredientes[k]) === -1){
-						response.push(value.ingredientes[k]);	
+				for(var k=0; k<value.ingredientes.length; k++){	
+					for(var l = 0; l<response.length; l++){
+						
+						var indexOfIngred1 = value.ingredientes[k].split(' ', 3).join(' ').length;
+						var indexOfIngred2 = response[l].split(' ', 3).join(' ').length;
+						
+						if(value.ingredientes[k].slice(indexOfIngred1) === response[l].slice(indexOfIngred2)){
+							var number = value.ingredientes[k].split(' ')[0];
+							var number2 = response[l].split(' ')[0];
+						
+							var number3 = parseInt(number)+parseInt(number2);
+						
+							var newString = response[l].replace(number2, number3);
+							console.log(newString)
+							response[l] = newString;							
+						}else{
+							response.push(value.ingredientes[k]);	
+						}						
 					}
 				}
 			}
@@ -325,7 +359,7 @@ module.exports.setPatientPantry = function(req, res, Paciente, Comida){
 					}
 					
 					console.log(resulta)
-					Paciente.update({"_id": _id, "despensa": { $elemMatch: {"fecha":fecha, "comidaTiempo": result.tipo, "menuId" : idComida}}}, {$push: {"despensa.$.ingredientes" : element._id.nombre } }).exec(function(error, resultad){
+					Paciente.update({"_id": _id, "despensa": { $elemMatch: {"fecha":fecha, "comidaTiempo": result.tipo, "menuId" : idComida}}}, {$push: {"despensa.$.ingredientes" : ""+element._id.porcion*result.ingred[i].cant+" "+element._id.unitMeasure+" de "+element._id.nombre } }).exec(function(error, resultad){
 						if(error){
 							return res.status(status.INTERNAL_SERVER_ERROR).json({error: error.toString()});
 						}
