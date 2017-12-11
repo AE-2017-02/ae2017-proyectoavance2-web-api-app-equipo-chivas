@@ -32,8 +32,8 @@ var pacienteSchema = {
 	tratamiento: {type: String, required: false},
 	meta: {type: String, required: false},
 	userconfig: {
-		aceptNotification : {type: Boolean, required: false},
-		timeBefore: {type: Number, required: false}
+		aceptNotification : {type: Boolean, required: true, default: true},
+		timeBefore: {type: Number, required: true, default: 15}
 	},
 	device_key:{type:String,required:true},
 	despensa: [{

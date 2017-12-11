@@ -254,8 +254,9 @@ module.exports.getPantryMenusForDate2 = function(req, res, Paciente){
 						
 						var indexOfIngred1 = value.ingredientes[k].split(' ', 3).join(' ').length;
 						var indexOfIngred2 = response[l].split(' ', 3).join(' ').length;
-						
-						if(value.ingredientes[k].slice(indexOfIngred1) === response[l].slice(indexOfIngred2)){
+						console.log(value.ingredientes[k].slice(indexOfIngred1));
+						console.log(response[l].slice(indexOfIngred2));
+						if(value.ingredientes[k].slice(indexOfIngred1) == response[l].slice(indexOfIngred2)){
 							var number = value.ingredientes[k].split(' ')[0];
 							var number2 = response[l].split(' ')[0];
 						
