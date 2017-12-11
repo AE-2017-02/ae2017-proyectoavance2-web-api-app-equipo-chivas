@@ -230,6 +230,7 @@ module.exports.getLastCompletedApointmentForPatient = function (req, res, Cita, 
 				if (resulta[i].status == "terminada") {
 					id = resulta[i]._id;
 					date = resulta[i].fecha;
+					i = -1;
 				}
 			}
 			if (id != "") {
