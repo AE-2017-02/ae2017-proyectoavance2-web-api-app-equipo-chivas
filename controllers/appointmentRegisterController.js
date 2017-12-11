@@ -238,8 +238,8 @@ module.exports.getFatMass = function (req, res, RegistroCita, Paciente, Historia
 			"MMT": MMT.toFixed(2),
 			"IMC": IMC.toFixed(2),
 			"ICC": ICC.toFixed(2),
-			"Peso ideal": pesoIdeal.toFixed(2),
-			"Cambio de peso": cambioPeso.toFixed(2),
+			"peso_ideal": pesoIdeal.toFixed(2),
+			"cambio_peso": cambioPeso.toFixed(2),
 			"complexion" : complexion.toFixed(2)
 		}
 
