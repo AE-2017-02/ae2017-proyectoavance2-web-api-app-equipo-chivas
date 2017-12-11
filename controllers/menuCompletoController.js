@@ -221,7 +221,7 @@ module.exports.newMenuUserComplete = function (req, res, MenuUsuario, Menu, Paci
 			console.log(result);
 			console.log(result._id);
 			console.log(idUser);
-			Paciente.findOneAndUpdate({"_id":idUser}, {$set:{"menu_asigando":[result._id]}}, {new: true}).exec(handle.handleOne.bind(null, 'patient', res));
+			Paciente.findOneAndUpdate({"_id":idUser}, {$set:{"menu_asignado":[result._id]}}, {new: true}).exec(handle.handleOne.bind(null, 'patient', res));
 		});
 	}	
 
