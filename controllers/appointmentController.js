@@ -124,22 +124,6 @@ module.exports.getAppointmentsWithPatient = function (req, res, Cita, Paciente) 
 };
 
 module.exports.getAppointmentsUsedForDate = function (req, res, Cita) {
-	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
-	console.log(token);
-	if (token) {
-		try {
-			var decoded = jwt.decode(token, 'GarnicaUltraSecretKey');
-
-			if (decoded.exp <= Date.now()) {
-				return res.end('Access token has expired', 400);
-			};
-		} catch (err) {
-			return res.status(status.FORBIDDEN).json({ error: 'No valid access token provided' });
-		}
-	} else {
-		return res.status(status.FORBIDDEN).json({ error: 'No valid access token provided' });
-	}
-
 	try {
 		var date = req.params.date;
 	} catch (e) {
@@ -284,22 +268,6 @@ module.exports.getAppointmentRecordForPatient = function (req, res, HistorialCit
 }
 
 module.exports.newAppointment = function (req, res, Cita) {
-	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
-	console.log(token);
-	if (token) {
-		try {
-			var decoded = jwt.decode(token, 'GarnicaUltraSecretKey');
-
-			if (decoded.exp <= Date.now()) {
-				return res.end('Access token has expired', 400);
-			};
-		} catch (err) {
-			return res.status(status.FORBIDDEN).json({ error: 'No valid access token provided' });
-		}
-	} else {
-		return res.status(status.FORBIDDEN).json({ error: 'No valid access token provided' });
-	}
-
 	try {
 		var appointment = req.body.cita;
 	} catch (e) {
