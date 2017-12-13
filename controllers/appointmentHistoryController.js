@@ -75,23 +75,7 @@ module.exports.getAppointmentHistoryByPatient = function (req, res, HistorialCit
 	HistorialCitas.find({'paciente': _id}).exec(handle.handleOne.bind(null, 'historialCita', res));
 };
 
-module.exports.newAppointmentHistory = function (req, res, HistorialCitas){
-	var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
-	console.log(token);
-	if (token) {
-		try {
-			var decoded = jwt.decode(token, 'GarnicaUltraSecretKey');
-
-			if (decoded.exp <= Date.now()) {
-				return res.end('Access token has expired', 400);
-			};
-		} catch (err) {
-			return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
-		}
-	} else {
-		return res.status(status.FORBIDDEN).json({error: 'No valid access token provided'});
-	}
-	
+module.exports.newAppointmentHistory = function (req, res, HistorialCitas){	
 	try{
 		var historialCita = req.body.historial_citas;
 	} catch(e){
